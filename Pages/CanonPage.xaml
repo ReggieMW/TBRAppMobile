@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="TBRAppMobile.Pages.CanonPage"
+    Title="Book Canon">
+
+    <StackLayout Padding="20">
+        <Label Text="🌟 Your Book Canon" FontSize="24" HorizontalOptions="Center" />
+
+        <CollectionView x:Name="CanonView" ItemsSource="{Binding CanonBooks}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border Margin="5" Padding="10" BackgroundColor="#eef6ff">
+                        <VerticalStackLayout>
+                            <Label Text="{Binding Title}" FontSize="18" FontAttributes="Bold"/>
+                            <Label Text="{Binding Author}" FontSize="14"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </StackLayout>
+</ContentPage>

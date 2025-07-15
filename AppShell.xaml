@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="TBRAppMobile.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:TBRAppMobile"
+    xmlns:pages="clr-namespace:TBRAppMobile.Pages">
+
+    <FlyoutItem Title="TBR List">
+        <ShellContent ContentTemplate="{DataTemplate pages:TBRListPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Add Book">
+        <ShellContent ContentTemplate="{DataTemplate pages:AddBookPage}" />
+    </FlyoutItem>
+
+<FlyoutItem Title="Read Books">
+    <ShellContent ContentTemplate="{DataTemplate pages:ReadListPage}" />
+</FlyoutItem>
+
+<FlyoutItem Title="Canon">
+    <ShellContent ContentTemplate="{DataTemplate pages:CanonPage}" />
+</FlyoutItem>
+
+
+    <ShellContent
+        Title="Home"
+        ContentTemplate="{DataTemplate local:MainPage}"
+        Route="MainPage" />
+
+</Shell>
