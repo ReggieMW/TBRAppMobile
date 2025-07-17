@@ -1,45 +1,51 @@
 using TBRAppMobile.Models;
+using System.Diagnostics;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace TBRAppMobile.Services;
 
 public class BookService
 {
-    private readonly List<Book> _allBooks = new();
-    private readonly List<Book> _readBooks = new();
-    private readonly List<Book> _canon = new();
-    private readonly List<Book> _currentReads = new();
+    private readonly ObservableCollection<Book> _allBooks = new();
 
     private readonly Dictionary<string, int> _subjectHistory = new();
     private readonly Dictionary<string, int> _vibeHistory = new();
     private readonly Dictionary<string, int> _sourceHistory = new();
 
-    private readonly List<string> _defaultSubjects = new()
+    private readonly ObservableCollection<string> _defaultSubjects = new()
     {
         "Love", "Life", "Outer Space", "Kings & Queens & Realms", "Murder"
     };
 
-    private readonly List<string> _defaultVibes = new()
+    private readonly ObservableCollection<string> _defaultVibes = new()
     {
         "Sad", "Scary", "Hopeful", "Funny", "Thoughtful"
     };
 
-    private readonly List<string> _defaultSources = new()
+    private readonly ObservableCollection<string> _defaultSources = new()
     {
         "Recommended", "BookTok", "Cool Cover", "Review", "Love the Author", "Book Club Book"
     };
 
     public IReadOnlyList<Book> AllBooks => _allBooks;
-    public IReadOnlyList<Book> ReadBooks => _readBooks;
-    public IReadOnlyList<Book> CurrentReads => _currentReads;
-    public IReadOnlyList<Book> Canon => _canon;
+    public ObservableCollection<Book> TBRBooks { get; } = new();
+    public ObservableCollection<Book> ReadBooks { get; } = new();
+    public ObservableCollection<Book> CurrentReadBooks { get; } = new();
+    public ObservableCollection<Book> CanonBooks { get; } = new();
+
 
     public void AddBook(Book book)
     {
         book.Status = BookStatus.TBR;
         _allBooks.Add(book);
+        TBRBooks.Add(book);
         UpdateSuggestions(_subjectHistory, book.Subject);
         UpdateSuggestions(_vibeHistory, book.Vibe);
         UpdateSuggestions(_sourceHistory, book.Source);
+
+        Debug.WriteLine($"Added book: {book.Title}");
     }
 
     public void MarkAsRead(Book book, string? newVibe = null, string? comparable = null)
@@ -58,45 +64,89 @@ public class BookService
         }
     }
 
+    public void UpdateBookStatus(Book book, BookStatus newStatus)
+    {
+        RemoveFromAllStatusCollections(book);
+
+        book.Status = newStatus;
+
+        switch (newStatus)
+        {
+            case BookStatus.TBR:
+                TBRBooks.Add(book);
+                break;
+            case BookStatus.Read:
+                ReadBooks.Add(book);
+                break;
+            case BookStatus.CurrentReads:
+                CurrentReadBooks.Add(book);
+                break;
+        }
+    }
+
+    private void RemoveFromAllStatusCollections(Book book)
+    {
+        TBRBooks.Remove(book);
+        ReadBooks.Remove(book);
+        CurrentReadBooks.Remove(book);
+    }
+
+    public void RemoveBook(Book book)
+    {
+        _allBooks.Remove(book);
+        TBRBooks.Remove(book);
+        ReadBooks.Remove(book);
+        CurrentReadBooks.Remove(book);
+        CanonBooks.Remove(book);
+    }
 
     public void MarkAsCurrentRead(Book book)
     {
-        book.Status = BookStatus.CurrentRead;
-        _currentReads.Add(book);
+        UpdateBookStatus(book, BookStatus.CurrentReads);
     }
 
     public void AddToCanon(Book book)
     {
-        if (!_canon.Contains(book))
+        if (!CanonBooks.Contains(book))
         {
             book.IsCanon = true;
-            _canon.Add(book);
+            CanonBooks.Add(book);
         }
     }
 
-    public List<Book> GetTBRBooks()
+    public ObservableCollection<Book> GetAllBooks()
     {
-        return _allBooks.Where(b => b.Status == BookStatus.TBR).ToList();
+        return _allBooks;
     }
 
-    public List<Book> GetCurrentReads()
+    public ObservableCollection<Book> GetTBR_Books()
     {
-        return _allBooks.Where(b => b.Status == BookStatus.CurrentRead).ToList();
+        return new ObservableCollection<Book>(_allBooks.Where(b => b.Status == BookStatus.TBR));
     }
 
-    public List<Book> GetReadBooks()
+    public ObservableCollection<Book> GetCurrentReads()
     {
-        return _allBooks.Where(b => b.Status == BookStatus.Read).ToList();
+        return new ObservableCollection<Book>(_allBooks.Where(b => b.Status == BookStatus.CurrentReads));
     }
 
-    public List<Book> GetCanonBooks()
+    public ObservableCollection<Book> GetReadBooks()
     {
-        return _canon;
+        return new ObservableCollection<Book>(_allBooks.Where(b => b.Status == BookStatus.Read));
     }
 
-    public List<string> GetSubjectsSuggestions() => GetTopSuggestions(_subjectHistory, _defaultSubjects);
-    public List<string> GetVibeSuggestions() => GetTopSuggestions(_vibeHistory, _defaultVibes);
-    public List<string> GetDiscoverSuggestions() => GetTopSuggestions(_sourceHistory, _defaultSources);
+    public ObservableCollection<Book> GetDNFBooks()
+    {
+        return new ObservableCollection<Book>(_allBooks.Where(b => b.Status == BookStatus.DNF));
+    }
+
+    public ObservableCollection<Book> GetCanonBooks()
+    {
+        return CanonBooks;
+    }
+
+    public ObservableCollection<string> GetSubjectsSuggestions() => GetTopSuggestions(_subjectHistory, _defaultSubjects);
+    public ObservableCollection<string> GetVibeSuggestions() => GetTopSuggestions(_vibeHistory, _defaultVibes);
+    public ObservableCollection<string> GetSourceSuggestions() => GetTopSuggestions(_sourceHistory, _defaultSources);
 
     private static void UpdateSuggestions(Dictionary<string, int> history, string? value)
     {
@@ -108,14 +158,31 @@ public class BookService
             history[value] = 1;
     }
 
-    private static List<string> GetTopSuggestions(Dictionary<string, int> history, List<string>? defaults = null)
+    private static ObservableCollection<string> GetTopSuggestions(
+    Dictionary<string, int> history,
+    ObservableCollection<string>? defaults = null)
     {
-        return history
-            .OrderByDescending(kv => kv.Value)
-            .Take(5)
-            .Select(kv => kv.Key)
-            .Concat(defaults?.Except(history.Keys).Take(5 - history.Count) ?? Enumerable.Empty<string>())
-            .Distinct()
-            .ToList();
+        return new ObservableCollection<string>(
+            history
+                .OrderByDescending(kv => kv.Value)
+                .Take(5)
+                .Select(kv => kv.Key)
+                .Concat(defaults?.Except(history.Keys).Take(5 - history.Count) ?? Enumerable.Empty<string>())
+                .Distinct()
+                .ToList()
+        );
     }
+
+#if DEBUG
+    public void SeedTestBooks()
+    {
+        if (_allBooks.Any()) return;
+
+        AddBook(new Book { Title = "The Left Hand of Darkness", Author = "Ursula K. Le Guin", YearPublished = 1969, Pages = 304, Country = "USA", Subject = "Outer Space", Vibe = "Thoughtful", Source = "Recommendation", Status = BookStatus.TBR });
+        AddBook(new Book { Title = "Beloved", Author = "Toni Morrison", YearPublished = 1987, Pages = 324, Country = "USA", Subject = "Love", Vibe = "Sad", Source = "Book Club Book", Status = BookStatus.Read });
+        AddBook(new Book { Title = "Blood Meridian", Author = "Cormac McCarthy", YearPublished = 1985, Pages = 348, Country = "USA", Subject = "Violence", Vibe = "Dark", Source = "Review", Status = BookStatus.CurrentReads });
+        AddBook(new Book { Title = "House of Leaves", Author = "Mark Z. Danielewski", YearPublished = 2000, Pages = 709, Country = "USA", Subject = "Scary Stuff", Vibe = "Scary", Source = "Cool Cover", Status = BookStatus.DNF });
+    }
+#endif
+
 }

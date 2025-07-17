@@ -1,45 +1,101 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:TBRAppMobile.Converters"
              x:Class="TBRAppMobile.Pages.AddBookPage"
              Title="Add a Book">
 
-    <ScrollView>
-        <StackLayout Padding="20" Spacing="15">
+        <ContentPage.Resources>
+                <ResourceDictionary>
+                        <converters:IconBorderConverter x:Key="IconBorderConverter"/>
+                </ResourceDictionary>
+        </ContentPage.Resources>
 
-            <Label Text="➕ Add a Book" FontSize="24" HorizontalOptions="Center" />
+        <ScrollView>
+                <StackLayout Padding="20"
+                             Spacing="15">
 
-            <Entry x:Name="TitleEntry" Placeholder="Title" />
-            <Entry x:Name="AuthorEntry" Placeholder="Author" />
-            <Entry x:Name="YearEntry" Placeholder="Year Published" Keyboard="Numeric" />
-            <Entry x:Name="PagesEntry" Placeholder="Pages" Keyboard="Numeric" />
-            <Entry x:Name="CountryEntry" Placeholder="Country" />
+                        <Label Text="➕ Add a Book"
+                               FontSize="24"
+                               HorizontalOptions="Center"/>
 
-            <Label Text="Subject" />
-            <Picker x:Name="SubjectPicker"
-                    Title="Select a Subject"
-                    ItemsSource="{Binding SubjectSuggestions}"
-                    SelectedIndexChanged="OnSubjectSelected" />
-            <Entry x:Name="SubjectEntry" Placeholder="Or enter your own subject" />
+                        <Entry x:Name="TitleEntry"
+                               Placeholder="Title"/>
+                        <Entry x:Name="AuthorEntry"
+                               Placeholder="Author"/>
+                        <Entry x:Name="YearEntry"
+                               Placeholder="Year Published"
+                               Keyboard="Numeric"/>
+                        <Entry x:Name="PagesEntry"
+                               Placeholder="Pages"
+                               Keyboard="Numeric"/>
+                        <Entry x:Name="CountryEntry"
+                               Placeholder="Country"/>
 
-            <Label Text="Vibe" />
-            <Picker x:Name="VibePicker"
-                    Title="Select a Vibe"
-                    ItemsSource="{Binding VibeSuggestions}"
-                    SelectedIndexChanged="OnVibeSelected" />
-            <Entry x:Name="VibeEntry" Placeholder="Or enter your own vibe" />
+                        <Label Text="Subject"/>
+                        <Picker x:Name="SubjectPicker"
+                                Title="Select a Subject"
+                                ItemsSource="{Binding SubjectSuggestions}"
+                                SelectedIndexChanged="OnSubjectSelected"/>
+                        <Entry x:Name="SubjectEntry"
+                               Placeholder="Or enter your own subject"/>
 
-            <Label Text="Source" />
-            <Picker x:Name="SourcePicker"
-                    Title="Select a Source"
-                    ItemsSource="{Binding SourceSuggestions}"
-                    SelectedIndexChanged="OnSourceSelected" />
-            <Entry x:Name="SourceEntry" Placeholder="Or enter your own source" />
+                        <Label Text="Vibe"/>
+                        <Picker x:Name="VibePicker"
+                                Title="Select a Vibe"
+                                ItemsSource="{Binding VibeSuggestions}"
+                                SelectedIndexChanged="OnVibeSelected"/>
+                        <Entry x:Name="VibeEntry"
+                               Placeholder="Or enter your own vibe"/>
 
-            <Button Text="Save Book" Clicked="OnSaveClicked" BackgroundColor="#0077cc" TextColor="White" />
+                        <Label Text="Source"/>
+                        <Picker x:Name="SourcePicker"
+                                Title="Select a Source"
+                                ItemsSource="{Binding SourceSuggestions}"
+                                SelectedIndexChanged="OnSourceSelected"/>
+                        <Entry x:Name="SourceEntry"
+                               Placeholder="Or enter your own source"/>
+                        <Label Text="Icon"/>
+                        <HorizontalStackLayout Spacing="10">
+                                <Button Text="📷 Use Camera"
+                                        Clicked="OnCameraClicked"/>
+                                <Button Text="📁 Upload Image"
+                                        Clicked="OnUploadClicked"/>
+                        </HorizontalStackLayout>
 
-            <Label x:Name="StatusLabel" TextColor="Green" FontSize="14" IsVisible="False" />
-        </StackLayout>
-    </ScrollView>
+                        <CollectionView
+                                x:Name="IconPicker"
+                                ItemsSource="{Binding DefaultIcons}"
+                                SelectionMode="Single"
+                                SelectedItem="{Binding SelectedIcon, Mode=TwoWay}"
+                                HeightRequest="80">
+
+                                <CollectionView.ItemsLayout>
+                                        <LinearItemsLayout Orientation="Horizontal"/>
+                                </CollectionView.ItemsLayout>
+
+                                <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                                <Frame Padding="5"
+                                                       Margin="5"
+                                                       BorderColor="{Binding ., Converter={StaticResource IconBorderConverter}, ConverterParameter={x:Reference IconPicker}}"
+                                                       HasShadow="False">
+                                                        <Image Source="{Binding}"
+                                                               WidthRequest="40"
+                                                               HeightRequest="40"/>
+                                                </Frame>
+                                        </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                        </CollectionView>
+                        <Button Text="Save Book"
+                                Clicked="OnSaveClicked"
+                                BackgroundColor="#0077cc"
+                                TextColor="White"/>
+                        <Label x:Name="StatusLabel"
+                               TextColor="Green"
+                               FontSize="14"
+                               IsVisible="False"/>
+                </StackLayout>
+        </ScrollView>
 </ContentPage>
 

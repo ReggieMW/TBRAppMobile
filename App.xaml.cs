@@ -1,14 +1,13 @@
-﻿namespace TBRAppMobile;
+﻿using TBRAppMobile.Pages;
+
+namespace TBRAppMobile;
 
 public partial class App : Application
 {
-	public App()
-	{
-		InitializeComponent();
-	}
+    public App(AppShell appShell)
+    {
+        InitializeComponent();
 
-	protected override Window CreateWindow(IActivationState? activationState)
-	{
-		return new Window(new AppShell());
-	}
+        MainPage = appShell; // Shell will now handle page navigation
+    }
 }

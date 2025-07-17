@@ -1,42 +1,67 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="TBRAppMobile.Pages.TBRListPage"
-    xmlns:views="clr-namespace:TBRAppMobile.Views"
-    Title="TBR List">
+       xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       x:Class="TBRAppMobile.Pages.TBRListPage"
+       Title="TBR List">
 
-    <StackLayout Padding="20">
-        <Label Text="📚 Your TBR Pile"
-                FontSize="24"
-                HorizontalOptions="Center"/>
-        <CollectionView x:Name="TBRListView"
-                        ItemsSource="{Binding TBRBooks}">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <views:BookCard/>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-        <CollectionView x:Name="TBRCollection"
-                ItemsSource="{Binding TBRBooks}">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Frame Margin="5"
-                            Padding="10"
-                            BackgroundColor="#f0f0f0">
-                        <VerticalStackLayout>
-                            <Label Text="{Binding Title}"
-                                    FontAttributes="Bold"
-                                    FontSize="18"/>
-                            <Label Text="{Binding Author}"
-                                    FontSize="14"/>
-                            <Label Text="{Binding Pages, StringFormat='Pages: {0}'}"
-                                    FontSize="12"/>
-                        </VerticalStackLayout>
-                    </Frame>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-    </StackLayout>
+       <Grid RowDefinitions="Auto,*"
+             Padding="20">
+              <Label Text="📚 Your TBR Pile"
+                     FontSize="24"
+                     HorizontalOptions="Center"
+                     Margin="0,0,0,10"
+                     Grid.Row="0"/>
+              <Button
+                     Text="Add Book"
+                     Clicked="OnAddBookClicked"
+                     Grid.Row="1"
+                     BackgroundColor="#0077cc"
+                     TextColor="White"
+                     HorizontalOptions="Center"
+                     Margin="0,0,0,10"/>
+              <CollectionView x:Name="TBRList"
+                              Grid.Row="2"
+                              ItemsSource="{Binding TBRBooks}"
+                              SelectionMode="None">
+                     <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                   <Frame BorderColor="DarkGray"
+                                          CornerRadius="10"
+                                          Padding="10"
+                                          Margin="5">
+                                          <Grid ColumnDefinitions="Auto,*"
+                                                ColumnSpacing="10">
+                                                 <Image Source="{Binding IconPath}"
+                                                        WidthRequest="40"
+                                                        HeightRequest="40"
+                                                        VerticalOptions="Start"
+                                                        Aspect="AspectFit"/>
+                                                 <StackLayout Grid.Column="1">
+                                                        <Label Text="{Binding Title}"
+                                                               FontSize="20"
+                                                               FontAttributes="Bold"/>
+                                                        <Label Text="{Binding Author}"
+                                                               FontSize="16"
+                                                               TextColor="DarkSlateGray"/>
+                                                        <Label Text="{Binding Pages, StringFormat='📖 {0} pages'}"
+                                                               FontSize="14"/>
+                                                        <Label Text="{Binding Subject, StringFormat='🏷️ {0}'}"
+                                                               FontSize="14"/>
+                                                        <Label Text="{Binding Vibe, StringFormat='🎯 Vibe: {0}'}"
+                                                               FontSize="14"/>
+                                                        <Label Text="{Binding YearPublished, StringFormat='📅 {0}'}"
+                                                               FontSize="14"/>
+                                                        <Label Text="{Binding Country, StringFormat='🌍 {0}'}"
+                                                               FontSize="14"/>
+                                                        <Label Text="{Binding Source, StringFormat='📌 Source: {0}'}"
+                                                               FontSize="14"/>
+                                                 </StackLayout>
+                                          </Grid>
+                                   </Frame>
+                            </DataTemplate>
+                     </CollectionView.ItemTemplate>
+              </CollectionView>
+       </Grid>
 </ContentPage>
+

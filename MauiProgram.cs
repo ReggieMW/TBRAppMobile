@@ -6,28 +6,39 @@ namespace TBRAppMobile;
 
 public static class MauiProgram
 {
-	public static MauiApp CreateMauiApp()
-	{
-		var builder = MauiApp.CreateBuilder();
-		builder
-			.UseMauiApp<App>()
-			.ConfigureFonts(fonts =>
-			{
-				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-			});
+    public static MauiApp CreateMauiApp()
+    {
+        var builder = MauiApp.CreateBuilder();
+
+        builder
+            .UseMauiApp<App>()
+            .ConfigureFonts(fonts =>
+            {
+                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+            });
+
 
 #if DEBUG
 		builder.Logging.AddDebug();
 #endif
 
-	    builder.Services.AddSingleton<BookService>();
-		builder.Services.AddSingleton<ListManager>();
-		builder.Services.AddTransient<AddBookPage>();
-		builder.Services.AddTransient<TBRListPage>();
-		builder.Services.AddSingleton<ReadListPage>();
-		builder.Services.AddSingleton<CanonPage>();
+        // Register services
+        builder.Services.AddSingleton<BookService>();
+        builder.Services.AddSingleton<ListManager>();
 
-		return builder.Build();
-	}
+        // Register pages
+        builder.Services.AddTransient<AddBookPage>();
+        builder.Services.AddTransient<TBRListPage>();
+        builder.Services.AddTransient<ReadListPage>();
+        builder.Services.AddTransient<CanonPage>();
+
+        builder.Services.AddSingleton<AppShell>();
+        builder.Services.AddSingleton<App>();
+
+        var mauiApp = builder.Build();
+
+        return mauiApp;
+    }
 }
+
