@@ -3,35 +3,41 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Storage;
+using System.Diagnostics;
 using TBRAppMobile.Models;
 using TBRAppMobile.Services;
+using TBRAppMobile.ViewModels;
 
 namespace TBRAppMobile.Pages
 {
     public partial class AddBookPage : ContentPage
     {
         private readonly BookService _bookService;
+        private readonly AddBookViewModel _viewModel;
 
-        public ObservableCollection<string>? SubjectSuggestions { get; set; }
-        public ObservableCollection<string>? VibeSuggestions { get; set; }
-        public ObservableCollection<string>? SourceSuggestions { get; set; }
-        public ObservableCollection<string> DefaultIcons { get; set; }
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            if (BindingContext is AddBookViewModel viewModel)
+            {
+                viewModel.SubjectSuggestions = _bookService.GetSubjectsSuggestions();
+                viewModel.VibeSuggestions = _bookService.GetVibeSuggestions();
+                viewModel.SourceSuggestions = _bookService.GetSourceSuggestions();
+
+                // Notify the UI
+                viewModel.OnPropertyChanged(nameof(viewModel.SubjectSuggestions));
+                viewModel.OnPropertyChanged(nameof(viewModel.VibeSuggestions));
+                viewModel.OnPropertyChanged(nameof(viewModel.SourceSuggestions));
+            }
+        }
 
         public AddBookPage(BookService bookService)
         {
             InitializeComponent();
             _bookService = bookService;
-
-            SubjectSuggestions = _bookService.GetSubjectsSuggestions();
-            VibeSuggestions = _bookService.GetVibeSuggestions();
-            SourceSuggestions = _bookService.GetSourceSuggestions();
-            DefaultIcons = new ObservableCollection<string>(new[]
-        {
-                "book_alloy.png", "book_cyan.png", "book_red.png", "book_green.png",
-                "book_yellow.png", "book_purple.png", "book_darkgreen.png", "book_black.png"
-            });
-
-            BindingContext = this;
+            _viewModel = new AddBookViewModel(bookService);
+            BindingContext = _viewModel;
         }
 
 
@@ -45,8 +51,7 @@ namespace TBRAppMobile.Pages
             if (file != null)
             {
                 var imagePath = file.FullPath;
-                DefaultIcons.Add(imagePath);  // Show in icon picker
-                IconPicker.SelectedItem = imagePath; // Select it
+                IconPicker.SelectedItem = imagePath;
             }
 
 
@@ -61,7 +66,6 @@ namespace TBRAppMobile.Pages
                 {
                     var stream = await photo.OpenReadAsync();
                     var path = photo.FullPath;
-                    DefaultIcons.Add(path);
                     IconPicker.SelectedItem = path;
                 }
             }
@@ -72,93 +76,76 @@ namespace TBRAppMobile.Pages
         }
         private async void OnSaveClicked(object sender, EventArgs e)
         {
-            string? title = TitleEntry.Text?.Trim();
-            string? author = AuthorEntry.Text?.Trim();
-            string? yearText = YearEntry.Text?.Trim();
-            string? pagesText = PagesEntry.Text?.Trim();
+            Debug.WriteLine("Clicked Save Book");
+            if (BindingContext is not AddBookViewModel viewModel)
+            {
+                Debug.WriteLine("BindingContext is not AddBookViewModel");
+                return;
+            }
 
-            // Basic validation
-            if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(author) ||
-                !int.TryParse(yearText, out int year) || !int.TryParse(pagesText, out int pages))
+            if (!int.TryParse(viewModel.YearText?.Trim(), out int year) ||
+                !int.TryParse(viewModel.PagesText?.Trim(), out int pages))
             {
                 await DisplayAlert("Error", "Please fill in all fields correctly.", "OK");
                 return;
             }
 
-            var book = new Book
-            {
-                Title = title,
-                Author = author,
-                Country = CountryEntry.Text?.Trim(),
-                Subject = SubjectPicker.SelectedItem?.ToString(),
-                Vibe = VibePicker.SelectedItem?.ToString(),
-                Source = SourcePicker.SelectedItem?.ToString(),
-                IconPath = IconPicker.SelectedItem?.ToString() ?? "book_cyan.png",
-                YearPublished = year,
-                Pages = pages
-            };
+            var book = viewModel.CreateBook();
+            book.YearPublished = year;
+            book.Pages = pages;
 
             _bookService.AddBook(book);
 
             bool addAnother = await DisplayAlert(
-    "Success",
-    $"\"{book.Title}\" added to your TBR list!",
-    "Add Another",
-    "Return to List");
+                "Success",
+                $"\"{book.Title}\" added to your TBR list!",
+                "Add Another",
+                "Return to List");
 
             if (addAnother)
             {
-                ClearForm();
+                viewModel.ClearForm();
+                viewModel.RefreshSuggestions();
             }
             else
             {
-                await Shell.Current.GoToAsync("..");
-            }
-
-        }
-
-        private void OnSubjectSelected(object sender, EventArgs e)
-        {
-            if (SubjectPicker.SelectedIndex != -1)
-            {
-                SubjectEntry.Text = SubjectPicker.SelectedItem.ToString();
+                viewModel.ClearForm();
+                viewModel.RefreshSuggestions();
+                await Shell.Current.GoToAsync($"//{nameof(TBRListPage)}");
             }
         }
 
-        private void OnVibeSelected(object sender, EventArgs e)
+            private void OnAuthorTextChanged(object sender, TextChangedEventArgs e)
         {
-            if (VibePicker.SelectedIndex != -1)
-            {
-                VibeEntry.Text = VibePicker.SelectedItem.ToString();
-            }
+            if (BindingContext is AddBookViewModel vm)
+                vm.FilterAuthorSuggestions(e.NewTextValue);
         }
 
-        private void OnSourceSelected(object sender, EventArgs e)
+        private void OnCountryTextChanged(object sender, TextChangedEventArgs e)
         {
-            if (SourcePicker.SelectedIndex != -1)
-            {
-                SourceEntry.Text = SourcePicker.SelectedItem.ToString();
-            }
+            if (BindingContext is AddBookViewModel vm)
+                vm.FilterCountrySuggestions(e.NewTextValue);
         }
-        
-        private void ClearForm()
+
+        private void OnSubjectTextChanged(object sender, TextChangedEventArgs e)
         {
-            TitleEntry.Text = string.Empty;
-            AuthorEntry.Text = string.Empty;
-            YearEntry.Text = string.Empty;
-            PagesEntry.Text = string.Empty;
-            CountryEntry.Text = string.Empty;
+            if (BindingContext is AddBookViewModel vm)
+                vm.FilterSubjectsSuggestions(e.NewTextValue);
+        }
 
-            SubjectPicker.SelectedIndex = -1;
-            VibePicker.SelectedIndex = -1;
-            SourcePicker.SelectedIndex = -1;
+        private void OnVibeTextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (BindingContext is AddBookViewModel vm)
+                vm.FilterVibeSuggestions(e.NewTextValue);
+        }
 
-            SubjectEntry.Text = string.Empty;
-            VibeEntry.Text = string.Empty;
-            SourceEntry.Text = string.Empty;
-
-            IconPicker.SelectedItem = null;
+        private void OnSourceTextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (BindingContext is AddBookViewModel vm)
+                vm.FilterSourceSuggestions(e.NewTextValue);
         }
     }
+
 }
+
 

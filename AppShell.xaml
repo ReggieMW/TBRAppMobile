@@ -5,22 +5,38 @@
     xmlns:pages="clr-namespace:TBRAppMobile.Pages"
     x:Class="TBRAppMobile.AppShell">
 
+    <FlyoutItem Title="Currently Reading"
+            Route="CurrentReadsPage">
+        <ShellContent ContentTemplate="{DataTemplate pages:CurrentReadsPage}"/>
+    </FlyoutItem>
+    
     <FlyoutItem Title="TBR List">
-        <ShellContent ContentTemplate="{DataTemplate pages:TBRListPage}"/>
+        <ShellContent ContentTemplate="{DataTemplate pages:TBRListPage}"
+                Route="TBRListPage"/>
     </FlyoutItem>
 
     <FlyoutItem Title="Add Book">
-        <ShellContent ContentTemplate="{DataTemplate pages:AddBookPage}"/>
+        <ShellContent ContentTemplate="{DataTemplate pages:AddBookPage}"
+                Route="AddBookPage"/>
     </FlyoutItem>
 
-    <FlyoutItem Title="Read Books">
+    <FlyoutItem Title="Read Books"
+            Route="ReadListPage">
         <ShellContent ContentTemplate="{DataTemplate pages:ReadListPage}"/>
     </FlyoutItem>
 
-    <FlyoutItem Title="Canon">
-        <ShellContent ContentTemplate="{DataTemplate pages:CanonPage}"/>
+
+    <FlyoutItem Title="Did Not Finish"
+            Route="DNFPage">
+        <ShellContent ContentTemplate="{DataTemplate pages:DNFPage}"/>
     </FlyoutItem>
 
+    <FlyoutItem Title="My Canon"
+            Route="MyCanonPage">
+        <ShellContent ContentTemplate="{DataTemplate pages:MyCanonPage}"/>
+    </FlyoutItem>
+
+
     <ShellContent Route="tbr"
-            ContentTemplate="{DataTemplate pages:TBRListPage}"/>
+                  ContentTemplate="{DataTemplate pages:TBRListPage}"/>
 </Shell>

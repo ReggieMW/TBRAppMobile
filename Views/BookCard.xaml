@@ -1,111 +1,95 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:TBRAppMobile.Views"
-             xmlns:models="clr-namespace:TBRAppMobile.Models"
-             x:Class="TBRAppMobile.Views.BookCard">
+<ContentView
+       xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       x:Class="TBRAppMobile.Views.BookCard"
+       x:Name="this"
+       Padding="10"
+       BackgroundColor="White">
 
-    <Frame Padding="10"
-           Margin="10"
-           BorderColor="LightGray"
-           CornerRadius="12"
-           HasShadow="True">
+       <Frame
+              CornerRadius="12"
+              BorderColor="#ddd"
+              HasShadow="True"
+              Padding="10"
+              Margin="5">
 
-        <VerticalStackLayout Spacing="8">
+              <Grid ColumnDefinitions="Auto, *"
+                    RowDefinitions="Auto, Auto, Auto">
+                     <!-- Icon -->
+                     <Image
+                            Grid.RowSpan="3"
+                            Grid.Column="0"
+                            WidthRequest="60"
+                            HeightRequest="90"
+                            Aspect="AspectFill"
+                            Source="{Binding IconPath, Source={x:Reference this}}"
+                            Margin="0,0,10,0"
+                            VerticalOptions="Center"/>
 
-            <Grid ColumnDefinitions="Auto,*"
-                  RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+                     <!-- Title -->
+                     <Label
+                            Grid.Column="1"
+                            Text="{Binding Title, Source={x:Reference this}}"
+                            FontAttributes="Bold"
+                            FontSize="16"
+                            LineBreakMode="TailTruncation"/>
 
-                <!-- Book Image -->
-                <Image Source="{Binding IconPath, TargetNullValue='book_blue.png'}"
-                       Grid.RowSpan="10"
-                       WidthRequest="80"
-                       HeightRequest="120"
-                       Aspect="AspectFill"
-                       VerticalOptions="Start"/>
+                     <!-- Author & Pages -->
+                     <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Text="{Binding Author, Source={x:Reference this}}"
+                            FontSize="14"
+                            TextColor="Gray"/>
 
-                <!-- Title -->
-                <Label Grid.Column="1"
-                       Text="{Binding Title}"
-                       FontAttributes="Bold"
-                       FontSize="16"/>
+                     <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            HorizontalOptions="End"
+                            Text="{Binding Pages, StringFormat='{}{0} pages', Source={x:Reference this}}"
+                            FontSize="12"
+                            TextColor="DarkGray"/>
 
-                <!-- Author -->
-                <Label Grid.Row="1"
-                       Grid.Column="1"
-                       Text="{Binding Author}"/>
+                     <!-- Subject & Vibe -->
+                     <StackLayout Grid.Row="2"
+                                  Grid.Column="1"
+                                  Orientation="Horizontal"
+                                  Spacing="10">
+                            <!-- Subject Chip -->
+                            <Frame Padding="5,2"
+                                   BackgroundColor="#eef"
+                                   CornerRadius="6"
+                                   HasShadow="False">
+                                   <Label
+                                          Text="{Binding Subject, Source={x:Reference this}}"
+                                          FontSize="12"
+                                          TextColor="#555"
+                                          VerticalOptions="Center"/>
+                            </Frame>
 
-                <!-- Pages, Subject, Source, Vibe -->
-                <Label Grid.Row="2"
-                       Grid.Column="1"
-                       Text="{Binding Pages, StringFormat='Pages: {0}'}"/>
-                <Label Grid.Row="3"
-                       Grid.Column="1"
-                       Text="{Binding Subject}"/>
-                <Label Grid.Row="4"
-                       Grid.Column="1"
-                       Text="{Binding Source}"/>
-                <Label Grid.Row="5"
-                       Grid.Column="1"
-                       Text="{Binding Vibe}"/>
+                            <!-- Vibe Chip -->
+                            <Frame Padding="5,2"
+                                   BackgroundColor="#efe"
+                                   CornerRadius="6"
+                                   HasShadow="False">
+                                   <Label
+                                          Text="{Binding Vibe, Source={x:Reference this}}"
+                                          FontSize="12"
+                                          TextColor="#555"
+                                          VerticalOptions="Center"/>
+                            </Frame>
+                     </StackLayout>
+                     <!-- GOOD: This can be accessed in code-behind -->
+                     <StackLayout x:Name="RecommendSection"
+                                  IsVisible="False">
+                            <!-- contents here -->
+                     </StackLayout>
+                     <!-- Currently not visible because not implemented yet -->
+                     <Entry x:Name="ComparableEntry"
+                            IsVisible="False"
+                            Placeholder="Comparable Book"/>
 
-                <!-- Year & Country -->
-                <Label Grid.Row="6"
-                       Grid.Column="1"
-                       Text="{Binding YearPublished, StringFormat='Year: {0}'}"/>
-                <Label Grid.Row="7"
-                       Grid.Column="1"
-                       Text="{Binding Country}"/>
-
-                <!-- Status Picker -->
-                <Picker Grid.Row="8"
-                        Grid.Column="1"
-                        Title="Status"
-                        ItemsSource="{x:Static models:BookStatusHelper.BookStatusValues}"
-                        SelectedItem="{Binding Status, Mode=TwoWay}"
-                        SelectedIndexChanged="OnStatusChanged"/>
-
-                <!-- Canon Checkbox -->
-                <StackLayout Grid.Row="9"
-                             Grid.Column="1"
-                             Orientation="Horizontal">
-                    <CheckBox IsChecked="{Binding IsCanon, Mode=TwoWay}"/>
-                    <Label Text="Mark as Canon"
-                           VerticalOptions="Center"/>
-                </StackLayout>
-            </Grid>
-
-            <!-- Recommend toggle -->
-            <StackLayout Orientation="Horizontal"
-                         Spacing="10">
-                <Label Text="Recommend?"
-                       VerticalOptions="Center"/>
-                <Switch IsToggled="{Binding Recommend, Mode=TwoWay}"
-                        Toggled="OnRecommendToggled"/>
-            </StackLayout>
-
-            <StackLayout x:Name="RecommendSection"
-                         Padding="0,10,0,0"
-                         IsVisible="False">
-                <Label Text="Would you recommend this?"/>
-                <Switch IsToggled="{Binding Recommend, Source={x:Reference This}}"
-                        Toggled="OnRecommendToggled"/>
-
-
-                <!-- Comparable input (shown only if Recommend is true) -->
-                <Entry x:Name="ComparableEntry"
-                       Placeholder="Comparable book or author"
-                       IsVisible="{Binding Recommend}"
-                       Text="{Binding Comparable, Mode=TwoWay}"/>
-            </StackLayout>
-
-            <!-- Remove Button -->
-            <Button Text="Remove"
-                    BackgroundColor="DarkRed"
-                    TextColor="White"
-                    CornerRadius="8"
-                    Clicked="OnRemoveClicked"/>
-        </VerticalStackLayout>
-    </Frame>
+              </Grid>
+       </Frame>
 </ContentView>
-

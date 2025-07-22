@@ -17,7 +17,7 @@ public class Book
     public BookStatus Status { get; set; }
     public bool IsCanon { get; set; }
 
-    public bool Recommend { get; set; }
+    public bool Recommended { get; set; }
 
     private static readonly string[] DefaultIcons =
 {

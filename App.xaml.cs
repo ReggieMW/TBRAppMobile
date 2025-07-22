@@ -1,13 +1,15 @@
 ﻿using TBRAppMobile.Pages;
+using TBRAppMobile.Services;
 
 namespace TBRAppMobile;
 
 public partial class App : Application
 {
-    public App(AppShell appShell)
+    public static BookService BookService { get; } = new BookService();
+
+    public App()
     {
         InitializeComponent();
-
-        MainPage = appShell; // Shell will now handle page navigation
+        MainPage = new AppShell(); 
     }
 }

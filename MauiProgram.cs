@@ -20,7 +20,7 @@ public static class MauiProgram
 
 
 #if DEBUG
-		builder.Logging.AddDebug();
+        builder.Logging.AddDebug();
 #endif
 
         // Register services
@@ -31,7 +31,10 @@ public static class MauiProgram
         builder.Services.AddTransient<AddBookPage>();
         builder.Services.AddTransient<TBRListPage>();
         builder.Services.AddTransient<ReadListPage>();
-        builder.Services.AddTransient<CanonPage>();
+        builder.Services.AddTransient<CurrentReadsPage>();
+        builder.Services.AddTransient<DNFPage>();
+        builder.Services.AddTransient<MyCanonPage>();
+        builder.Services.AddTransient<BookViewPage>();
 
         builder.Services.AddSingleton<AppShell>();
         builder.Services.AddSingleton<App>();

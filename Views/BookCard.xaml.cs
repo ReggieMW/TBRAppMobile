@@ -161,7 +161,7 @@ namespace TBRAppMobile.Views
                 Country = this.Country,
                 Status = this.Status,
                 IsCanon = this.IsCanon,
-                Recommend = this.Recommend,
+                Recommended = this.Recommend,
                 Comparable = this.Recommend ? this.Comparable : null,
                 IconPath = this.IconPath
             };

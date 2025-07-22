@@ -1,28 +1,28 @@
 using Microsoft.Maui.Controls;
-using System.Collections.ObjectModel;
+using System.Diagnostics;
 using TBRAppMobile.Models;
 using TBRAppMobile.Services;
 
-namespace TBRAppMobile.Pages;
-
-public partial class ReadListPage : ContentPage
+namespace TBRAppMobile.Pages
 {
-    public ObservableCollection<Book> ReadBooks { get; } = new();
-    private readonly ListManager _manager;
-
-    public ReadListPage(ListManager manager)
+    public partial class ReadListPage : ContentPage
     {
-        InitializeComponent();
-        _manager = manager;
-        BindingContext = this;
-    }
+        private readonly BookService _bookService;
 
-    private void OnAddToCanonClicked(object sender, EventArgs e)
-    {
-        if (sender is Button button && button.BindingContext is Book book)
+        public ReadListPage(BookService bookService)
         {
-            _manager.AddToCanon(book);
-            DisplayAlert("Added", $"📘 \"{book.Title}\" added to Canon!", "OK");
+            InitializeComponent();
+            _bookService = bookService;
+            BindingContext = _bookService;
+            BookList.ItemsSource = _bookService.ReadBooks;
+        }
+
+        private async void OnBookSelected(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.CurrentSelection.FirstOrDefault() is Book selectedBook)
+                await Navigation.PushAsync(new BookViewPage(selectedBook, App.BookService));
+
+            ((CollectionView)sender).SelectedItem = null;
         }
     }
 }

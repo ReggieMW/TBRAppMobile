@@ -1,25 +1,36 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage 
+<ContentPage
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:TBRAppMobile.Views"
     x:Class="TBRAppMobile.Pages.ReadListPage"
-    Title="Read Books">
+    Title="Read List">
+    <ScrollView>
+        <VerticalStackLayout Padding="20"
+                Spacing="10">
+            <Label
+                Text="✅ Books You've Read"
+                FontSize="24"
+                HorizontalOptions="Center"/>
 
-    <StackLayout Padding="20">
-        <Label Text="📚 Read Books" FontSize="24" HorizontalOptions="Center" />
+            <CollectionView
+                x:Name="BookList"
+                ItemsSource="{Binding ReadBooks}"
+                SelectionMode="Single"
+                SelectionChanged="OnBookSelected">
 
-        <CollectionView x:Name="ReadBooksView" ItemsSource="{Binding ReadBooks}">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Border Margin="5" Padding="10" BackgroundColor="#f9f9f9">
-                        <VerticalStackLayout>
-                            <Label Text="{Binding Title}" FontSize="18" FontAttributes="Bold"/>
-                            <Label Text="{Binding Author}" FontSize="14"/>
-                            <Button Text="Add to Canon" Clicked="OnAddToCanonClicked" />
-                        </VerticalStackLayout>
-                    </Border>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-    </StackLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <views:BookCard
+                            Title="{Binding Title}"
+                            Author="{Binding Author}"
+                            IconPath="{Binding IconPath}"
+                            Pages="{Binding Pages}"
+                            Subject="{Binding Subject}"
+                            Vibe="{Binding Vibe}"/>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

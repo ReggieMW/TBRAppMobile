@@ -12,7 +12,11 @@ public partial class AppShell : Shell
 		InitializeComponent();
 		Routing.RegisterRoute(nameof(TBRListPage), typeof(TBRListPage));
 		Routing.RegisterRoute(nameof(AddBookPage), typeof(AddBookPage));
-        Routing.RegisterRoute(nameof(ReadListPage), typeof(ReadListPage));
-        Routing.RegisterRoute(nameof(CanonPage), typeof(CanonPage));
+		Routing.RegisterRoute(nameof(BookViewPage), typeof(BookViewPage));
+		Routing.RegisterRoute(nameof(ReadListPage), typeof(ReadListPage));
+		Routing.RegisterRoute(nameof(CurrentReadsPage), typeof(CurrentReadsPage));
+		Routing.RegisterRoute(nameof(DNFPage), typeof(DNFPage));
+		Routing.RegisterRoute(nameof(MyCanonPage), typeof(MyCanonPage));
+
 	}
 }

@@ -8,10 +8,13 @@ namespace TBRAppMobile.Converters
     {
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
+            var selectedIcon = (parameter as CollectionView)?.SelectedItem as string;
             var currentIcon = value as string;
-            var selectedIcon = parameter as string;
 
-            return currentIcon == selectedIcon ? Colors.DodgerBlue : Colors.Transparent;
+            if (string.IsNullOrEmpty(selectedIcon) || string.IsNullOrEmpty(currentIcon))
+                return Colors.Transparent;
+
+            return selectedIcon == currentIcon ? Colors.DodgerBlue : Colors.Transparent;
         }
 
         public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)

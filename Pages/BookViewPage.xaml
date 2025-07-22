@@ -1,0 +1,108 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TBRAppMobile.Pages.BookViewPage"
+             Title="{Binding Title}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20"
+                             Spacing="16">
+
+            <Image Source="{Binding ImagePath}"
+                   HeightRequest="200"
+                   Aspect="AspectFit"
+                   BackgroundColor="#FF0A0A0A"/>
+
+            <Label Text="{Binding Title}"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"/>
+
+            <Label Text="{Binding Author}"
+                   FontSize="18"
+                   HorizontalOptions="Center"
+                   TextColor="Gray"/>
+
+            <Grid ColumnDefinitions="Auto,*"
+                  RowDefinitions="Auto,Auto,Auto,Auto,Auto, Auto, Auto"
+                  RowSpacing="8">
+                <Label Text="Status:"
+                       Grid.Row="0"
+                       Grid.Column="0"/>
+                <Label Text="{Binding Status}"
+                       Grid.Row="0"
+                       Grid.Column="1"/>
+                <Label Text="Pages:"
+                       Grid.Row="1"
+                       Grid.Column="0"/>
+                <Label Text="{Binding Pages}"
+                       Grid.Row="1"
+                       Grid.Column="1"/>
+                <Label Text="Subject:"
+                       Grid.Row="2"
+                       Grid.Column="0"/>
+                <Label Text="{Binding Subject}"
+                       Grid.Row="2"
+                       Grid.Column="1"/>
+                <Label Text="Vibe:"
+                       Grid.Row="3"
+                       Grid.Column="0"/>
+                <Label Text="{Binding Vibe}"
+                       Grid.Row="3"
+                       Grid.Column="1"/>
+                <Label Text="Source:"
+                       Grid.Row="4"
+                       Grid.Column="0"/>
+                <Label Text="{Binding Source}"
+                       Grid.Row="4"
+                       Grid.Column="1"/>
+                <Label Text="Country:"
+                       Grid.Row="5"
+                       Grid.Column="0"/>
+                <Label Text="{Binding Country}"
+                       Grid.Row="5"
+                       Grid.Column="1"/>
+                <Label Text="Year:"
+                       Grid.Row="6"
+                       Grid.Column="0"/>
+                <Label Text="{Binding YearPublished}"
+                       Grid.Row="6"
+                       Grid.Column="1"/>
+            </Grid>
+
+            <!-- Canon Button -->
+            <Button x:Name="CanonButton"
+                    Text="{Binding CanonButtonText}"
+                    Clicked="OnCanonButtonClicked"
+                    BackgroundColor="Transparent"
+                    TextColor="DarkSlateGray"
+                    BorderColor="Gray"
+                    BorderWidth="1"
+                    CornerRadius="10"
+                    HeightRequest="40"/>
+
+
+            <!-- Status Buttons -->
+            <Label Text="Change Status:"
+                   FontAttributes="Bold"/>
+            <HorizontalStackLayout Spacing="10">
+                <Button Text="Want to Read"
+                        Command="{Binding UpdateStatusCommand}"
+                        CommandParameter="TBR"
+                        IsEnabled="{Binding IsNotTBR}"/>
+                <Button Text="Currently Reading"
+                        Command="{Binding UpdateStatusCommand}"
+                        CommandParameter="CurrentReads"
+                        IsEnabled="{Binding IsNotCurrentReads}"/>
+                <Button Text="Read"
+                        Command="{Binding UpdateStatusCommand}"
+                        CommandParameter="Read"
+                        IsEnabled="{Binding IsNotRead}"/>
+                <Button Text="DNF"
+                        Command="{Binding UpdateStatusCommand}"
+                        CommandParameter="DNF"
+                        IsEnabled="{Binding IsNotDNF}"/>
+            </HorizontalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

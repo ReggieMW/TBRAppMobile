@@ -46,11 +46,29 @@ build_metadata.AdditionalFiles.ManifestResourceName = TBRAppMobile.Pages.AddBook
 build_metadata.AdditionalFiles.TargetPath = Pages\AddBookPage.xaml
 build_metadata.AdditionalFiles.RelativePath = Pages\AddBookPage.xaml
 
-[C:/Users/reggi/TBRAppMobile/Pages/CanonPage.xaml]
+[C:/Users/reggi/TBRAppMobile/Pages/BookViewPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.ManifestResourceName = TBRAppMobile.Pages.CanonPage.xaml
-build_metadata.AdditionalFiles.TargetPath = Pages\CanonPage.xaml
-build_metadata.AdditionalFiles.RelativePath = Pages\CanonPage.xaml
+build_metadata.AdditionalFiles.ManifestResourceName = TBRAppMobile.Pages.BookViewPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Pages\BookViewPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Pages\BookViewPage.xaml
+
+[C:/Users/reggi/TBRAppMobile/Pages/CurrentReadsPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = TBRAppMobile.Pages.CurrentReadsPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Pages\CurrentReadsPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Pages\CurrentReadsPage.xaml
+
+[C:/Users/reggi/TBRAppMobile/Pages/DNFPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = TBRAppMobile.Pages.DNFPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Pages\DNFPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Pages\DNFPage.xaml
+
+[C:/Users/reggi/TBRAppMobile/Pages/MyCanonPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = TBRAppMobile.Pages.MyCanonPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Pages\MyCanonPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Pages\MyCanonPage.xaml
 
 [C:/Users/reggi/TBRAppMobile/Pages/ReadListPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
