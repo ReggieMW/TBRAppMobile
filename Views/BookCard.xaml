@@ -80,10 +80,9 @@
                                           VerticalOptions="Center"/>
                             </Frame>
                      </StackLayout>
-                     <!-- GOOD: This can be accessed in code-behind -->
+
                      <StackLayout x:Name="RecommendSection"
                                   IsVisible="False">
-                            <!-- contents here -->
                      </StackLayout>
                      <!-- Currently not visible because not implemented yet -->
                      <Entry x:Name="ComparableEntry"

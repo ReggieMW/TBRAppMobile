@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 
 namespace TBRAppMobile.Helpers;
 
+//class to manage suggestion functionality
 public static class AutoCompleteManager
 {
     public static void FilterSuggestions(

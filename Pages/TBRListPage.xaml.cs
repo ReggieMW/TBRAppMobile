@@ -11,6 +11,14 @@ namespace TBRAppMobile.Pages;
 public partial class TBRListPage : ContentPage
 {
     private readonly BookService _bookService;
+    
+    //updates page with most current version of List on page load
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        BindingContext = _bookService;
+        BookList.ItemsSource = _bookService.GetTBR_Books();
+    }
 
     public TBRListPage(BookService bookService)
     {
@@ -27,16 +35,7 @@ public partial class TBRListPage : ContentPage
         Debug.WriteLine($"Loaded {_bookService.TBRBooks.Count} books.");
     }
 
-
-    private void OnRemoveRequested(object? sender, Book book)
-    {
-        _bookService.RemoveBook(book);
-    }
-
-    private async void OnAddBookClicked(object sender, EventArgs e)
-    {
-        await Shell.Current.GoToAsync(nameof(AddBookPage));
-    }
+    //Allows user to click a book and navigate to BookViewPage
     private async void OnBookSelected(object sender, SelectionChangedEventArgs e)
     {
         if (e.CurrentSelection.FirstOrDefault() is Book selectedBook)

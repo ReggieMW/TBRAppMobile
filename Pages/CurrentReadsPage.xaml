@@ -5,6 +5,8 @@
     xmlns:views="clr-namespace:TBRAppMobile.Views"
     x:Class="TBRAppMobile.Pages.CurrentReadsPage"
     Title="Currently Reading List">
+
+    <!-- View Page for all books in Current Reads List -->
     <ScrollView>
         <VerticalStackLayout Padding="20"
                 Spacing="10">

@@ -1,12 +1,12 @@
 using TBRAppMobile.Models;
-using TBRAppMobile.Services;
 using System.Diagnostics;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using TBRAppMobile.Services;
+using TBRAppMobile.ViewModels;
 
 namespace TBRAppMobile.Services;
 
+//class handles functionality of book properties
 public class BookService
 {
     private readonly ObservableCollection<Book> _allBooks = new();
@@ -17,7 +17,7 @@ public class BookService
     private readonly Dictionary<string, int> _authorHistory = new();
     private readonly Dictionary<string, int> _countryHistory = new();
 
-
+//default suggestins. will be replaced by users most commonly used suggestions
     private readonly ObservableCollection<string> _defaultSubjects = new()
     {
         "Love", "Life", "Outer Space", "Kings & Queens & Realms", "Murder"
@@ -33,6 +33,7 @@ public class BookService
         "Recommended", "BookTok", "Cool Cover", "Review", "Love the Author", "Book Club Book"
     };
 
+//observableCollections allow for changing and updating much easier than Lists
     public IReadOnlyList<Book> AllBooks => _allBooks;
     public ObservableCollection<Book> TBRBooks { get; } = new();
     public ObservableCollection<Book> ReadBooks { get; } = new();
@@ -40,7 +41,7 @@ public class BookService
     public ObservableCollection<Book> MyCanon { get; } = new();
     public ObservableCollection<Book> DNFBooks { get; } = new();
 
-
+//AddBook method assigns book to proper collections and updates suggestion functionality
     public void AddBook(Book book)
     {
         _allBooks.Add(book);
@@ -57,7 +58,7 @@ public class BookService
                 CurrentReadBooks.Add(book);
                 break;
             case BookStatus.DNF:
-                TBRBooks.Add(book);
+                DNFBooks.Add(book);
                 break;
         }
 
@@ -79,8 +80,11 @@ public class BookService
         Debug.WriteLine($"Added book: {book.Title}");
     }
 
+//Same as AddBook but for already existing books; allows updating of any property
     public void UpdateBook(Book updatedBook)
     {
+        // Update status-based lists
+        UpdateBookStatus(updatedBook, updatedBook.Status);
         var existingBook = _allBooks.FirstOrDefault(b => b.Title == updatedBook.Title);
 
         if (existingBook != null)
@@ -101,76 +105,52 @@ public class BookService
         }
         else
         {
-            _allBooks.Add(updatedBook); // Book didn't exist — add it
+            _allBooks.Add(updatedBook);
         }
 
-        // Canon logic
         if (updatedBook.IsCanon && !MyCanon.Contains(updatedBook))
             MyCanon.Add(updatedBook);
         else if (!updatedBook.IsCanon && MyCanon.Contains(updatedBook))
             MyCanon.Remove(updatedBook);
 
-        // Update status-based lists
-        UpdateBookStatus(updatedBook, updatedBook.Status);
     }
 
-
-
-
+//Updates Book Status (from button clicks) and asigns to appropriate list. *possibly duplicated in AddBook method
     public void UpdateBookStatus(Book book, BookStatus newStatus)
     {
         RemoveFromAllStatusCollections(book);
 
         book.Status = newStatus;
 
-        switch (newStatus)
+        switch (book.Status)
         {
             case BookStatus.TBR:
-                TBRBooks.Add(book);
-                break;
-            case BookStatus.Read:
-                ReadBooks.Add(book);
+                if (!TBRBooks.Contains(book)) TBRBooks.Add(book);
                 break;
             case BookStatus.CurrentReads:
-                CurrentReadBooks.Add(book);
+                if (!CurrentReadBooks.Contains(book)) CurrentReadBooks.Add(book);
+                break;
+            case BookStatus.Read:
+                if (!ReadBooks.Contains(book)) ReadBooks.Add(book);
                 break;
             case BookStatus.DNF:
-                TBRBooks.Add(book);
+                if (!DNFBooks.Contains(book)) DNFBooks.Add(book);
                 break;
         }
-
-        if (book.IsCanon && !MyCanon.Contains(book))
-            MyCanon.Add(book);
-        else if (!book.IsCanon && MyCanon.Contains(book))
-            MyCanon.Remove(book);
-
     }
 
+//method to remove book from current status
     private void RemoveFromAllStatusCollections(Book book)
     {
         TBRBooks.Remove(book);
         ReadBooks.Remove(book);
         CurrentReadBooks.Remove(book);
+        DNFBooks.Remove(book);
     }
 
-    public void RemoveBook(Book book)
-    {
-        _allBooks.Remove(book);
-        TBRBooks.Remove(book);
-        ReadBooks.Remove(book);
-        CurrentReadBooks.Remove(book);
-        MyCanon.Remove(book);
-    }
 
-    public void AddToCanon(Book book)
-    {
-        if (!MyCanon.Contains(book))
-        {
-            book.IsCanon = true;
-            MyCanon.Add(book);
-        }
-    }
 
+//Methods to retrieve all books marked with specified status
     public ObservableCollection<Book> GetAllBooks()
     {
         return _allBooks;
@@ -201,6 +181,7 @@ public class BookService
         return MyCanon;
     }
 
+//Collections of suggestions for each property;
     public ObservableCollection<string> GetSubjectsSuggestions() => GetTopSuggestions(_subjectHistory, _defaultSubjects);
     public ObservableCollection<string> GetVibeSuggestions() => GetTopSuggestions(_vibeHistory, _defaultVibes);
     public ObservableCollection<string> GetSourceSuggestions() => GetTopSuggestions(_sourceHistory, _defaultSources);
@@ -286,7 +267,7 @@ _sourceHistory.Keys
                 .ToList()
         );
     }
-
+    
 #if DEBUG
     public void SeedTestBooks()
     {

@@ -7,7 +7,7 @@ using System.Windows.Input;
 using TBRAppMobile.Helpers;
 using Microsoft.Maui.Controls;
 
-
+//This ViewModel for the AddBook page implements dynamic changes made on the page throughout the app
 namespace TBRAppMobile.ViewModels;
 
 public class AddBookViewModel : INotifyPropertyChanged
@@ -24,6 +24,7 @@ public class AddBookViewModel : INotifyPropertyChanged
     {
         _bookService = bookService;
 
+        //These properties have suggestions provided by the logic
         SubjectSuggestions = _bookService.GetSubjectsSuggestions();
         VibeSuggestions = _bookService.GetVibeSuggestions();
         SourceSuggestions = _bookService.GetSourceSuggestions();
@@ -34,6 +35,7 @@ public class AddBookViewModel : INotifyPropertyChanged
         };
     }
 
+    //updates properties when user makes changes
     private string _title = string.Empty;
     public string BookTitle
     {
@@ -42,6 +44,8 @@ public class AddBookViewModel : INotifyPropertyChanged
     }
 
     private string _authorText = string.Empty;
+
+    //Dynamic typing recognition/suggestions: i.e. if the author exist in the app it will recognize and suggest author as you type
     public string AuthorText
     {
         get => _authorText;
@@ -262,6 +266,7 @@ public class AddBookViewModel : INotifyPropertyChanged
         }
     }
 
+//allows selection of suggestion
     public ICommand SelectAuthorCommand => new Command<string>((selected) =>
 {
     AuthorText = selected;
@@ -292,7 +297,7 @@ public class AddBookViewModel : INotifyPropertyChanged
         IsSourceSuggestionsVisible = false;
     });
 
-
+    //method for implementing updates made by users
     private void SetProperty<T>(ref T backingStore, T value, [CallerMemberName] string? propertyName = null)
     {
         if (EqualityComparer<T>.Default.Equals(backingStore, value))
@@ -302,7 +307,7 @@ public class AddBookViewModel : INotifyPropertyChanged
         OnPropertyChanged(propertyName ?? string.Empty);
     }
 
-
+//Method creates a book, assigns values to properties, and saves it in the app
     public Book CreateBook()
     {
         return new Book
@@ -317,6 +322,7 @@ public class AddBookViewModel : INotifyPropertyChanged
         };
     }
 
+//used to clear fields after user submits a change
     public void ClearForm()
     {
         BookTitle = string.Empty;
@@ -349,14 +355,15 @@ public class AddBookViewModel : INotifyPropertyChanged
         IsSourceSuggestionsVisible = false;
     }
 
+//these properties are dynamic and suggestions are based off previous user input. This method updates the pages to provide the relevent suggestions
     public void RefreshSuggestions()
     {
         SubjectSuggestions.Clear();
-            foreach (var item in _bookService.GetSubjectsSuggestions())
-                SubjectSuggestions.Add(item);
+        foreach (var item in _bookService.GetSubjectsSuggestions())
+            SubjectSuggestions.Add(item);
         VibeSuggestions.Clear();
-            foreach (var item in _bookService.GetVibeSuggestions())
-                VibeSuggestions.Add(item);
+        foreach (var item in _bookService.GetVibeSuggestions())
+            VibeSuggestions.Add(item);
         SourceSuggestions.Clear();
         foreach (var item in _bookService.GetSourceSuggestions())
             SourceSuggestions.Add(item);

@@ -2,6 +2,8 @@ using System;
 using System.Globalization;
 using Microsoft.Maui.Controls;
 
+
+//This is used for xaml pages so that border animations trigger when selecting an item
 namespace TBRAppMobile.Converters
 {
     public class IconBorderConverter : IValueConverter

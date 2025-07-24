@@ -19,13 +19,14 @@
                         <Label Text="➕ Add a Book"
                                FontSize="24"
                                HorizontalOptions="Center"/>
-
+                        <!-- Fields for user input of each property to add a book -->
                         <Entry Placeholder="Title"
                                Text="{Binding BookTitle}"/>
 
                         <Entry Placeholder="Author"
                                Text="{Binding AuthorText}"
                                TextChanged="OnAuthorTextChanged"/>
+                        <!-- Code for suggestion function -->
                         <CollectionView ItemsSource="{Binding FilteredAuthorSuggestions}"
                                         IsVisible="{Binding IsAuthorSuggestionsVisible}"
                                         SelectionMode="Single"
@@ -137,14 +138,14 @@
                                         </DataTemplate>
                                 </CollectionView.ItemTemplate>
                         </CollectionView>
-
+                        <!-- Button for using camera * upload an image button-->
                         <HorizontalStackLayout Spacing="10">
                                 <Button Text="📷 Use Camera"
                                         Clicked="OnCameraClicked"/>
                                 <Button Text="📁 Upload Image"
                                         Clicked="OnUploadClicked"/>
                         </HorizontalStackLayout>
-
+                        <!-- Default icons to choose from -->
                         <CollectionView
                                 x:Name="IconPicker"
                                 ItemsSource="{Binding DefaultIcons}"
@@ -198,7 +199,7 @@
 
                                         </DataTemplate>
                                 </CollectionView.ItemTemplate>
-
+                                <!-- Save Book button, changes aren't implemented until it is clicked :) -->
                         </CollectionView>
                         <Button Text="Save Book"
                                 Clicked="OnSaveClicked"

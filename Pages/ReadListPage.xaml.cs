@@ -9,6 +9,14 @@ namespace TBRAppMobile.Pages
     {
         private readonly BookService _bookService;
 
+//updates page with most current version of List on page load
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            BindingContext = _bookService;
+            BookList.ItemsSource = _bookService.GetReadBooks();
+        }
+
         public ReadListPage(BookService bookService)
         {
             InitializeComponent();
@@ -17,6 +25,7 @@ namespace TBRAppMobile.Pages
             BookList.ItemsSource = _bookService.ReadBooks;
         }
 
+//Allows user to click a book and navigate to BookViewPage
         private async void OnBookSelected(object sender, SelectionChangedEventArgs e)
         {
             if (e.CurrentSelection.FirstOrDefault() is Book selectedBook)

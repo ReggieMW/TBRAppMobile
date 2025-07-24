@@ -1,5 +1,7 @@
 ﻿namespace TBRAppMobile;
 
+
+//This is default MainPage. Will change to a login/Signup page when ready. Default page is Current Reads
 public partial class MainPage : ContentPage
 {
 	int count = 0;

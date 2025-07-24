@@ -5,11 +5,12 @@ namespace TBRAppMobile;
 
 public partial class App : Application
 {
-    public static BookService BookService { get; } = new BookService();
+
+    public static BookService BookService { get; } = new BookService(); //makes BookService globally accessible 
 
     public App()
     {
-        InitializeComponent();
-        MainPage = new AppShell(); 
+        InitializeComponent();      //initializing UI
+        MainPage = new AppShell();   //utilizing Shell Navigation
     }
 }

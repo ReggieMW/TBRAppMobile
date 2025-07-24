@@ -4,6 +4,7 @@ using TBRAppMobile.Services;
 
 namespace TBRAppMobile;
 
+//initializing/building MAUI
 public static class MauiProgram
 {
     public static MauiApp CreateMauiApp()
@@ -23,11 +24,10 @@ public static class MauiProgram
         builder.Logging.AddDebug();
 #endif
 
-        // Register services
+        // Register services as Singletons (static)
         builder.Services.AddSingleton<BookService>();
-        builder.Services.AddSingleton<ListManager>();
 
-        // Register pages
+        // Register pages as Transients (dynamic)
         builder.Services.AddTransient<AddBookPage>();
         builder.Services.AddTransient<TBRListPage>();
         builder.Services.AddTransient<ReadListPage>();

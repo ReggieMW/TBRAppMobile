@@ -4,6 +4,8 @@
              xmlns:views="clr-namespace:TBRAppMobile.Views"
              x:Class="TBRAppMobile.MainPage">
 
+
+<!-- This is default MainPage. Will change to a login/Signup page when ready. Default page is Current Reads -->
     <ScrollView>
         <VerticalStackLayout
             Padding="30,0"

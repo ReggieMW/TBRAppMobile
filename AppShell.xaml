@@ -10,12 +10,12 @@
         <ShellContent ContentTemplate="{DataTemplate pages:CurrentReadsPage}"/>
     </FlyoutItem>
     
-    <FlyoutItem Title="TBR List">
+    <FlyoutItem Title="TBR List" Route="TBRListPage">
         <ShellContent ContentTemplate="{DataTemplate pages:TBRListPage}"
                 Route="TBRListPage"/>
     </FlyoutItem>
 
-    <FlyoutItem Title="Add Book">
+    <FlyoutItem Title="Add Book" Route="AddBookPage">
         <ShellContent ContentTemplate="{DataTemplate pages:AddBookPage}"
                 Route="AddBookPage"/>
     </FlyoutItem>
@@ -35,8 +35,4 @@
             Route="MyCanonPage">
         <ShellContent ContentTemplate="{DataTemplate pages:MyCanonPage}"/>
     </FlyoutItem>
-
-
-    <ShellContent Route="tbr"
-                  ContentTemplate="{DataTemplate pages:TBRListPage}"/>
 </Shell>

@@ -5,6 +5,7 @@
     xmlns:views="clr-namespace:TBRAppMobile.Views"
     x:Class="TBRAppMobile.Pages.ReadListPage"
     Title="Read List">
+    <!-- View Page for all books in Read List -->
     <ScrollView>
         <VerticalStackLayout Padding="20"
                 Spacing="10">

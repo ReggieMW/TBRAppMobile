@@ -3,6 +3,8 @@ using Microsoft.Maui.Graphics;
 using System;
 using System.Threading.Tasks;
 
+
+//this helper is for animations on buttons, making them more dynamic so the user recognizes clicks/taps
 namespace TBRAppMobile.Helpers
 {
     public static class AnimationExtensions

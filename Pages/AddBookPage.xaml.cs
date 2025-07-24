@@ -15,6 +15,7 @@ namespace TBRAppMobile.Pages
         private readonly BookService _bookService;
         private readonly AddBookViewModel _viewModel;
 
+        //ensures Suggestion functions are up to date
         protected override void OnAppearing()
         {
             base.OnAppearing();
@@ -40,7 +41,7 @@ namespace TBRAppMobile.Pages
             BindingContext = _viewModel;
         }
 
-
+        //code to upload image
         private async void OnUploadClicked(object sender, EventArgs e)
         {
             var file = await FilePicker.PickAsync(new PickOptions
@@ -57,6 +58,7 @@ namespace TBRAppMobile.Pages
 
         }
 
+        //code to add image via camera
         private async void OnCameraClicked(object sender, EventArgs e)
         {
             if (MediaPicker.Default.IsCaptureSupported)
@@ -74,6 +76,8 @@ namespace TBRAppMobile.Pages
                 await DisplayAlert("Camera Unavailable", "This device does not support camera capture.", "OK");
             }
         }
+
+        //save button code
         private async void OnSaveClicked(object sender, EventArgs e)
         {
             Debug.WriteLine("Clicked Save Book");
@@ -115,7 +119,8 @@ namespace TBRAppMobile.Pages
             }
         }
 
-            private void OnAuthorTextChanged(object sender, TextChangedEventArgs e)
+        //takes new inputs and updates suggestion data
+        private void OnAuthorTextChanged(object sender, TextChangedEventArgs e)
         {
             if (BindingContext is AddBookViewModel vm)
                 vm.FilterAuthorSuggestions(e.NewTextValue);

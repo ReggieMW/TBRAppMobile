@@ -3,6 +3,7 @@ using TBRAppMobile.Models;
 
 namespace TBRAppMobile.Views
 {
+    //Class to provide a uniform view of all books for BookViewPage
     public partial class BookCard : ContentView
     {
         public BookCard()
@@ -130,23 +131,27 @@ namespace TBRAppMobile.Views
         public event EventHandler<Book>? StatusChanged;
         public event EventHandler<Book>? RemoveRequested;
 
+//updates for status change
         private void OnStatusChanged(object sender, EventArgs e)
         {
             RecommendSection.IsVisible = Status == BookStatus.Read || Status == BookStatus.DNF;
             StatusChanged?.Invoke(this, GetBook());
         }
 
+//not implemented yet
         private void OnRecommendToggled(object sender, ToggledEventArgs e)
         {
             Recommend = e.Value;
             ComparableEntry.IsVisible = Recommend;
         }
 
+//Remove book option, button not added yet
         private void OnRemoveClicked(object sender, EventArgs e)
         {
             RemoveRequested?.Invoke(this, GetBook());
         }
 
+//fetches book info
         private Book GetBook()
         {
             return new Book

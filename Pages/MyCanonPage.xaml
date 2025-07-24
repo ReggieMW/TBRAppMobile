@@ -5,6 +5,7 @@
     xmlns:views="clr-namespace:TBRAppMobile.Views"
     x:Class="TBRAppMobile.Pages.MyCanonPage"
     Title="My Canon">
+    <!-- View Page for all books in My Canon List -->
     <ScrollView>
         <VerticalStackLayout Padding="20"
                 Spacing="10">
@@ -14,7 +15,7 @@
                 HorizontalOptions="Center"/>
 
             <CollectionView
-                x:Name="BookList"
+                x:Name="MyCanon"
                 ItemsSource="{Binding MyCanon}"
                 SelectionMode="Single"
                 SelectionChanged="OnBookSelected">

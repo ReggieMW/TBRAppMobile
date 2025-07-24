@@ -2,7 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TBRAppMobile.Pages.BookViewPage"
              Title="{Binding Title}">
-
+<!--Page for viewing an individual book and all properties, many updates to come! -->
     <ScrollView>
         <VerticalStackLayout Padding="20"
                              Spacing="16">
@@ -55,7 +55,7 @@
                 <Label Text="{Binding Source}"
                        Grid.Row="4"
                        Grid.Column="1"/>
-                <Label Text="Country:"
+                <Label Text="Country: "
                        Grid.Row="5"
                        Grid.Column="0"/>
                 <Label Text="{Binding Country}"
