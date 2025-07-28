@@ -5,6 +5,7 @@ using TBRAppMobile.Models;
 using TBRAppMobile.Services;
 using System.Windows.Input;
 using TBRAppMobile.Helpers;
+using TBRAppMobile.Pages;
 using Microsoft.Maui.Controls;
 
 //This ViewModel for the AddBook page implements dynamic changes made on the page throughout the app
@@ -13,16 +14,21 @@ namespace TBRAppMobile.ViewModels;
 public class AddBookViewModel : INotifyPropertyChanged
 {
     private readonly BookService _bookService;
+    private readonly GoogleBooksService _googleBooksService;
 
     public event PropertyChangedEventHandler? PropertyChanged;
     public ObservableCollection<string> DefaultIcons { get; set; } = new();
+    private ObservableCollection<Book> _searchResults = new();
 
     public void OnPropertyChanged([CallerMemberName] string name = "") =>
            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 
-    public AddBookViewModel(BookService bookService)
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+    public AddBookViewModel(BookService bookService, GoogleBooksService googleBooksService)
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     {
         _bookService = bookService;
+        _googleBooksService = googleBooksService;
 
         //These properties have suggestions provided by the logic
         SubjectSuggestions = _bookService.GetSubjectsSuggestions();
@@ -33,6 +39,30 @@ public class AddBookViewModel : INotifyPropertyChanged
             "book_alloy.png", "book_cyan.png", "book_red.png", "book_green.png",
             "book_yellow.png", "book_purple.png", "book_darkgreen.png", "book_black.png"
         };
+
+    }
+    
+    //Google Search results drop down 
+    public ObservableCollection<Book> SearchResults
+    {
+        get => _searchResults;
+        set => SetProperty(ref _searchResults, value);
+    }
+
+    private Book _selectedSearchResult;
+    public Book SelectedSearchResult
+    {
+        get => _selectedSearchResult;
+        set
+        {
+            SetProperty(ref _selectedSearchResult, value);
+
+            if (value != null)
+            {
+                PopulateFromGoogleBook(value);
+                SearchResults.Clear();
+            }
+        }
     }
 
     //updates properties when user makes changes
@@ -266,7 +296,7 @@ public class AddBookViewModel : INotifyPropertyChanged
         }
     }
 
-//allows selection of suggestion
+    //allows selection of suggestion
     public ICommand SelectAuthorCommand => new Command<string>((selected) =>
 {
     AuthorText = selected;
@@ -297,6 +327,25 @@ public class AddBookViewModel : INotifyPropertyChanged
         IsSourceSuggestionsVisible = false;
     });
 
+    private bool _isGoogleImage;
+    public bool IsGoogleImage
+    {
+        get => _isGoogleImage;
+        set => SetProperty(ref _isGoogleImage, value);
+    }
+
+
+    //GoogleBooks Search Code
+    public void PopulateFromGoogleBook(Book book)
+    {
+        BookTitle = book.Title;
+        AuthorText = book.Author;
+        PagesText = book.Pages > 0 ? book.Pages.ToString() : string.Empty;
+        YearText = book.YearPublished > 0 ? book.YearPublished.ToString() : string.Empty;
+        SelectedIcon = book.IconPath;
+        IsGoogleImage = !string.IsNullOrEmpty(book.IconPath);
+    }
+
     //method for implementing updates made by users
     private void SetProperty<T>(ref T backingStore, T value, [CallerMemberName] string? propertyName = null)
     {
@@ -307,7 +356,7 @@ public class AddBookViewModel : INotifyPropertyChanged
         OnPropertyChanged(propertyName ?? string.Empty);
     }
 
-//Method creates a book, assigns values to properties, and saves it in the app
+    //Method creates a book, assigns values to properties, and saves it in the app
     public Book CreateBook()
     {
         return new Book
@@ -322,15 +371,24 @@ public class AddBookViewModel : INotifyPropertyChanged
         };
     }
 
-//used to clear fields after user submits a change
+    private string _searchQuery;
+    public string SearchQuery
+    {
+        get => _searchQuery;
+        set => SetProperty(ref _searchQuery, value);
+    }
+
+    //used to clear fields after user submits a change
     public void ClearForm()
     {
+        SearchQuery = string.Empty;
+        SearchResults.Clear();
+
         BookTitle = string.Empty;
         AuthorText = string.Empty;
         YearText = string.Empty;
         PagesText = string.Empty;
         CountryText = string.Empty;
-
         SelectedSubject = null;
         SubjectText = string.Empty;
 
@@ -341,6 +399,7 @@ public class AddBookViewModel : INotifyPropertyChanged
         SourceText = string.Empty;
 
         SelectedIcon = null;
+        IsGoogleImage = false;
 
         FilteredAuthorSuggestions.Clear();
         FilteredCountrySuggestions.Clear();
@@ -355,7 +414,7 @@ public class AddBookViewModel : INotifyPropertyChanged
         IsSourceSuggestionsVisible = false;
     }
 
-//these properties are dynamic and suggestions are based off previous user input. This method updates the pages to provide the relevent suggestions
+    //these properties are dynamic and suggestions are based off previous user input. This method updates the pages to provide the relevent suggestions
     public void RefreshSuggestions()
     {
         SubjectSuggestions.Clear();

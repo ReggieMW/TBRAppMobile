@@ -26,13 +26,14 @@ namespace TBRAppMobile.Pages
 
         }
 
-//Allows user to click a book and navigate to BookViewPage
+        //Allows user to click a book and navigate to BookViewPage
         private async void OnBookSelected(object sender, SelectionChangedEventArgs e)
         {
             if (e.CurrentSelection.FirstOrDefault() is Book selectedBook)
-                await Navigation.PushAsync(new BookViewPage(selectedBook, App.BookService));
-
-            ((CollectionView)sender).SelectedItem = null;
+            {
+                await App.BookService.NavigateToBookAsync(selectedBook);
+            }
         }
+
     }
 }

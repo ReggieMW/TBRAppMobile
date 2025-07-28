@@ -30,9 +30,10 @@ namespace TBRAppMobile.Pages
         private async void OnBookSelected(object sender, SelectionChangedEventArgs e)
         {
             if (e.CurrentSelection.FirstOrDefault() is Book selectedBook)
-                await Navigation.PushAsync(new BookViewPage(selectedBook, App.BookService));
-
-            ((CollectionView)sender).SelectedItem = null;
+            {
+                await App.BookService.NavigateToBookAsync(selectedBook);
+            }
         }
+
     }
 }

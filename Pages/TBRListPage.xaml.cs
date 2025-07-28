@@ -11,7 +11,7 @@ namespace TBRAppMobile.Pages;
 public partial class TBRListPage : ContentPage
 {
     private readonly BookService _bookService;
-    
+
     //updates page with most current version of List on page load
     protected override void OnAppearing()
     {
@@ -40,9 +40,8 @@ public partial class TBRListPage : ContentPage
     {
         if (e.CurrentSelection.FirstOrDefault() is Book selectedBook)
         {
-            await Navigation.PushAsync(new BookViewPage(selectedBook, App.BookService));
+            await App.BookService.NavigateToBookAsync(selectedBook);
         }
-
-    ((CollectionView)sender).SelectedItem = null; // clear selection
     }
+
 }

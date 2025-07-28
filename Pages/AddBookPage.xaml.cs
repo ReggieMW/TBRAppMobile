@@ -8,12 +8,14 @@ using TBRAppMobile.Models;
 using TBRAppMobile.Services;
 using TBRAppMobile.ViewModels;
 
+
 namespace TBRAppMobile.Pages
 {
     public partial class AddBookPage : ContentPage
     {
         private readonly BookService _bookService;
         private readonly AddBookViewModel _viewModel;
+        private readonly GoogleBooksService _googleBooksService;
 
         //ensures Suggestion functions are up to date
         protected override void OnAppearing()
@@ -33,12 +35,65 @@ namespace TBRAppMobile.Pages
             }
         }
 
-        public AddBookPage(BookService bookService)
+        public AddBookPage(BookService bookService, GoogleBooksService googleBooksService)
         {
             InitializeComponent();
             _bookService = bookService;
-            _viewModel = new AddBookViewModel(bookService);
+            _googleBooksService = googleBooksService;
+            _viewModel = new AddBookViewModel(bookService, googleBooksService);
             BindingContext = _viewModel;
+        }
+
+        //Google Search Code
+        private async void OnSearchClicked(object sender, EventArgs e)
+        {
+            var query = SearchEntry.Text;
+            if (string.IsNullOrWhiteSpace(query)) return;
+
+            if (BindingContext is AddBookViewModel vm)
+            {
+                try
+                {
+                    var results = await _googleBooksService.SearchBooksAsync(query);
+#pragma warning disable CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
+                    vm.SearchResults = new ObservableCollection<Book>(results);
+#pragma warning restore CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Search failed: {ex.Message}");
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                    await Application.Current.MainPage.DisplayAlert("Search Error", "Unable to fetch book results. Please try again.", "OK");
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                }
+            }
+        }
+
+
+        private async void OnSearchQueryChanged(object sender, TextChangedEventArgs e)
+        {
+            if (BindingContext is AddBookViewModel vm && !string.IsNullOrWhiteSpace(e.NewTextValue))
+            {
+                try
+                {
+                    var results = await _googleBooksService.SearchBooksAsync(e.NewTextValue);
+#pragma warning disable CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
+                    vm.SearchResults = new ObservableCollection<Book>(results);
+#pragma warning restore CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Search failed: {ex.Message}");
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                    await Application.Current.MainPage.DisplayAlert("Search Error", "Unable to fetch book results. Please try again.", "OK");
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                }
+
+            }
         }
 
         //code to upload image

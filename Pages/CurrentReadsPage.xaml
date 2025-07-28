@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:views="clr-namespace:TBRAppMobile.Views"
     x:Class="TBRAppMobile.Pages.CurrentReadsPage"
-    Title="Currently Reading List">
+    Title="Currently Reading {The Nightstand Pile}">
 
     <!-- View Page for all books in Current Reads List -->
     <ScrollView>

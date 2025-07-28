@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Collections.ObjectModel;
 using TBRAppMobile.Services;
 using TBRAppMobile.ViewModels;
+using TBRAppMobile.Pages;
 
 namespace TBRAppMobile.Services;
 
@@ -79,6 +80,17 @@ public class BookService
 
         Debug.WriteLine($"Added book: {book.Title}");
     }
+
+   //Navigation code for viewing a BookViewPage
+    public async Task NavigateToBookAsync(Book selectedBook)
+    {
+        if (selectedBook == null)
+            return;
+
+        var page = new BookViewPage(selectedBook, this);
+        await Shell.Current.Navigation.PushAsync(page);
+    }
+
 
 //Same as AddBook but for already existing books; allows updating of any property
     public void UpdateBook(Book updatedBook)
