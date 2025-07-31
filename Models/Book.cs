@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using SQLite;
 
 namespace TBRAppMobile.Models;
 
@@ -10,7 +11,7 @@ public class Book : INotifyPropertyChanged
     private string _author = string.Empty;
     private int _yearPublished;
     private int _pages;
-    private string? _country = string.Empty;
+    private string _country = string.Empty;
     private string? _subject = string.Empty;
     private string? _vibe = string.Empty;
     private string? _source = string.Empty;
@@ -18,7 +19,10 @@ public class Book : INotifyPropertyChanged
     private bool _isCanon;
     private string? _iconPath;
 
-//syncs with UI so when a book property is added or updated it syncs across the app
+    //syncs with UI so when a book property is added or updated it syncs across the app
+
+    [PrimaryKey, AutoIncrement]
+public int Id {get; set;}
     public string Title
     {
         get => _title;
@@ -31,19 +35,8 @@ public class Book : INotifyPropertyChanged
         set { _author = value; OnPropertyChanged(); }
     }
 
-    public int YearPublished
-    {
-        get => _yearPublished;
-        set { _yearPublished = value; OnPropertyChanged(); }
-    }
 
-    public int Pages
-    {
-        get => _pages;
-        set { _pages = value; OnPropertyChanged(); }
-    }
-
-    public string? Country
+    public string Country
     {
         get => _country;
         set { _country = value; OnPropertyChanged(); }
@@ -66,54 +59,7 @@ public class Book : INotifyPropertyChanged
         get => _source;
         set { _source = value; OnPropertyChanged(); }
     }
-
-//Book Status reflects the users current relationship with the book, Dynamic and updated by user
-    public BookStatus Status
-    {
-        get => _status;
-        set
-        {
-            if (_status != value)
-            {
-                _status = value;
-                OnPropertyChanged();
-            }
-        }
-    }
-
-//A favorites list, more or less
-    public bool IsCanon
-    {
-        get => _isCanon;
-        set
-        {
-            if (_isCanon != value)
-            {
-                _isCanon = value;
-                OnPropertyChanged();
-            }
-        }
-    }
-
-//property allowing user to provide a comparison to a book
-    private string? _comparable;
-    public string? Comparable
-    {
-        get => _comparable;
-        set
-        {
-            if (_comparable != value)
-            {
-                _comparable = value;
-                OnPropertyChanged();
-            }
-        }
-    }
-
-
-
-    public bool Recommended { get; set; }
-
+    
 //Default icon in several different colors for users who don't provide their own image for a book *one of these isn't working!
     private static readonly string[] DefaultIcons =
     {
@@ -134,6 +80,65 @@ public class Book : INotifyPropertyChanged
         get => _iconPath ?? _defaultIcon;
         set { _iconPath = value; OnPropertyChanged(); }
     }
+    public int Pages
+    {
+        get => _pages;
+        set { _pages = value; OnPropertyChanged(); }
+    }
+    public int YearPublished
+    {
+        get => _yearPublished;
+        set { _yearPublished = value; OnPropertyChanged(); }
+    }
+//A favorites list, more or less
+    public bool IsCanon
+    {
+        get => _isCanon;
+        set
+        {
+            if (_isCanon != value)
+            {
+                _isCanon = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+
+
+//Book Status reflects the users current relationship with the book, Dynamic and updated by user
+    public BookStatus Status
+    {
+        get => _status;
+        set
+        {
+            if (_status != value)
+            {
+                _status = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+
+
+//property allowing user to provide a comparison to a book
+    private string? _comparable;
+    public string? Comparable
+    {
+        get => _comparable;
+        set
+        {
+            if (_comparable != value)
+            {
+                _comparable = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+
+
+
+    public bool Recommended { get; set; }
+
 
 //property change logic for UI
     public event PropertyChangedEventHandler? PropertyChanged;

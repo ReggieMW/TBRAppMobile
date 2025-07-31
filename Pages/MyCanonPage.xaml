@@ -4,7 +4,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:views="clr-namespace:TBRAppMobile.Views"
     x:Class="TBRAppMobile.Pages.MyCanonPage"
-    Title="My Canon {The Display Shelf}">
+    Title="My Canon {The Display Shelf}"
+    BackgroundColor="{StaticResource BackgroundColor}">
     <!-- View Page for all books in My Canon List -->
     <ScrollView>
         <VerticalStackLayout Padding="20"

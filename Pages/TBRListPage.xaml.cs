@@ -44,4 +44,10 @@ public partial class TBRListPage : ContentPage
         }
     }
 
+    private async void OnViewDbBooksClicked(object sender, EventArgs e)
+{
+    await Navigation.PushAsync(new DbBooksPage());
+}
+
+
 }

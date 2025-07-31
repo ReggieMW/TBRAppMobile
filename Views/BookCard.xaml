@@ -5,11 +5,12 @@
        x:Class="TBRAppMobile.Views.BookCard"
        x:Name="this"
        Padding="10"
-       BackgroundColor="White">
+       BackgroundColor="{StaticResource AccentColor}">
 
        <Frame
               CornerRadius="12"
-              BorderColor="#ddd"
+              BackgroundColor="{StaticResource BackgroundColor}"
+              BorderColor="{StaticResource HeaderBackground}"
               HasShadow="True"
               Padding="10"
               Margin="5">
@@ -41,7 +42,7 @@
                             Grid.Column="1"
                             Text="{Binding Author, Source={x:Reference this}}"
                             FontSize="14"
-                            TextColor="Gray"/>
+                            TextColor="{StaticResource TextColor}"/>
 
                      <Label
                             Grid.Row="1"
@@ -49,7 +50,7 @@
                             HorizontalOptions="End"
                             Text="{Binding Pages, StringFormat='{}{0} pages', Source={x:Reference this}}"
                             FontSize="12"
-                            TextColor="DarkGray"/>
+                            TextColor="{StaticResource TextColor}"/>
 
                      <!-- Subject & Vibe -->
                      <StackLayout Grid.Row="2"
@@ -58,25 +59,27 @@
                                   Spacing="10">
                             <!-- Subject Chip -->
                             <Frame Padding="5,2"
-                                   BackgroundColor="#eef"
+                                   BackgroundColor="{StaticResource CardBackground}"
+                                   BorderColor="{StaticResource PrimaryColor}"
                                    CornerRadius="6"
                                    HasShadow="False">
                                    <Label
                                           Text="{Binding Subject, Source={x:Reference this}}"
                                           FontSize="12"
-                                          TextColor="#555"
+                                          TextColor="{StaticResource TextColor}"
                                           VerticalOptions="Center"/>
                             </Frame>
 
                             <!-- Vibe Chip -->
                             <Frame Padding="5,2"
-                                   BackgroundColor="#efe"
+                                   BackgroundColor="{StaticResource CardBackground}"
+                                   BorderColor="{StaticResource PrimaryColor}"
                                    CornerRadius="6"
                                    HasShadow="False">
                                    <Label
                                           Text="{Binding Vibe, Source={x:Reference this}}"
                                           FontSize="12"
-                                          TextColor="#555"
+                                          TextColor="{StaticResource TextColor}"
                                           VerticalOptions="Center"/>
                             </Frame>
                      </StackLayout>

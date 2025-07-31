@@ -56,7 +56,9 @@ namespace TBRAppMobile.Pages
                 {
                     var results = await _googleBooksService.SearchBooksAsync(query);
 #pragma warning disable CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
-                    vm.SearchResults = new ObservableCollection<Book>(results);
+                    _viewModel.SearchResults = new ObservableCollection<Book>(results);
+                    _viewModel.IsSearchDropdownVisible = true;
+                    OnPropertyChanged(nameof(vm.SearchResults));
 #pragma warning restore CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
                 }
                 catch (Exception ex)
@@ -64,37 +66,45 @@ namespace TBRAppMobile.Pages
                     Debug.WriteLine($"Search failed: {ex.Message}");
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
-                    await Application.Current.MainPage.DisplayAlert("Search Error", "Unable to fetch book results. Please try again.", "OK");
+                    await Application.Current.MainPage.DisplayAlert("Search Error", ex.Message, "OK");
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
                 }
             }
         }
-
 
         private async void OnSearchQueryChanged(object sender, TextChangedEventArgs e)
         {
-            if (BindingContext is AddBookViewModel vm && !string.IsNullOrWhiteSpace(e.NewTextValue))
-            {
-                try
-                {
-                    var results = await _googleBooksService.SearchBooksAsync(e.NewTextValue);
-#pragma warning disable CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
-                    vm.SearchResults = new ObservableCollection<Book>(results);
-#pragma warning restore CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"Search failed: {ex.Message}");
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-                    await Application.Current.MainPage.DisplayAlert("Search Error", "Unable to fetch book results. Please try again.", "OK");
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
-                }
+            if (_viewModel == null || string.IsNullOrWhiteSpace(e.NewTextValue))
+                return;
 
+            try
+            {
+                var results = await _googleBooksService.SearchBooksAsync(e.NewTextValue);
+                _viewModel.SearchResults = new ObservableCollection<Book>(results ?? new List<Book>());
+                _viewModel.IsSearchDropdownVisible = _viewModel.SearchResults.Count > 0;
+
+                Debug.WriteLine($"Updated dropdown visibility: {_viewModel.IsSearchDropdownVisible}");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Search failed: {ex}");
+                await MainThread.InvokeOnMainThreadAsync(async () =>
+                    {
+                        await Application.Current?.MainPage?.DisplayAlert("Search Error", "Unable to fetch book results.", "OK");
+                    });
             }
         }
+
+        private void OnForceDropdownClicked(object sender, EventArgs e)
+        {
+            _viewModel.IsSearchDropdownVisible = true;
+            Debug.WriteLine("Forced visibility to TRUE");
+        }
+
+
+
+
 
         //code to upload image
         private async void OnUploadClicked(object sender, EventArgs e)
@@ -107,7 +117,6 @@ namespace TBRAppMobile.Pages
             if (file != null)
             {
                 var imagePath = file.FullPath;
-                IconPicker.SelectedItem = imagePath;
             }
 
 
@@ -123,7 +132,6 @@ namespace TBRAppMobile.Pages
                 {
                     var stream = await photo.OpenReadAsync();
                     var path = photo.FullPath;
-                    IconPicker.SelectedItem = path;
                 }
             }
             else
@@ -154,6 +162,9 @@ namespace TBRAppMobile.Pages
             book.Pages = pages;
 
             _bookService.AddBook(book);
+            await App.Database.SaveBookAsync(book);
+            System.Diagnostics.Debug.WriteLine($"[Path] DB is here: {Path.Combine(FileSystem.AppDataDirectory, "books.db3")}");
+
 
             bool addAnother = await DisplayAlert(
                 "Success",

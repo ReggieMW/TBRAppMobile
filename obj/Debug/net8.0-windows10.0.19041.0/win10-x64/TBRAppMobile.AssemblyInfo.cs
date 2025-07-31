@@ -17,7 +17,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TBRAppMobile")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+75d50e0bc7d31bed53f49e57f67098ac6d3da84e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+803dc8f1a2f5e70b0bc78c58cfc48c67cc219134")]
 [assembly: System.Reflection.AssemblyProductAttribute("TBRAppMobile")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TBRAppMobile")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

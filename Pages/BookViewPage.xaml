@@ -1,7 +1,8 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TBRAppMobile.Pages.BookViewPage"
-             Title="{Binding Title}">
+             Title="{Binding Title}"
+             BackgroundColor="{StaticResource BackgroundColor}">
 <!--Page for viewing an individual book and all properties, many updates to come! -->
     <ScrollView>
         <VerticalStackLayout Padding="20"
@@ -10,7 +11,7 @@
             <Image Source="{Binding ImagePath}"
                    HeightRequest="200"
                    Aspect="AspectFit"
-                   BackgroundColor="#FF0A0A0A"/>
+                   BackgroundColor="{StaticResource AccentColor}"/>
 
             <Label Text="{Binding Title}"
                    FontSize="24"
@@ -20,7 +21,7 @@
             <Label Text="{Binding Author}"
                    FontSize="18"
                    HorizontalOptions="Center"
-                   TextColor="Gray"/>
+                   TextColor="{StaticResource TextColor}"/>
 
             <Grid ColumnDefinitions="Auto,*"
                   RowDefinitions="Auto,Auto,Auto,Auto,Auto, Auto, Auto"
@@ -73,9 +74,9 @@
             <Button x:Name="CanonButton"
                     Text="{Binding CanonButtonText}"
                     Clicked="OnCanonButtonClicked"
-                    BackgroundColor="Transparent"
-                    TextColor="DarkSlateGray"
-                    BorderColor="Gray"
+                    BackgroundColor="{StaticResource AccentColor}"
+                    TextColor="{StaticResource TextColor}"
+                    BorderColor="{StaticResource PrimaryColor}"
                     BorderWidth="1"
                     CornerRadius="10"
                     HeightRequest="40"/>

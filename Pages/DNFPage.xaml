@@ -4,7 +4,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:views="clr-namespace:TBRAppMobile.Views"
     x:Class="TBRAppMobile.Pages.DNFPage"
-    Title="Your DNF List {The Donate Box}">
+    Title="Your DNF List {The Donate Box}"
+    BackgroundColor="{StaticResource BackgroundColor}">
     <!-- View Page for all books in DNF List -->
     <ScrollView>
         <VerticalStackLayout Padding="20"

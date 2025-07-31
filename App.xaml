@@ -5,11 +5,44 @@
              x:Class="TBRAppMobile.App">
              <!-- MAUI installed to make IOS, Android, and Windows compatible app-->
     <Application.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
-                <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Application.Resources>
+    <!-- Color Palette -->
+    <Color x:Key="PrimaryColor">#A53D2C</Color>
+    <Color x:Key="BackgroundColor">#EFE1C1</Color>
+    <Color x:Key="TextColor">#1A1A1A</Color>
+    <Color x:Key="AccentColor">#D3A63B</Color>
+    <Color x:Key="CardBackground">#FDF5E6</Color>
+    <Color x:Key="HeaderBackground">#B0815B</Color>
+
+    <!-- Entry Style -->
+    <Style TargetType="Entry">
+        <Setter Property="BackgroundColor" Value="{StaticResource CardBackground}" />
+        <Setter Property="TextColor" Value="{StaticResource TextColor}" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontFamily" Value="Georgia" />
+        <Setter Property="Margin" Value="0,5" />
+    </Style>
+
+    <!-- Button Style -->
+    <Style TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{StaticResource AccentColor}" />
+        <Setter Property="TextColor" Value="{StaticResource TextColor}" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="FontFamily" Value="Georgia" />
+        <Setter Property="FontSize" Value="14" />
+    </Style>
+
+    <!-- Label Style -->
+    <Style TargetType="Label">
+        <Setter Property="TextColor" Value="{StaticResource TextColor}" />
+        <Setter Property="BackgroundColor" Value="{StaticResource BackgroundColor}" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontFamily" Value="Georgia" />
+    </Style>
+
+    <!-- Page Background -->
+    <Style TargetType="ContentPage">
+        <Setter Property="BackgroundColor" Value="{StaticResource BackgroundColor}" />
+    </Style>
+</Application.Resources>
+
 </Application>

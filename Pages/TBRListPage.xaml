@@ -4,11 +4,12 @@
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:views="clr-namespace:TBRAppMobile.Views"
        x:Class="TBRAppMobile.Pages.TBRListPage"
-       Title="Your TBR List {The Stack}">
+       Title="Your TBR List {The Stack}"
+       BackgroundColor="{StaticResource BackgroundColor}">
        <!-- View Page for all books in TBR List -->
        <ScrollView>
               <VerticalStackLayout Padding="20"
-                            Spacing="10">
+                                   Spacing="10">
                      <Label
                             Text="📚 Your TBR Pile"
                             FontSize="24"
@@ -32,6 +33,8 @@
                                    </DataTemplate>
                             </CollectionView.ItemTemplate>
                      </CollectionView>
+                     <Button Text="🧾 View DB Books"
+                             Clicked="OnViewDbBooksClicked"/>
               </VerticalStackLayout>
        </ScrollView>
 </ContentPage>

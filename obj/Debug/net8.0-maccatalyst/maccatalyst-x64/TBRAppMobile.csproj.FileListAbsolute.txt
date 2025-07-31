@@ -308,3 +308,8 @@ C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\refint\
 C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\TBRAppMobile.pdb
 C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\TBRAppMobile.genruntimeconfig.cache
 C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\ref\TBRAppMobile.dll
+C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\SQLite-net.dll
+C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\SQLitePCLRaw.batteries_v2.dll
+C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\SQLitePCLRaw.core.dll
+C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\SQLitePCLRaw.provider.e_sqlite3.dll
+C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\libe_sqlite3.dylib

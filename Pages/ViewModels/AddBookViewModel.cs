@@ -41,7 +41,7 @@ public class AddBookViewModel : INotifyPropertyChanged
         };
 
     }
-    
+
     //Google Search results drop down 
     public ObservableCollection<Book> SearchResults
     {
@@ -50,6 +50,13 @@ public class AddBookViewModel : INotifyPropertyChanged
     }
 
     private Book _selectedSearchResult;
+    private bool _isSearchDropdownVisible;
+    public bool IsSearchDropdownVisible
+    {
+        get => _isSearchDropdownVisible;
+        set => SetProperty(ref _isSearchDropdownVisible, value);
+    }
+
     public Book SelectedSearchResult
     {
         get => _selectedSearchResult;
@@ -61,6 +68,7 @@ public class AddBookViewModel : INotifyPropertyChanged
             {
                 PopulateFromGoogleBook(value);
                 SearchResults.Clear();
+                IsSearchDropdownVisible = false;
             }
         }
     }
@@ -341,6 +349,7 @@ public class AddBookViewModel : INotifyPropertyChanged
         BookTitle = book.Title;
         AuthorText = book.Author;
         PagesText = book.Pages > 0 ? book.Pages.ToString() : string.Empty;
+        CountryText = book.Country;
         YearText = book.YearPublished > 0 ? book.YearPublished.ToString() : string.Empty;
         SelectedIcon = book.IconPath;
         IsGoogleImage = !string.IsNullOrEmpty(book.IconPath);

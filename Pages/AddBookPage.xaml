@@ -4,263 +4,219 @@
              xmlns:converters="clr-namespace:TBRAppMobile.Converters"
              x:Class="TBRAppMobile.Pages.AddBookPage"
              x:Name="AddBookPageInstance"
-             Title="Add a Book">
+             Title="Add a Book"
+             BackgroundColor="{StaticResource BackgroundColor}">
 
-        <ContentPage.Resources>
-                <ResourceDictionary>
-                        <converters:IconBorderConverter x:Key="IconBorderConverter"/>
-                </ResourceDictionary>
-        </ContentPage.Resources>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:IconBorderConverter x:Key="IconBorderConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
-        <ScrollView>
-                <StackLayout Padding="20"
-                             Spacing="15">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
 
-                        <Label Text="➕ Add a Book"
-                               FontSize="24"
-                               HorizontalOptions="Start"/>
-                        <!-- Fields for user input of each property to add a book -->
-                        <Entry x:Name="SearchEntry"
-                               Placeholder="Search title or author"
-                               Text="{Binding SearchQuery}"
-                               TextChanged="OnSearchQueryChanged"/>
-                        <Button Text="Search"
-                                Clicked="OnSearchClicked"/>
-                        <CollectionView ItemsSource="{Binding SearchResults}"
-                                        SelectionMode="Single"
-                                        SelectedItem="{Binding SelectedSearchResult}"
-                                        HeightRequest="200">
-                                <CollectionView.ItemTemplate>
-                                        <DataTemplate>
-                                                <Grid Padding="5"
-                                                      ColumnDefinitions="Auto, *"
-                                                      RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto">
-                                                        <Image Grid.RowSpan="2"
-                                                               Grid.Column="0"
-                                                               Source="{Binding IconPath}"
-                                                               WidthRequest="40"
-                                                               HeightRequest="60"
-                                                               Margin="0,0,10,0"/>
+            <!-- Section: Header -->
+            <Label Text="➕ Add a Book" FontSize="24" FontAttributes="Bold" HorizontalOptions="Start" />
 
-                                                        <Label Grid.Column="1"
-                                                               Grid.Row="0"
-                                                               Text="{Binding Title}"
-                                                               FontAttributes="Bold"/>
+            <!-- Section: Google Books Search -->
+            <Label Text="Search Google Books" FontSize="18" FontAttributes="Bold" />
+            <Entry x:Name="SearchEntry"
+                   Placeholder="Search title or author"
+                   Text="{Binding SearchQuery}"
+                   TextChanged="OnSearchQueryChanged" />
+            <Button Text="Search" Clicked="OnSearchClicked" />
+            <Button Text="Force Dropdown Visible" Clicked="OnForceDropdownClicked" />
 
-                                                        <Label Grid.Column="1"
-                                                               Grid.Row="1"
-                                                               Text="{Binding Author}"
-                                                               FontSize="12"
-                                                               TextColor="Gray"/>
-                                                </Grid>
-
-                                        </DataTemplate>
-                                </CollectionView.ItemTemplate>
-                        </CollectionView>
-                        <Entry Placeholder="Title"
-                               Text="{Binding BookTitle}"/>
-
-                        <Entry Placeholder="Author"
-                               Text="{Binding AuthorText}"
-                               TextChanged="OnAuthorTextChanged"/>
-                        <!-- Code for suggestion function -->
-                        <CollectionView ItemsSource="{Binding FilteredAuthorSuggestions}"
-                                        IsVisible="{Binding IsAuthorSuggestionsVisible}"
-                                        SelectionMode="Single"
-                                        HeightRequest="100">
-                                <CollectionView.ItemTemplate>
-                                        <DataTemplate>
-                                                <Label Text="{Binding .}">
-                                                        <Label.GestureRecognizers>
-                                                                <TapGestureRecognizer Command="{Binding BindingContext.SelectAuthorCommand, Source={x:Reference AddBookPageInstance}}"
-                                                                                      CommandParameter="{Binding .}"/>
-                                                        </Label.GestureRecognizers>
-                                                </Label>
-                                        </DataTemplate>
-                                </CollectionView.ItemTemplate>
-                        </CollectionView>
-
-                        <Entry Placeholder="Country"
-                               Text="{Binding CountryText}"
-                               TextChanged="OnCountryTextChanged"/>
-                        <CollectionView ItemsSource="{Binding FilteredCountrySuggestions}"
-                                        IsVisible="{Binding IsCountrySuggestionsVisible}"
-                                        SelectionMode="Single"
-                                        HeightRequest="100">
-                                <CollectionView.ItemTemplate>
-                                        <DataTemplate>
-                                                <Label Text="{Binding .}">
-                                                        <Label.GestureRecognizers>
-                                                                <TapGestureRecognizer Command="{Binding BindingContext.SelectCountryCommand, Source={x:Reference AddBookPageInstance}}"
-                                                                                      CommandParameter="{Binding .}"/>
-                                                        </Label.GestureRecognizers>
-                                                </Label>
-                                        </DataTemplate>
-                                </CollectionView.ItemTemplate>
-                        </CollectionView>
-
-                        <Entry Placeholder="Year Published"
-                               Keyboard="Numeric"
-                               Text="{Binding YearText}"/>
-
-                        <Entry Placeholder="Pages"
-                               Keyboard="Numeric"
-                               Text="{Binding PagesText}"/>
-
-                        <Label Text="Subject"/>
-                        <Picker Title="Select a Subject"
-                                ItemsSource="{Binding SubjectSuggestions}"
-                                SelectedItem="{Binding SelectedSubject}"/>
-                        <Entry Placeholder="Or enter your own subject"
-                               Text="{Binding SubjectText}"
-                               TextChanged="OnSubjectTextChanged"/>
-                        <CollectionView ItemsSource="{Binding FilteredSubjectsSuggestions}"
-                                        IsVisible="{Binding IsSubjectsSuggestionsVisible}"
-                                        SelectionMode="Single"
-                                        HeightRequest="100">
-                                <CollectionView.ItemTemplate>
-                                        <DataTemplate>
-                                                <Label Text="{Binding .}">
-                                                        <Label.GestureRecognizers>
-                                                                <TapGestureRecognizer Command="{Binding BindingContext.SelectSubjectsCommand, Source={x:Reference AddBookPageInstance}}"
-                                                                                      CommandParameter="{Binding .}"/>
-                                                        </Label.GestureRecognizers>
-                                                </Label>
-                                        </DataTemplate>
-                                </CollectionView.ItemTemplate>
-                        </CollectionView>
-
-                        <Label Text="Vibe"/>
-                        <Picker Title="Select a Vibe"
-                                ItemsSource="{Binding VibeSuggestions}"
-                                SelectedItem="{Binding SelectedVibe}"/>
-                        <Entry Placeholder="Or enter your own vibe"
-                               Text="{Binding VibeText}"
-                               TextChanged="OnVibeTextChanged"/>
-                        <CollectionView ItemsSource="{Binding FilteredVibeSuggestions}"
-                                        IsVisible="{Binding IsVibeSuggestionsVisible}"
-                                        SelectionMode="Single"
-                                        HeightRequest="60">
-                                <CollectionView.ItemTemplate>
-                                        <DataTemplate>
-                                                <Label Text="{Binding .}">
-                                                        <Label.GestureRecognizers>
-                                                                <TapGestureRecognizer Command="{Binding BindingContext.SelectVibeCommand, Source={x:Reference AddBookPageInstance}}"
-                                                                                      CommandParameter="{Binding .}"/>
-                                                        </Label.GestureRecognizers>
-                                                </Label>
-                                        </DataTemplate>
-                                </CollectionView.ItemTemplate>
-                        </CollectionView>
-
-                        <Label Text="Source"/>
-                        <Picker Title="Select a Source"
-                                ItemsSource="{Binding SourceSuggestions}"
-                                SelectedItem="{Binding SelectedSource}"/>
-                        <Entry Placeholder="Or enter your own source"
-                               Text="{Binding SourceText}"
-                               TextChanged="OnSourceTextChanged"/>
-                        <CollectionView ItemsSource="{Binding FilteredSourceSuggestions}"
-                                        IsVisible="{Binding IsSourceSuggestionsVisible}"
-                                        SelectionMode="Single"
-                                        HeightRequest="60">
-                                <CollectionView.ItemTemplate>
-                                        <DataTemplate>
-                                                <Label Text="{Binding .}">
-                                                        <Label.GestureRecognizers>
-                                                                <TapGestureRecognizer Command="{Binding BindingContext.SelectSourceCommand, Source={x:Reference AddBookPageInstance}}"
-                                                                                      CommandParameter="{Binding .}"/>
-                                                        </Label.GestureRecognizers>
-                                                </Label>
-                                        </DataTemplate>
-                                </CollectionView.ItemTemplate>
-                        </CollectionView>
-                        <!-- Button for using camera & upload an image button-->
-                        <HorizontalStackLayout Spacing="10">
-                                <Button Text="📷 Use Camera"
-                                        Clicked="OnCameraClicked"/>
-                                <Button Text="📁 Upload Image"
-                                        Clicked="OnUploadClicked"/>
-                        </HorizontalStackLayout>
-                        <!-- Default icons to choose from -->
-                        <CollectionView
-                                x:Name="IconPicker"
-                                ItemsSource="{Binding DefaultIcons}"
+            <!-- Conditional Search Results Area -->
+            <ContentView IsVisible="{Binding IsSearchDropdownVisible}">
+                <CollectionView ItemsSource="{Binding SearchResults}"
                                 SelectionMode="Single"
-                                SelectedItem="{Binding SelectedIcon}"
-                                        HeightRequest="150">
-                                <CollectionView.ItemsLayout>
-                                        <LinearItemsLayout Orientation="Horizontal"/>
-                                </CollectionView.ItemsLayout>
+                                SelectedItem="{Binding SelectedSearchResult}"
+                                HeightRequest="200">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Padding="10" Margin="5" BackgroundColor="{StaticResource AccentColor}" HasShadow="True" CornerRadius="6">
+                                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                                    <Image Grid.Column="0"
+                                           Source="{Binding IconPath}"
+                                           WidthRequest="40"
+                                           HeightRequest="60"
+                                           Aspect="AspectFill" />
+                                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                                        <Label Text="{Binding Title}" FontAttributes="Bold" FontSize="16" TextColor="Black" />
+                                        <Label Text="{Binding Author}" FontSize="13" TextColor="DimGray" />
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </ContentView>
 
-                                <CollectionView.ItemTemplate>
-                                        <DataTemplate>
-                                                <Frame x:Name="IconFrame"
-                                                       Padding="5"
-                                                       CornerRadius="10"
-                                                       BorderColor="Transparent"
-                                                       HasShadow="False"
-                                                       WidthRequest="50"
-                                                       HeightRequest="50">
-                                                        <Frame.Content>
-                                                                <Image Source="{Binding}"
-                                                                       WidthRequest="40"
-                                                                       HeightRequest="40"/>
-                                                        </Frame.Content>
-                                                        <VisualStateManager.VisualStateGroups>
-                                                                <VisualStateGroup Name="CommonStates">
-                                                                        <VisualState Name="Selected">
-                                                                                <VisualState.Setters>
-                                                                                        <Setter TargetName="IconFrame"
-                                                                                                Property="BorderColor"
-                                                                                                Value="DodgerBlue"/>
-                                                                                        <Setter TargetName="IconFrame"
-                                                                                                Property="HasShadow"
-                                                                                                Value="True"/>
-                                                                                </VisualState.Setters>
-                                                                        </VisualState>
-                                                                        <VisualState Name="Normal">
-                                                                                <VisualState.Setters>
-                                                                                        <Setter TargetName="IconFrame"
-                                                                                                Property="BorderColor"
-                                                                                                Value="Transparent"/>
-                                                                                        <Setter TargetName="IconFrame"
-                                                                                                Property="HasShadow"
-                                                                                                Value="False"/>
-                                                                                </VisualState.Setters>
-                                                                        </VisualState>
-                                                                </VisualStateGroup>
-                                                        </VisualStateManager.VisualStateGroups>
-                                                </Frame>
+            <!-- Google Image Preview -->
+            <StackLayout Padding="10" HorizontalOptions="Start" IsVisible="{Binding IsGoogleImage}">
+                <Image Source="{Binding SelectedIcon}"
+                       WidthRequest="100"
+                       HeightRequest="150"
+                       Aspect="AspectFill"
+                       Margin="0,0,0,5" />
+                <Label Text="Using Google Books image" FontSize="12" TextColor="{StaticResource TextColor}" />
+            </StackLayout>
 
-                                        </DataTemplate>
-                                </CollectionView.ItemTemplate>
-                        </CollectionView>
-                                <!--GoogleBooks Suggested Image -->
-                                <StackLayout Padding="10"
-                                             HorizontalOptions="Start"
-                                             IsVisible="{Binding IsGoogleImage}">
-                                        <Image Source="{Binding SelectedIcon}"
-                                               WidthRequest="100"
-                                               HeightRequest="150"
-                                               Aspect="AspectFill"
-                                               Margin="0,0,0,5"/>
+            <!-- Section: Book Details -->
+            <Label Text="Book Details" FontSize="18" FontAttributes="Bold" />
 
-                                        <Label Text="Using Google Books image"
-                                               FontSize="12"
-                                               TextColor="Green"
-                                               HorizontalOptions="Start"/>
-                                </StackLayout>
-                                <!-- Save Book button, changes aren't implemented until it is clicked :) -->
-                        <Button Text="Save Book"
-                                Clicked="OnSaveClicked"
-                                BackgroundColor="#0077cc"
-                                TextColor="White"/>
-                        <Label x:Name="StatusLabel"
-                               TextColor="Green"
-                               FontSize="14"
-                               IsVisible="False"/>
-                </StackLayout>
-        </ScrollView>
+            <Entry Placeholder="Title" Text="{Binding BookTitle}" TextColor="{StaticResource TextColor}"/>
+
+            <Entry Placeholder="Author" Text="{Binding AuthorText}" TextColor="{StaticResource TextColor}" TextChanged="OnAuthorTextChanged" />
+            <CollectionView ItemsSource="{Binding FilteredAuthorSuggestions}"
+                            IsVisible="{Binding IsAuthorSuggestionsVisible}"
+                            SelectionMode="Single"
+                            HeightRequest="100">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Label Text="{Binding .}">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding BindingContext.SelectAuthorCommand, Source={x:Reference AddBookPageInstance}}"
+                                                      CommandParameter="{Binding .}" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Entry Placeholder="Country" Text="{Binding CountryText}" TextColor="{StaticResource TextColor}" TextChanged="OnCountryTextChanged" />
+            <CollectionView ItemsSource="{Binding FilteredCountrySuggestions}"
+                            IsVisible="{Binding IsCountrySuggestionsVisible}"
+                            SelectionMode="Single"
+                            HeightRequest="100">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Label Text="{Binding .}">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding BindingContext.SelectCountryCommand, Source={x:Reference AddBookPageInstance}}"
+                                                      CommandParameter="{Binding .}" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Entry Placeholder="Year Published" Keyboard="Numeric" Text="{Binding YearText}" TextColor="{StaticResource TextColor}" />
+            <Entry Placeholder="Pages" Keyboard="Numeric" Text="{Binding PagesText}" TextColor="{StaticResource TextColor}" />
+
+            <!-- Section: Subject -->
+            <Label Text="Subject" FontSize="18" FontAttributes="Bold" />
+            <Picker Title="Select a Subject" ItemsSource="{Binding SubjectSuggestions}" SelectedItem="{Binding SelectedSubject}" BackgroundColor="{StaticResource CardBackground}" />
+            <Entry Placeholder="Or enter your own subject" Text="{Binding SubjectText}" TextColor="{StaticResource TextColor}" TextChanged="OnSubjectTextChanged" />
+            <CollectionView ItemsSource="{Binding FilteredSubjectsSuggestions}"
+                            IsVisible="{Binding IsSubjectsSuggestionsVisible}"
+                            SelectionMode="Single"
+                            HeightRequest="100">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Label Text="{Binding .}">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding BindingContext.SelectSubjectsCommand, Source={x:Reference AddBookPageInstance}}"
+                                                      CommandParameter="{Binding .}" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- Section: Vibe -->
+            <Label Text="Vibe" FontSize="18" FontAttributes="Bold" />
+            <Picker Title="Select a Vibe" ItemsSource="{Binding VibeSuggestions}" SelectedItem="{Binding SelectedVibe}" BackgroundColor="{StaticResource CardBackground}"/>
+            <Entry Placeholder="Or enter your own vibe" Text="{Binding VibeText}" TextChanged="OnVibeTextChanged" />
+            <CollectionView ItemsSource="{Binding FilteredVibeSuggestions}"
+                            IsVisible="{Binding IsVibeSuggestionsVisible}"
+                            SelectionMode="Single"
+                            HeightRequest="60">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Label Text="{Binding .}">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding BindingContext.SelectVibeCommand, Source={x:Reference AddBookPageInstance}}"
+                                                      CommandParameter="{Binding .}" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- Section: Source -->
+            <Label Text="Source" FontSize="18" FontAttributes="Bold" />
+            <Picker Title="Select a Source" ItemsSource="{Binding SourceSuggestions}" SelectedItem="{Binding SelectedSource}" BackgroundColor="{StaticResource CardBackground}"/>
+            <Entry Placeholder="Or enter your own source" Text="{Binding SourceText}" TextChanged="OnSourceTextChanged" />
+            <CollectionView ItemsSource="{Binding FilteredSourceSuggestions}"
+                            IsVisible="{Binding IsSourceSuggestionsVisible}"
+                            SelectionMode="Single"
+                            HeightRequest="60">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Label Text="{Binding .}">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding BindingContext.SelectSourceCommand, Source={x:Reference AddBookPageInstance}}"
+                                                      CommandParameter="{Binding .}" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- Section: Icon Picker -->
+            <Label Text="Select an Icon or Upload" FontSize="18" FontAttributes="Bold" />
+            <HorizontalStackLayout Spacing="10">
+                <Button Text="📷 Use Camera" Clicked="OnCameraClicked" />
+                <Button Text="📁 Upload Image" Clicked="OnUploadClicked" />
+            </HorizontalStackLayout>
+
+            <CollectionView x:Name="IconPicker"
+                            ItemsSource="{Binding DefaultIcons}"
+                            SelectionMode="Single"
+                            SelectedItem="{Binding SelectedIcon}"
+                            HeightRequest="150">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Horizontal" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame x:Name="IconFrame"
+                               Padding="5"
+                               CornerRadius="10"
+                               BorderColor="{StaticResource PrimaryColor}"
+                               HasShadow="False"
+                               WidthRequest="50"
+                               HeightRequest="50">
+                            <Image Source="{Binding}" WidthRequest="40" HeightRequest="40" />
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup Name="CommonStates">
+                                    <VisualState Name="Selected">
+                                        <VisualState.Setters>
+                                            <Setter TargetName="IconFrame" Property="BorderColor" Value="{StaticResource PrimaryColor}" />
+                                            <Setter TargetName="IconFrame" Property="HasShadow" Value="True" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState Name="Normal">
+                                        <VisualState.Setters>
+                                            <Setter TargetName="IconFrame" Property="BorderColor" Value="{StaticResource PrimaryColor}" />
+                                            <Setter TargetName="IconFrame" Property="HasShadow" Value="False" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            
+
+            <!-- Save Button -->
+            <Button Text="Save Book" Clicked="OnSaveClicked" BackgroundColor="{StaticResource BackgroundColor}" TextColor="{StaticResource TextColor}" />
+            <Label x:Name="StatusLabel" TextColor="{StaticResource PrimaryColor}" FontSize="14" IsVisible="False" />
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
-
