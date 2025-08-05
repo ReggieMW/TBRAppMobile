@@ -75,12 +75,13 @@ namespace TBRAppMobile.Pages
 
         private async void OnSearchQueryChanged(object sender, TextChangedEventArgs e)
         {
-            if (_viewModel == null || string.IsNullOrWhiteSpace(e.NewTextValue))
+            string? query = e?.NewTextValue;
+            if (_viewModel == null || string.IsNullOrWhiteSpace(query))
                 return;
 
             try
             {
-                var results = await _googleBooksService.SearchBooksAsync(e.NewTextValue);
+                var results = await _googleBooksService.SearchBooksAsync(query);
                 _viewModel.SearchResults = new ObservableCollection<Book>(results ?? new List<Book>());
                 _viewModel.IsSearchDropdownVisible = _viewModel.SearchResults.Count > 0;
 
@@ -89,22 +90,14 @@ namespace TBRAppMobile.Pages
             catch (Exception ex)
             {
                 Debug.WriteLine($"Search failed: {ex}");
-                await MainThread.InvokeOnMainThreadAsync(async () =>
+                await MainThread.InvokeOnMainThreadAsync(static async () =>
                     {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
                         await Application.Current?.MainPage?.DisplayAlert("Search Error", "Unable to fetch book results.", "OK");
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
                     });
             }
         }
-
-        private void OnForceDropdownClicked(object sender, EventArgs e)
-        {
-            _viewModel.IsSearchDropdownVisible = true;
-            Debug.WriteLine("Forced visibility to TRUE");
-        }
-
-
-
-
 
         //code to upload image
         private async void OnUploadClicked(object sender, EventArgs e)

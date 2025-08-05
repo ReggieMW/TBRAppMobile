@@ -40,14 +40,16 @@ public partial class TBRListPage : ContentPage
     {
         if (e.CurrentSelection.FirstOrDefault() is Book selectedBook)
         {
-            await App.BookService.NavigateToBookAsync(selectedBook);
+            ((CollectionView)sender).SelectedItem = null;
+
+            await Shell.Current.GoToAsync($"{nameof(BookViewPage)}?bookId={selectedBook.Id}");
         }
     }
 
-    private async void OnViewDbBooksClicked(object sender, EventArgs e)
+    protected override void OnDisappearing()
 {
-    await Navigation.PushAsync(new DbBooksPage());
+    base.OnDisappearing();
+    BindingContext = null;
 }
-
 
 }

@@ -18,7 +18,7 @@ public class BookService
     private readonly Dictionary<string, int> _authorHistory = new();
     private readonly Dictionary<string, int> _countryHistory = new();
 
-//default suggestins. will be replaced by users most commonly used suggestions
+    //default suggestins. will be replaced by users most commonly used suggestions
     private readonly ObservableCollection<string> _defaultSubjects = new()
     {
         "Love", "Life", "Outer Space", "Kings & Queens & Realms", "Murder"
@@ -34,7 +34,7 @@ public class BookService
         "Recommended", "BookTok", "Cool Cover", "Review", "Love the Author", "Book Club Book"
     };
 
-//observableCollections allow for changing and updating much easier than Lists
+    //observableCollections allow for changing and updating much easier than Lists
     public IReadOnlyList<Book> AllBooks => _allBooks;
     public ObservableCollection<Book> TBRBooks { get; } = new();
     public ObservableCollection<Book> ReadBooks { get; } = new();
@@ -42,9 +42,15 @@ public class BookService
     public ObservableCollection<Book> MyCanon { get; } = new();
     public ObservableCollection<Book> DNFBooks { get; } = new();
 
-//AddBook method assigns book to proper collections and updates suggestion functionality
+    //AddBook method assigns book to proper collections and updates suggestion functionality
+    private int _nextId = 125;
     public void AddBook(Book book)
     {
+        if (book.Id == 0)
+        {
+            book.Id = _nextId++;
+            Debug.WriteLine($"[AddBook] Assigned new ID: {book.Id}");
+        }
         _allBooks.Add(book);
 
         switch (book.Status)
@@ -62,6 +68,8 @@ public class BookService
                 DNFBooks.Add(book);
                 break;
         }
+
+
 
         if (book.IsCanon && !MyCanon.Contains(book))
         {
@@ -81,18 +89,26 @@ public class BookService
         Debug.WriteLine($"Added book: {book.Title}");
     }
 
-   //Navigation code for viewing a BookViewPage
-    public async Task NavigateToBookAsync(Book selectedBook)
+    public Book? GetBookById(int id)
     {
-        if (selectedBook == null)
-            return;
-
-        var page = new BookViewPage(selectedBook, this);
-        await Shell.Current.Navigation.PushAsync(page);
+        return _allBooks.FirstOrDefault(b => b.Id == id);
     }
 
 
-//Same as AddBook but for already existing books; allows updating of any property
+    //Navigation code for viewing a BookViewPage
+    public async Task NavigateToBookAsync(Book selectedBook)
+    {
+        await Shell.Current.GoToAsync($"{nameof(BookViewPage)}?bookId={selectedBook.Id}");
+    }
+
+    public async Task NavigateToListPageAsync(Book book)
+    {
+        await Shell.Current.GoToAsync($"bookviewpage?bookId={book.Id}");
+    }
+
+
+
+    //Same as AddBook but for already existing books; allows updating of any property
     public void UpdateBook(Book updatedBook)
     {
         // Update status-based lists
@@ -127,7 +143,7 @@ public class BookService
 
     }
 
-//Updates Book Status (from button clicks) and asigns to appropriate list. *possibly duplicated in AddBook method
+    //Updates Book Status (from button clicks) and asigns to appropriate list. *possibly duplicated in AddBook method
     public void UpdateBookStatus(Book book, BookStatus newStatus)
     {
         RemoveFromAllStatusCollections(book);
@@ -151,7 +167,7 @@ public class BookService
         }
     }
 
-//method to remove book from current status
+    //method to remove book from current status
     private void RemoveFromAllStatusCollections(Book book)
     {
         TBRBooks.Remove(book);
@@ -162,7 +178,7 @@ public class BookService
 
 
 
-//Methods to retrieve all books marked with specified status
+    //Methods to retrieve all books marked with specified status
     public ObservableCollection<Book> GetAllBooks()
     {
         return _allBooks;
@@ -193,7 +209,7 @@ public class BookService
         return MyCanon;
     }
 
-//Collections of suggestions for each property;
+    //Collections of suggestions for each property;
     public ObservableCollection<string> GetSubjectsSuggestions() => GetTopSuggestions(_subjectHistory, _defaultSubjects);
     public ObservableCollection<string> GetVibeSuggestions() => GetTopSuggestions(_vibeHistory, _defaultVibes);
     public ObservableCollection<string> GetSourceSuggestions() => GetTopSuggestions(_sourceHistory, _defaultSources);
@@ -279,37 +295,37 @@ _sourceHistory.Keys
                 .ToList()
         );
     }
-    
+
 #if DEBUG
     public void SeedTestBooks()
     {
         if (_allBooks.Any()) return;
 
-        AddBook(new Book { Title = "The Night Circus", Author = "Erin Morgenstern", YearPublished = 2021, Pages = 183, Country = "Nigeria", Subject = "Technology", Vibe = "Sad", Source = "Social Media", Status = BookStatus.DNF, IsCanon = false });
-        AddBook(new Book { Title = "White Teeth", Author = "Zadie Smith", YearPublished = 1963, Pages = 546, Country = "UK", Subject = "Politics", Vibe = "Philosophical", Source = "Social Media", Status = BookStatus.Read, IsCanon = false });
-        AddBook(new Book { Title = "The Wind-Up Bird Chronicle", Author = "Haruki Murakami", YearPublished = 1964, Pages = 379, Country = "Nigeria", Subject = "History", Vibe = "Funny", Source = "Podcast", Status = BookStatus.CurrentReads, IsCanon = false });
-        AddBook(new Book { Title = "Never Let Me Go", Author = "Kazuo Ishiguro", YearPublished = 1955, Pages = 338, Country = "France", Subject = "Mystery", Vibe = "Tense", Source = "Book Club", Status = BookStatus.Read, IsCanon = true });
-        AddBook(new Book { Title = "The Amazing Adventures of Kavalier & Clay", Author = "Michael Chabon", YearPublished = 2000, Pages = 512, Country = "Germany", Subject = "Mystery", Vibe = "Weird", Source = "Gift", Status = BookStatus.Read, IsCanon = false });
-        AddBook(new Book { Title = "Midnight's Children", Author = "Salman Rushdie", YearPublished = 2004, Pages = 229, Country = "Chile", Subject = "Politics", Vibe = "Hopeful", Source = "Book Club", Status = BookStatus.Read, IsCanon = true });
-        AddBook(new Book { Title = "Cloud Atlas", Author = "David Mitchell", YearPublished = 2014, Pages = 561, Country = "India", Subject = "Love", Vibe = "Dark", Source = "Library", Status = BookStatus.TBR, IsCanon = true });
-        AddBook(new Book { Title = "The Brief Wondrous Life of Oscar Wao", Author = "Junot Díaz", YearPublished = 1976, Pages = 558, Country = "Chile", Subject = "Politics", Vibe = "Funny", Source = "Library", Status = BookStatus.CurrentReads, IsCanon = true });
-        AddBook(new Book { Title = "Lincoln in the Bardo", Author = "George Saunders", YearPublished = 1988, Pages = 262, Country = "Chile", Subject = "Love", Vibe = "Hopeful", Source = "Library", Status = BookStatus.TBR, IsCanon = false });
-        AddBook(new Book { Title = "A Visit from the Goon Squad", Author = "Jennifer Egan", YearPublished = 1998, Pages = 683, Country = "UK", Subject = "Politics", Vibe = "Weird", Source = "Gift", Status = BookStatus.CurrentReads, IsCanon = false });
-        AddBook(new Book { Title = "The Sellout", Author = "Paul Beatty", YearPublished = 1964, Pages = 692, Country = "Russia", Subject = "Politics", Vibe = "Dark", Source = "Library", Status = BookStatus.CurrentReads, IsCanon = true });
-        AddBook(new Book { Title = "The Luminaries", Author = "Eleanor Catton", YearPublished = 1996, Pages = 535, Country = "Russia", Subject = "History", Vibe = "Beautiful", Source = "Book Club", Status = BookStatus.TBR, IsCanon = false });
-        AddBook(new Book { Title = "Normal People", Author = "Sally Rooney", YearPublished = 1999, Pages = 688, Country = "Japan", Subject = "Friendship", Vibe = "Hopeful", Source = "Social Media", Status = BookStatus.CurrentReads, IsCanon = false });
-        AddBook(new Book { Title = "The Goldfinch", Author = "Donna Tartt", YearPublished = 2005, Pages = 457, Country = "Russia", Subject = "Mystery", Vibe = "Tense", Source = "Review", Status = BookStatus.CurrentReads, IsCanon = false });
-        AddBook(new Book { Title = "The Overstory", Author = "Richard Powers", YearPublished = 1982, Pages = 683, Country = "France", Subject = "Politics", Vibe = "Uplifting", Source = "Review", Status = BookStatus.TBR, IsCanon = false });
-        AddBook(new Book { Title = "Circe", Author = "Madeline Miller", YearPublished = 2001, Pages = 258, Country = "Chile", Subject = "Fantasy", Vibe = "Hopeful", Source = "Social Media", Status = BookStatus.Read, IsCanon = false });
-        AddBook(new Book { Title = "The Underground Railroad", Author = "Colson Whitehead", YearPublished = 2012, Pages = 313, Country = "Chile", Subject = "Politics", Vibe = "Tense", Source = "Review", Status = BookStatus.Read, IsCanon = true });
-        AddBook(new Book { Title = "The Road", Author = "Cormac McCarthy", YearPublished = 1994, Pages = 446, Country = "Germany", Subject = "War", Vibe = "Philosophical", Source = "Social Media", Status = BookStatus.DNF, IsCanon = false });
-        AddBook(new Book { Title = "Piranesi", Author = "Susanna Clarke", YearPublished = 1986, Pages = 259, Country = "USA", Subject = "Mystery", Vibe = "Tense", Source = "Podcast", Status = BookStatus.TBR, IsCanon = false });
-        AddBook(new Book { Title = "Exit West", Author = "Mohsin Hamid", YearPublished = 1985, Pages = 287, Country = "Russia", Subject = "Fantasy", Vibe = "Weird", Source = "Library", Status = BookStatus.TBR, IsCanon = false });
-        AddBook(new Book { Title = "Klara and the Sun", Author = "Kazuo Ishiguro", YearPublished = 1983, Pages = 471, Country = "Japan", Subject = "Adventure", Vibe = "Hopeful", Source = "Library", Status = BookStatus.TBR, IsCanon = false });
-        AddBook(new Book { Title = "Sula", Author = "Toni Morrison", YearPublished = 1976, Pages = 352, Country = "India", Subject = "Politics", Vibe = "Hopeful", Source = "Gift", Status = BookStatus.CurrentReads, IsCanon = false });
-        AddBook(new Book { Title = "Norwegian Wood", Author = "Haruki Murakami", YearPublished = 2009, Pages = 591, Country = "Nigeria", Subject = "Family", Vibe = "Whimsical", Source = "Review", Status = BookStatus.TBR, IsCanon = false });
-        AddBook(new Book { Title = "The Master and Margarita", Author = "Mikhail Bulgakov", YearPublished = 1971, Pages = 547, Country = "India", Subject = "Fantasy", Vibe = "Sad", Source = "Gift", Status = BookStatus.DNF, IsCanon = false });
-        AddBook(new Book { Title = "Jazz", Author = "Toni Morrison", YearPublished = 2013, Pages = 240, Country = "Nigeria", Subject = "Mystery", Vibe = "Sad", Source = "Review", Status = BookStatus.CurrentReads, IsCanon = false });
+        AddBook(new Book { Id = 100, Title = "The Night Circus", Author = "Erin Morgenstern", YearPublished = 2021, Pages = 183, Country = "Nigeria", Subject = "Technology", Vibe = "Sad", Source = "Social Media", Status = BookStatus.DNF, IsCanon = false });
+        AddBook(new Book { Id = 101, Title = "White Teeth", Author = "Zadie Smith", YearPublished = 1963, Pages = 546, Country = "UK", Subject = "Politics", Vibe = "Philosophical", Source = "Social Media", Status = BookStatus.Read, IsCanon = false });
+        AddBook(new Book { Id = 102, Title = "The Wind-Up Bird Chronicle", Author = "Haruki Murakami", YearPublished = 1964, Pages = 379, Country = "Nigeria", Subject = "History", Vibe = "Funny", Source = "Podcast", Status = BookStatus.CurrentReads, IsCanon = false });
+        AddBook(new Book { Id = 103, Title = "Never Let Me Go", Author = "Kazuo Ishiguro", YearPublished = 1955, Pages = 338, Country = "France", Subject = "Mystery", Vibe = "Tense", Source = "Book Club", Status = BookStatus.Read, IsCanon = true });
+        AddBook(new Book { Id = 104, Title = "The Amazing Adventures of Kavalier & Clay", Author = "Michael Chabon", YearPublished = 2000, Pages = 512, Country = "Germany", Subject = "Mystery", Vibe = "Weird", Source = "Gift", Status = BookStatus.Read, IsCanon = false });
+        AddBook(new Book { Id = 105, Title = "Midnight's Children", Author = "Salman Rushdie", YearPublished = 2004, Pages = 229, Country = "Chile", Subject = "Politics", Vibe = "Hopeful", Source = "Book Club", Status = BookStatus.Read, IsCanon = true });
+        AddBook(new Book { Id = 106, Title = "Cloud Atlas", Author = "David Mitchell", YearPublished = 2014, Pages = 561, Country = "India", Subject = "Love", Vibe = "Dark", Source = "Library", Status = BookStatus.TBR, IsCanon = true });
+        AddBook(new Book { Id = 107, Title = "The Brief Wondrous Life of Oscar Wao", Author = "Junot Díaz", YearPublished = 1976, Pages = 558, Country = "Chile", Subject = "Politics", Vibe = "Funny", Source = "Library", Status = BookStatus.CurrentReads, IsCanon = true });
+        AddBook(new Book { Id = 108, Title = "Lincoln in the Bardo", Author = "George Saunders", YearPublished = 1988, Pages = 262, Country = "Chile", Subject = "Love", Vibe = "Hopeful", Source = "Library", Status = BookStatus.TBR, IsCanon = false });
+        AddBook(new Book { Id = 109, Title = "A Visit from the Goon Squad", Author = "Jennifer Egan", YearPublished = 1998, Pages = 683, Country = "UK", Subject = "Politics", Vibe = "Weird", Source = "Gift", Status = BookStatus.CurrentReads, IsCanon = false });
+        AddBook(new Book { Id = 110, Title = "The Sellout", Author = "Paul Beatty", YearPublished = 1964, Pages = 692, Country = "Russia", Subject = "Politics", Vibe = "Dark", Source = "Library", Status = BookStatus.CurrentReads, IsCanon = true });
+        AddBook(new Book { Id = 111, Title = "The Luminaries", Author = "Eleanor Catton", YearPublished = 1996, Pages = 535, Country = "Russia", Subject = "History", Vibe = "Beautiful", Source = "Book Club", Status = BookStatus.TBR, IsCanon = false });
+        AddBook(new Book { Id = 112, Title = "Normal People", Author = "Sally Rooney", YearPublished = 1999, Pages = 688, Country = "Japan", Subject = "Friendship", Vibe = "Hopeful", Source = "Social Media", Status = BookStatus.CurrentReads, IsCanon = false });
+        AddBook(new Book { Id = 113, Title = "The Goldfinch", Author = "Donna Tartt", YearPublished = 2005, Pages = 457, Country = "Russia", Subject = "Mystery", Vibe = "Tense", Source = "Review", Status = BookStatus.CurrentReads, IsCanon = false });
+        AddBook(new Book { Id = 114, Title = "The Overstory", Author = "Richard Powers", YearPublished = 1982, Pages = 683, Country = "France", Subject = "Politics", Vibe = "Uplifting", Source = "Review", Status = BookStatus.TBR, IsCanon = false });
+        AddBook(new Book { Id = 115, Title = "Circe", Author = "Madeline Miller", YearPublished = 2001, Pages = 258, Country = "Chile", Subject = "Fantasy", Vibe = "Hopeful", Source = "Social Media", Status = BookStatus.Read, IsCanon = false });
+        AddBook(new Book { Id = 116, Title = "The Underground Railroad", Author = "Colson Whitehead", YearPublished = 2012, Pages = 313, Country = "Chile", Subject = "Politics", Vibe = "Tense", Source = "Review", Status = BookStatus.Read, IsCanon = true });
+        AddBook(new Book { Id = 117, Title = "The Road", Author = "Cormac McCarthy", YearPublished = 1994, Pages = 446, Country = "Germany", Subject = "War", Vibe = "Philosophical", Source = "Social Media", Status = BookStatus.DNF, IsCanon = false });
+        AddBook(new Book { Id = 118, Title = "Piranesi", Author = "Susanna Clarke", YearPublished = 1986, Pages = 259, Country = "USA", Subject = "Mystery", Vibe = "Tense", Source = "Podcast", Status = BookStatus.TBR, IsCanon = false });
+        AddBook(new Book { Id = 119, Title = "Exit West", Author = "Mohsin Hamid", YearPublished = 1985, Pages = 287, Country = "Russia", Subject = "Fantasy", Vibe = "Weird", Source = "Library", Status = BookStatus.TBR, IsCanon = false });
+        AddBook(new Book { Id = 120, Title = "Klara and the Sun", Author = "Kazuo Ishiguro", YearPublished = 1983, Pages = 471, Country = "Japan", Subject = "Adventure", Vibe = "Hopeful", Source = "Library", Status = BookStatus.TBR, IsCanon = false });
+        AddBook(new Book { Id = 121, Title = "Sula", Author = "Toni Morrison", YearPublished = 1976, Pages = 352, Country = "India", Subject = "Politics", Vibe = "Hopeful", Source = "Gift", Status = BookStatus.CurrentReads, IsCanon = false });
+        AddBook(new Book { Id = 122, Title = "Norwegian Wood", Author = "Haruki Murakami", YearPublished = 2009, Pages = 591, Country = "Nigeria", Subject = "Family", Vibe = "Whimsical", Source = "Review", Status = BookStatus.TBR, IsCanon = false });
+        AddBook(new Book { Id = 123, Title = "The Master and Margarita", Author = "Mikhail Bulgakov", YearPublished = 1971, Pages = 547, Country = "India", Subject = "Fantasy", Vibe = "Sad", Source = "Gift", Status = BookStatus.DNF, IsCanon = false });
+        AddBook(new Book { Id = 124, Title = "Jazz", Author = "Toni Morrison", YearPublished = 2013, Pages = 240, Country = "Nigeria", Subject = "Mystery", Vibe = "Sad", Source = "Review", Status = BookStatus.CurrentReads, IsCanon = false });
     }
 
 #endif

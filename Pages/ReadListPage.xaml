@@ -24,6 +24,7 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <views:BookCard
+                            BookId="{Binding Id}"
                             Title="{Binding Title}"
                             Author="{Binding Author}"
                             IconPath="{Binding IconPath}"

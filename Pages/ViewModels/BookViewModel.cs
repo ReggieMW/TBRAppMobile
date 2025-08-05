@@ -15,15 +15,18 @@ public class BookViewModel : INotifyPropertyChanged
 {
     private readonly BookService _bookService;
     private Book _book;
+    private readonly NavigationService _navigationService;
 
 
     public ICommand ToggleCanonCommand { get; }
     public ICommand UpdateStatusCommand { get; }
-    
-    public BookViewModel(Book book, BookService bookService)
+    public ICommand ReturnToListCommand { get; }
+
+    public BookViewModel(Book book, BookService bookService, NavigationService navigationService)
     {
         _book = book;
         _bookService = bookService;
+        _navigationService = navigationService;
 
         //allows user to change book status
         UpdateStatusCommand = new Command<string>(status =>
@@ -33,7 +36,21 @@ public class BookViewModel : INotifyPropertyChanged
         });
 
         ToggleCanonCommand = new Command(ToggleCanonStatus);
+        ReturnToListCommand = new Command(async () => await ReturnToListAsync());
     }
+
+    private async Task ReturnToListAsync()
+{
+    string targetRoute = _book.Status switch
+    {
+        BookStatus.TBR => "//TBRListPage",
+        BookStatus.Read => "//ReadListPage",
+        BookStatus.CurrentReads => "//CurrentReadsPage",
+        BookStatus.DNF => "//DNFPage",
+        _ => "//TBRListPage"
+    };
+    await _navigationService.NavigateToPageAsync(targetRoute);
+}
 
     //allows user to add to MyCanon 
     private void ToggleCanonStatus()

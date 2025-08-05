@@ -26,7 +26,6 @@
                    Text="{Binding SearchQuery}"
                    TextChanged="OnSearchQueryChanged" />
             <Button Text="Search" Clicked="OnSearchClicked" />
-            <Button Text="Force Dropdown Visible" Clicked="OnForceDropdownClicked" />
 
             <!-- Conditional Search Results Area -->
             <ContentView IsVisible="{Binding IsSearchDropdownVisible}">

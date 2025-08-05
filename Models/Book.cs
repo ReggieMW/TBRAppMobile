@@ -7,6 +7,10 @@ namespace TBRAppMobile.Models;
 //Book properties
 public class Book : INotifyPropertyChanged
 {
+    //syncs with UI so when a book property is added or updated it syncs across the app
+
+    [PrimaryKey, AutoIncrement]
+    public int Id { get; set; }
     private string _title = string.Empty;
     private string _author = string.Empty;
     private int _yearPublished;
@@ -19,10 +23,6 @@ public class Book : INotifyPropertyChanged
     private bool _isCanon;
     private string? _iconPath;
 
-    //syncs with UI so when a book property is added or updated it syncs across the app
-
-    [PrimaryKey, AutoIncrement]
-public int Id {get; set;}
     public string Title
     {
         get => _title;

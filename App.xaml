@@ -43,6 +43,10 @@
     <Style TargetType="ContentPage">
         <Setter Property="BackgroundColor" Value="{StaticResource BackgroundColor}" />
     </Style>
+
+    <Style TargetType="Picker">
+        <Setter Property="TextColor" Value="{StaticResource TextColor}" />
+    </Style>
 </Application.Resources>
 
 </Application>

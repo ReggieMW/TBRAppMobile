@@ -16,6 +16,10 @@ C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\Microso
 C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\Microsoft.Maui.dll
 C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\Microsoft.Maui.Essentials.dll
 C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\Microsoft.Maui.Graphics.dll
+C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\SQLite-net.dll
+C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\SQLitePCLRaw.batteries_v2.dll
+C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\SQLitePCLRaw.core.dll
+C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\SQLitePCLRaw.provider.e_sqlite3.dll
 C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\System.Diagnostics.DiagnosticSource.dll
 C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\ar\Microsoft.Maui.Controls.resources.dll
 C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\ca\Microsoft.Maui.Controls.resources.dll
@@ -51,6 +55,7 @@ C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\vi\Micr
 C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\zh-HK\Microsoft.Maui.Controls.resources.dll
 C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\zh-Hans\Microsoft.Maui.Controls.resources.dll
 C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\zh-Hant\Microsoft.Maui.Controls.resources.dll
+C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\libe_sqlite3.dylib
 C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\Microsoft.CSharp.dll
 C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\Microsoft.VisualBasic.Core.dll
 C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\Microsoft.VisualBasic.dll
@@ -261,13 +266,6 @@ C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\mauispl
 C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\resizetizer\r\dotnet_bot@3x.png
 C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\resizetizer\r\dotnet_bot@2x.png
 C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\resizetizer\r\dotnet_bot.png
-C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\resizetizer\r\Resources\book_red.png
-C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\resizetizer\r\Resources\book_black.png
-C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\resizetizer\r\Resources\book_cyan.png
-C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\resizetizer\r\Resources\book_yellow.png
-C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\resizetizer\r\Resources\book_darkgreen.png
-C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\resizetizer\r\Resources\book_purple.png
-C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\resizetizer\r\Resources\book_green.png
 C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\resizetizer\r\Assets.xcassets\appicon.appiconset\appiconItunesArtwork.png
 C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\resizetizer\r\Assets.xcassets\appicon.appiconset\appicon83.5x83.5@2x.png
 C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\resizetizer\r\Assets.xcassets\appicon.appiconset\appicon76x76@2x.png
@@ -280,6 +278,13 @@ C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\resizet
 C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\resizetizer\r\Assets.xcassets\appicon.appiconset\appicon20x20@3x.png
 C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\resizetizer\r\Assets.xcassets\appicon.appiconset\appicon20x20@2x.png
 C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\resizetizer\r\Assets.xcassets\appicon.appiconset\Contents.json
+C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\resizetizer\r\Resources\book_darkgreen.png
+C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\resizetizer\r\Resources\book_purple.png
+C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\resizetizer\r\Resources\book_green.png
+C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\resizetizer\r\Resources\book_cyan.png
+C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\resizetizer\r\Resources\book_red.png
+C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\resizetizer\r\Resources\book_black.png
+C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\resizetizer\r\Resources\book_yellow.png
 C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\resizetizer\r\Resources\book_alloy.png
 C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\mauiimage.stamp
 C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\mauiimage.outputs
@@ -308,8 +313,3 @@ C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\refint\
 C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\TBRAppMobile.pdb
 C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\TBRAppMobile.genruntimeconfig.cache
 C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\ref\TBRAppMobile.dll
-C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\SQLite-net.dll
-C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\SQLitePCLRaw.batteries_v2.dll
-C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\SQLitePCLRaw.core.dll
-C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\SQLitePCLRaw.provider.e_sqlite3.dll
-C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\libe_sqlite3.dylib

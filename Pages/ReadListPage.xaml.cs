@@ -30,9 +30,18 @@ namespace TBRAppMobile.Pages
         {
             if (e.CurrentSelection.FirstOrDefault() is Book selectedBook)
             {
-                await App.BookService.NavigateToBookAsync(selectedBook);
+                ((CollectionView)sender).SelectedItem = null;
+
+                await Shell.Current.GoToAsync($"{nameof(BookViewPage)}?bookId={selectedBook.Id}");
             }
         }
+        
+        protected override void OnDisappearing()
+{
+    base.OnDisappearing();
+    BindingContext = null;
+}
+
 
     }
 }

@@ -54,12 +54,6 @@ build_metadata.AdditionalFiles.ManifestResourceName = TBRAppMobile.Pages.Current
 build_metadata.AdditionalFiles.TargetPath = Pages\CurrentReadsPage.xaml
 build_metadata.AdditionalFiles.RelativePath = Pages\CurrentReadsPage.xaml
 
-[C:/Users/reggi/TBRAppMobile/Pages/DbBooksPage.xaml]
-build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.ManifestResourceName = TBRAppMobile.Pages.DbBooksPage.xaml
-build_metadata.AdditionalFiles.TargetPath = Pages\DbBooksPage.xaml
-build_metadata.AdditionalFiles.RelativePath = Pages\DbBooksPage.xaml
-
 [C:/Users/reggi/TBRAppMobile/Pages/DNFPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = TBRAppMobile.Pages.DNFPage.xaml

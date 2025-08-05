@@ -151,11 +151,21 @@ namespace TBRAppMobile.Views
             RemoveRequested?.Invoke(this, GetBook());
         }
 
-//fetches book info
+public static readonly BindableProperty BookIdProperty =
+    BindableProperty.Create(nameof(BookId), typeof(int), typeof(BookCard), 0);
+
+public int BookId
+{
+    get => (int)GetValue(BookIdProperty);
+    set => SetValue(BookIdProperty, value);
+}
+
+        //fetches book info
         private Book GetBook()
         {
             return new Book
             {
+                Id = this.BookId,
                 Title = this.Title,
                 Author = this.Author,
                 Pages = this.Pages,

@@ -13,13 +13,13 @@ namespace TBRAppMobile.Pages
         {
             base.OnAppearing();
             MyCanon.ItemsSource = null;
-            MyCanon.ItemsSource = App.BookService.MyCanon;
+            MyCanon.ItemsSource = _bookService.MyCanon;
         }
         public MyCanonPage(BookService bookService)
         {
             InitializeComponent();
             _bookService = bookService;
-            BindingContext = App.BookService;
+            BindingContext = _bookService;
 
             Debug.WriteLine($"Loaded {_bookService.MyCanon.Count} canon books.");
         }
@@ -31,9 +31,18 @@ namespace TBRAppMobile.Pages
         {
             if (e.CurrentSelection.FirstOrDefault() is Book selectedBook)
             {
-                await App.BookService.NavigateToBookAsync(selectedBook);
+                ((CollectionView)sender).SelectedItem = null;
+
+                await Shell.Current.GoToAsync($"{nameof(BookViewPage)}?bookId={selectedBook.Id}");
             }
         }
+        
+        protected override void OnDisappearing()
+{
+    base.OnDisappearing();
+    BindingContext = null;
+}
+
 
     }
 }

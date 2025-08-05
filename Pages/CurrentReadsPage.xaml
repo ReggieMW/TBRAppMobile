@@ -31,6 +31,7 @@
                     <DataTemplate>
                         <!-- BookCard will pick up theme if it uses styles or dynamic colors -->
                         <views:BookCard
+                            BookId="{Binding Id}"
                             Title="{Binding Title}"
                             Author="{Binding Author}"
                             IconPath="{Binding IconPath}"

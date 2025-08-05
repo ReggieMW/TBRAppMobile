@@ -7,14 +7,6 @@ namespace TBRAppMobile.Pages
 {
     public partial class CurrentReadsPage : ContentPage
     {
-        //updates page with most current version of List on page load
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-            BindingContext = _bookService;
-            BookList.ItemsSource = _bookService.GetCurrentReads();
-        }
-
         private readonly BookService _bookService;
 
         public CurrentReadsPage(BookService bookService)
@@ -26,18 +18,23 @@ namespace TBRAppMobile.Pages
             _bookService.SeedTestBooks();
 #endif
 
-            BindingContext = _bookService;
-            BookList.ItemsSource = _bookService.CurrentReadBooks;
         }
 
-        //Allows user to click a book and navigate to BookViewPage
+        protected override void OnAppearing()
+        {
+            BindingContext = _bookService;
+            base.OnAppearing();
+            BookList.ItemsSource = _bookService.GetCurrentReads();
+        }
+
         private async void OnBookSelected(object sender, SelectionChangedEventArgs e)
         {
             if (e.CurrentSelection.FirstOrDefault() is Book selectedBook)
             {
-                await App.BookService.NavigateToBookAsync(selectedBook);
+                ((CollectionView)sender).SelectedItem = null;
+                await Shell.Current.GoToAsync($"{nameof(BookViewPage)}?bookId={selectedBook.Id}");
             }
         }
-
     }
+
 }

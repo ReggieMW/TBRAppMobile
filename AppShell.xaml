@@ -8,34 +8,34 @@
     FlyoutItemIsVisible="True"
     TitleColor="{StaticResource TextColor}">
 
-    <FlyoutItem Title="Currently Reading"
-            Route="CurrentReadsPage">
-        <ShellContent ContentTemplate="{DataTemplate pages:CurrentReadsPage}"/>
+    <!-- CURRENTLY READING -->
+    <FlyoutItem Title="Currently Reading" Route="CurrentReadsPage">
+        <ShellContent ContentTemplate="{DataTemplate pages:CurrentReadsPage}" />
     </FlyoutItem>
-    
+
+    <!-- TBR LIST -->
     <FlyoutItem Title="TBR List" Route="TBRListPage">
-        <ShellContent ContentTemplate="{DataTemplate pages:TBRListPage}"
-                Route="TBRListPage"/>
+        <ShellContent ContentTemplate="{DataTemplate pages:TBRListPage}" />
     </FlyoutItem>
 
+    <!-- ADD BOOK -->
     <FlyoutItem Title="Add Book" Route="AddBookPage">
-        <ShellContent ContentTemplate="{DataTemplate pages:AddBookPage}"
-                Route="AddBookPage"/>
+        <ShellContent ContentTemplate="{DataTemplate pages:AddBookPage}" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Read Books"
-            Route="ReadListPage">
-        <ShellContent ContentTemplate="{DataTemplate pages:ReadListPage}"/>
+    <!-- READ -->
+    <FlyoutItem Title="Read Books" Route="ReadListPage">
+        <ShellContent ContentTemplate="{DataTemplate pages:ReadListPage}" />
     </FlyoutItem>
 
-
-    <FlyoutItem Title="Did Not Finish"
-            Route="DNFPage">
-        <ShellContent ContentTemplate="{DataTemplate pages:DNFPage}"/>
+    <!-- DNF -->
+    <FlyoutItem Title="Did Not Finish" Route="DNFPage">
+        <ShellContent ContentTemplate="{DataTemplate pages:DNFPage}" />
     </FlyoutItem>
 
-    <FlyoutItem Title="My Canon"
-            Route="MyCanonPage">
-        <ShellContent ContentTemplate="{DataTemplate pages:MyCanonPage}"/>
+    <!-- MY CANON -->
+    <FlyoutItem Title="My Canon" Route="MyCanonPage">
+        <ShellContent ContentTemplate="{DataTemplate pages:MyCanonPage}" />
     </FlyoutItem>
+
 </Shell>

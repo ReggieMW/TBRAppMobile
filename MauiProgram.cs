@@ -27,6 +27,8 @@ public static class MauiProgram
         // Register services as Singletons (static)
         builder.Services.AddSingleton<BookService>();
         builder.Services.AddSingleton<GoogleBooksService>();
+        builder.Services.AddSingleton<NavigationService>();
+
 
 
         // Register pages as Transients (dynamic)
