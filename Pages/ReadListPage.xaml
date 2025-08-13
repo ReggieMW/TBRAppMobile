@@ -15,9 +15,32 @@
                 FontSize="24"
                 HorizontalOptions="Center"/>
 
+  <Grid ColumnDefinitions="*,Auto,Auto" BackgroundColor="Transparent">
+                <Picker x:Name="SortPicker"
+                        Title="Sort by"
+                        SelectedIndex="0"
+                        BackgroundColor="Transparent">
+                    <Picker.Items>
+                        <x:String>Title</x:String>
+                        <x:String>Author</x:String>
+                        <x:String>YearPublished</x:String>
+                        <x:String>Pages</x:String>
+                        <x:String>Id</x:String>
+                    </Picker.Items>
+                </Picker>
+
+                <Switch x:Name="AscSwitch"
+                        Grid.Column="1" />
+
+                <Entry x:Name="SearchEntry"
+                       Grid.Column="2"
+                       Placeholder="Search"
+                       BackgroundColor="Transparent" />
+            </Grid>
+  
             <CollectionView
                 x:Name="BookList"
-                ItemsSource="{Binding ReadBooks}"
+                
                 SelectionMode="Single"
                 SelectionChanged="OnBookSelected">
 

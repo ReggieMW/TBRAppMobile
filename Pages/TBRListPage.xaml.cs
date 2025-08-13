@@ -11,28 +11,34 @@ namespace TBRAppMobile.Pages;
 public partial class TBRListPage : ContentPage
 {
     private readonly BookService _bookService;
+    private BookListController? _controller; 
+    
 
-    //updates page with most current version of List on page load
+    public TBRListPage()
+    {
+        InitializeComponent();
+        _bookService = App.BookService;
+    }
+
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        BindingContext = _bookService;
-        BookList.ItemsSource = _bookService.GetTBR_Books();
+        _controller ??= new BookListController(
+            _bookService,
+            () => _bookService.GetTBR_Books(),     
+            BookList,
+            SortPicker,
+            AscSwitch,
+            SearchEntry);
+
+        _controller.Refresh();
     }
 
-    public TBRListPage(BookService bookService)
+    protected override void OnDisappearing()
     {
-        InitializeComponent();
-        _bookService = bookService;
-        BindingContext = _bookService;
-        BookList.ItemsSource = _bookService.TBRBooks;
-
-#if DEBUG
-        bookService.SeedTestBooks();
-#endif
-
-
-        Debug.WriteLine($"Loaded {_bookService.TBRBooks.Count} books.");
+        base.OnDisappearing();
+        _controller?.Dispose(); // Unwire events cleanly
+        _controller = null;
     }
 
     //Allows user to click a book and navigate to BookViewPage
@@ -42,14 +48,8 @@ public partial class TBRListPage : ContentPage
         {
             ((CollectionView)sender).SelectedItem = null;
 
-            await Shell.Current.GoToAsync($"{nameof(BookViewPage)}?bookId={selectedBook.Id}");
+            await NavigationService.NavigateToBookViewPage(selectedBook.Id);
+
         }
     }
-
-    protected override void OnDisappearing()
-{
-    base.OnDisappearing();
-    BindingContext = null;
-}
-
 }

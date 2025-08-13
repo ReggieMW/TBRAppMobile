@@ -1,97 +1,65 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView
-       xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-       x:Class="TBRAppMobile.Views.BookCard"
-       x:Name="this"
-       Padding="10"
-       BackgroundColor="{StaticResource AccentColor}">
+    x:Class="TBRAppMobile.Views.BookCard"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Name="root"
+    BackgroundColor="Transparent">
 
-       <Frame
-              CornerRadius="12"
-              BackgroundColor="{StaticResource BackgroundColor}"
-              BorderColor="{StaticResource HeaderBackground}"
-              HasShadow="True"
-              Padding="10"
-              Margin="5">
+    <!-- card surface -->
+    <Frame Padding="12"
+           CornerRadius="12"
+           HasShadow="True"
+           BackgroundColor="{StaticResource BackgroundColor}"
+           BorderColor="{StaticResource PrimaryColor}">
 
-              <Grid ColumnDefinitions="Auto, *"
-                    RowDefinitions="Auto, Auto, Auto">
-                     <!-- Icon -->
-                     <Image
-                            Grid.RowSpan="3"
-                            Grid.Column="0"
-                            WidthRequest="60"
-                            HeightRequest="90"
-                            Aspect="AspectFill"
-                            Source="{Binding IconPath, Source={x:Reference this}}"
-                            Margin="0,0,10,0"
-                            VerticalOptions="Center"/>
+        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12" BackgroundColor="Transparent">
+            <Image Grid.Column="0"
+                   WidthRequest="54" HeightRequest="54"
+                   Aspect="AspectFit"
+                   Source="{Binding IconPath, Source={x:Reference root}}" />
 
-                     <!-- Title -->
-                     <Label
-                            Grid.Column="1"
-                            Text="{Binding Title, Source={x:Reference this}}"
-                            FontAttributes="Bold"
-                            FontSize="16"
-                            LineBreakMode="TailTruncation"/>
+            <VerticalStackLayout Grid.Column="1" Spacing="4" BackgroundColor="Transparent">
+                <Label Text="{Binding Title, Source={x:Reference root}}"
+                       FontSize="18" FontAttributes="Bold"
+                       BackgroundColor="Transparent"
+                       TextColor="{StaticResource TextColor}" />
 
-                     <!-- Author & Pages -->
-                     <Label
-                            Grid.Row="1"
-                            Grid.Column="1"
-                            Text="{Binding Author, Source={x:Reference this}}"
-                            FontSize="14"
-                            TextColor="{StaticResource TextColor}"/>
+                <Label Text="{Binding Author, Source={x:Reference root}}"
+                       FontSize="14"
+                       BackgroundColor="Transparent"
+                       TextColor="{StaticResource TextColor}" />
 
-                     <Label
-                            Grid.Row="1"
-                            Grid.Column="1"
-                            HorizontalOptions="End"
-                            Text="{Binding Pages, StringFormat='{}{0} pages', Source={x:Reference this}}"
-                            FontSize="12"
-                            TextColor="{StaticResource TextColor}"/>
+                <!-- chips -->
+                <HorizontalStackLayout Spacing="8" BackgroundColor="Transparent">
+                    <Border Padding="6,2"
+                            BackgroundColor="{StaticResource AccentColor}"
+                            Stroke="{StaticResource PrimaryColor}"
+                            StrokeThickness="1"
+                            >
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="8"/>
+                        </Border.StrokeShape>
+                        <Label Text="{Binding Subject, Source={x:Reference root}}"
+                               BackgroundColor="Transparent"
+                               FontSize="12" FontAttributes="Bold"
+                               TextColor="{StaticResource TextColor}" />
+                    </Border>
 
-                     <!-- Subject & Vibe -->
-                     <StackLayout Grid.Row="2"
-                                  Grid.Column="1"
-                                  Orientation="Horizontal"
-                                  Spacing="10">
-                            <!-- Subject Chip -->
-                            <Frame Padding="5,2"
-                                   BackgroundColor="{StaticResource CardBackground}"
-                                   BorderColor="{StaticResource PrimaryColor}"
-                                   CornerRadius="6"
-                                   HasShadow="False">
-                                   <Label
-                                          Text="{Binding Subject, Source={x:Reference this}}"
-                                          FontSize="12"
-                                          TextColor="{StaticResource TextColor}"
-                                          VerticalOptions="Center"/>
-                            </Frame>
-
-                            <!-- Vibe Chip -->
-                            <Frame Padding="5,2"
-                                   BackgroundColor="{StaticResource CardBackground}"
-                                   BorderColor="{StaticResource PrimaryColor}"
-                                   CornerRadius="6"
-                                   HasShadow="False">
-                                   <Label
-                                          Text="{Binding Vibe, Source={x:Reference this}}"
-                                          FontSize="12"
-                                          TextColor="{StaticResource TextColor}"
-                                          VerticalOptions="Center"/>
-                            </Frame>
-                     </StackLayout>
-
-                     <StackLayout x:Name="RecommendSection"
-                                  IsVisible="False">
-                     </StackLayout>
-                     <!-- Currently not visible because not implemented yet -->
-                     <Entry x:Name="ComparableEntry"
-                            IsVisible="False"
-                            Placeholder="Comparable Book"/>
-
-              </Grid>
-       </Frame>
+                    <Border Padding="6,2"
+                            BackgroundColor="{StaticResource PrimaryColor}"
+                            Stroke="{StaticResource PrimaryColor}"
+                            StrokeThickness="1">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="8"/>
+                        </Border.StrokeShape>
+                        <Label Text="{Binding Vibe, Source={x:Reference root}}"
+                               BackgroundColor="Transparent"
+                               FontSize="12" FontAttributes="Bold"
+                               TextColor="{StaticResource TextColor}" />
+                    </Border>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </Grid>
+    </Frame>
 </ContentView>

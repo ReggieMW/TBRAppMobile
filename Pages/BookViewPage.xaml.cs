@@ -14,7 +14,6 @@ public partial class BookViewPage : ContentPage
 
     private int _bookId;
     private bool _isLoaded = false;
-    private readonly NavigationService _navigationService;
 
     public string BookId
     {
@@ -31,9 +30,9 @@ public partial class BookViewPage : ContentPage
     public BookViewPage()
     {
         InitializeComponent();
-        _bookService = App.BookService;
+        _bookService = App.BookService!;
     }
-    
+
     protected override void OnAppearing()
     {
         base.OnAppearing();
@@ -52,7 +51,7 @@ public partial class BookViewPage : ContentPage
             if (book != null)
             {
                 Debug.WriteLine($"[BookViewPage] Loaded book: {book.Title}");
-                BindingContext = new BookViewModel(book, _bookService, _navigationService);
+                BindingContext = new BookViewModel(book, _bookService);
             }
             else
             {
@@ -77,11 +76,41 @@ public partial class BookViewPage : ContentPage
             vm.ToggleCanonCommand.Execute(null);
         }
     }
-    protected override void OnDisappearing()
+
+    private async void OnDeleteButtonClicked(object sender, EventArgs e)
     {
-        base.OnDisappearing();
-        BindingContext = null;
-        _bookId = 0;
-        _isLoaded = false;
+        if (BindingContext is not BookViewModel vm) return;
+
+
+        bool confirm = await DisplayAlert("Confirm Delete Book", $"Are you sure you want to delete '{vm.Title}'?", "Yes", "Cancel");
+
+        if (!confirm) return;
+
+        var targetRoute = vm.Status switch
+        {
+            BookStatus.TBR => "//TBRListPage",
+            BookStatus.CurrentReads => "//CurrentReadsPage",
+            BookStatus.Read => "//ReadListPage",
+            BookStatus.DNF => "//DNFPage",
+            _ => "//TBRListPage"
+        };
+
+        try
+        {
+            if (sender is Button btn) btn.IsEnabled = false;
+            await _bookService.DeleteBook(vm.Book);
+            await Shell.Current.GoToAsync($"{targetRoute}");
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"[Delete Error] {ex.Message}");
+            await DisplayAlert("Error", "Could not delete the book.", "OK");
+        }
+        finally
+        {
+            if (sender is Button bbtn) bbtn.IsEnabled = true;
+        }
+
+
     }
 }

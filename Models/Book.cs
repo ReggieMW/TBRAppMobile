@@ -65,7 +65,7 @@ public class Book : INotifyPropertyChanged
     {
         "book_alloy.png",
         "book_red.png",
-        "boook_green.png",
+        "book_green.png",
         "book_yellow.png",
         "book_purple.png",
         "book_darkgreen.png",

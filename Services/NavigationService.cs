@@ -8,14 +8,14 @@ using TBRAppMobile.Pages;
 namespace TBRAppMobile.Services;
 
 //class handles functionality of book properties
-public class NavigationService
+public static class NavigationService
 {
-    public async Task NavigateToPageAsync(string pageName)
+    public static async Task NavigateToPageAsync(string pageName)
     {
         await Shell.Current.GoToAsync($"//{pageName}");
     }
 
-    public async Task NavigateToBookViewPage(int bookId)
+    public static async Task NavigateToBookViewPage(int bookId)
     {
         await Shell.Current.GoToAsync($"{nameof(BookViewPage)}?bookId={bookId}");
     }

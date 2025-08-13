@@ -5,31 +5,45 @@
     xmlns:views="clr-namespace:TBRAppMobile.Views"
     x:Class="TBRAppMobile.Pages.CurrentReadsPage"
     Title="The Nightstand Pile"
-    BackgroundColor="{StaticResource BackgroundColor}"> <!-- 💡 Themed background -->
+    BackgroundColor="{StaticResource BackgroundColor}">
 
     <ScrollView>
-        <VerticalStackLayout 
-            Padding="20"
-            Spacing="10">
+        <VerticalStackLayout Padding="20" Spacing="10">
 
-            <!-- Themed heading -->
-            <Label
-                Text="📖 Currently Reading"
-                FontSize="24"
-                FontFamily="Georgia"
-                TextColor="{StaticResource TextColor}"
-                HorizontalOptions="Center" />
+            <Label Text="📖 Currently Reading"
+                   FontSize="24"
+                   FontFamily="Georgia"
+                   TextColor="{StaticResource TextColor}"
+                   HorizontalOptions="Center" />
 
-            <!-- Book List -->
-            <CollectionView
-                x:Name="BookList"
-                ItemsSource="{Binding CurrentReadBooks}"
-                SelectionMode="Single"
-                SelectionChanged="OnBookSelected">
+            <Grid ColumnDefinitions="*,Auto,Auto" BackgroundColor="Transparent">
+                <Picker x:Name="SortPicker"
+                        Title="Sort by"
+                        SelectedIndex="0"
+                        BackgroundColor="Transparent">
+                    <Picker.Items>
+                        <x:String>Title</x:String>
+                        <x:String>Author</x:String>
+                        <x:String>YearPublished</x:String>
+                        <x:String>Pages</x:String>
+                        <x:String>Id</x:String>
+                    </Picker.Items>
+                </Picker>
 
+                <Switch x:Name="AscSwitch"
+                        Grid.Column="1"/>
+
+                <Entry x:Name="SearchEntry"
+                       Grid.Column="2"
+                       Placeholder="Search"
+                       BackgroundColor="Transparent" />
+            </Grid>
+
+            <CollectionView x:Name="BookList"
+                            SelectionMode="Single"
+                            SelectionChanged="OnBookSelected">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <!-- BookCard will pick up theme if it uses styles or dynamic colors -->
                         <views:BookCard
                             BookId="{Binding Id}"
                             Title="{Binding Title}"

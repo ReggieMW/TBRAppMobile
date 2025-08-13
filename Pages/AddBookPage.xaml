@@ -5,13 +5,7 @@
              x:Class="TBRAppMobile.Pages.AddBookPage"
              x:Name="AddBookPageInstance"
              Title="Add a Book"
-             BackgroundColor="{StaticResource BackgroundColor}">
-
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <converters:IconBorderConverter x:Key="IconBorderConverter" />
-        </ResourceDictionary>
-    </ContentPage.Resources>
+             BackgroundColor="{StaticResource AccentColor}">
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="15">
@@ -35,7 +29,7 @@
                                 HeightRequest="200">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Frame Padding="10" Margin="5" BackgroundColor="{StaticResource AccentColor}" HasShadow="True" CornerRadius="6">
+                            <Frame Padding="10" Margin="5" BackgroundColor="{StaticResource CardBackground}" HasShadow="True" CornerRadius="6">
                                 <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
                                     <Image Grid.Column="0"
                                            Source="{Binding IconPath}"
@@ -66,9 +60,9 @@
             <!-- Section: Book Details -->
             <Label Text="Book Details" FontSize="18" FontAttributes="Bold" />
 
-            <Entry Placeholder="Title" Text="{Binding BookTitle}" TextColor="{StaticResource TextColor}"/>
+            <Entry Placeholder="Title" PlaceholderColor="{StaticResource PrimaryColor}" Text="{Binding BookTitle}" TextColor="{StaticResource TextColor}"/>
 
-            <Entry Placeholder="Author" Text="{Binding AuthorText}" TextColor="{StaticResource TextColor}" TextChanged="OnAuthorTextChanged" />
+            <Entry Placeholder="Author" PlaceholderColor="{StaticResource PrimaryColor}" Text="{Binding AuthorText}" TextColor="{StaticResource TextColor}" TextChanged="OnAuthorTextChanged" />
             <CollectionView ItemsSource="{Binding FilteredAuthorSuggestions}"
                             IsVisible="{Binding IsAuthorSuggestionsVisible}"
                             SelectionMode="Single"
@@ -85,7 +79,7 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
-            <Entry Placeholder="Country" Text="{Binding CountryText}" TextColor="{StaticResource TextColor}" TextChanged="OnCountryTextChanged" />
+            <Entry Placeholder="Country" PlaceholderColor="{StaticResource PrimaryColor}" Text="{Binding CountryText}" TextColor="{StaticResource TextColor}" TextChanged="OnCountryTextChanged" />
             <CollectionView ItemsSource="{Binding FilteredCountrySuggestions}"
                             IsVisible="{Binding IsCountrySuggestionsVisible}"
                             SelectionMode="Single"
@@ -102,13 +96,13 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
-            <Entry Placeholder="Year Published" Keyboard="Numeric" Text="{Binding YearText}" TextColor="{StaticResource TextColor}" />
-            <Entry Placeholder="Pages" Keyboard="Numeric" Text="{Binding PagesText}" TextColor="{StaticResource TextColor}" />
+            <Entry Placeholder="Year Published" PlaceholderColor="{StaticResource PrimaryColor}" Keyboard="Numeric" Text="{Binding YearText}" TextColor="{StaticResource TextColor}" />
+            <Entry Placeholder="Pages" Keyboard="Numeric" PlaceholderColor="{StaticResource PrimaryColor}" Text="{Binding PagesText}" TextColor="{StaticResource TextColor}" />
 
             <!-- Section: Subject -->
             <Label Text="Subject" FontSize="18" FontAttributes="Bold" />
-            <Picker Title="Select a Subject" ItemsSource="{Binding SubjectSuggestions}" SelectedItem="{Binding SelectedSubject}" BackgroundColor="{StaticResource CardBackground}" />
-            <Entry Placeholder="Or enter your own subject" Text="{Binding SubjectText}" TextColor="{StaticResource TextColor}" TextChanged="OnSubjectTextChanged" />
+            <Picker Title="Select a Subject" TitleColor="{StaticResource PrimaryColor}" ItemsSource="{Binding SubjectSuggestions}" SelectedItem="{Binding SelectedSubject}" BackgroundColor="{StaticResource CardBackground}" />
+            <Entry Placeholder="Or enter your own subject" PlaceholderColor="{StaticResource PrimaryColor}" Text="{Binding SubjectText}" TextColor="{StaticResource TextColor}" TextChanged="OnSubjectTextChanged" />
             <CollectionView ItemsSource="{Binding FilteredSubjectsSuggestions}"
                             IsVisible="{Binding IsSubjectsSuggestionsVisible}"
                             SelectionMode="Single"
@@ -127,8 +121,8 @@
 
             <!-- Section: Vibe -->
             <Label Text="Vibe" FontSize="18" FontAttributes="Bold" />
-            <Picker Title="Select a Vibe" ItemsSource="{Binding VibeSuggestions}" SelectedItem="{Binding SelectedVibe}" BackgroundColor="{StaticResource CardBackground}"/>
-            <Entry Placeholder="Or enter your own vibe" Text="{Binding VibeText}" TextChanged="OnVibeTextChanged" />
+            <Picker Title="Select a Vibe" TitleColor="{StaticResource PrimaryColor}" ItemsSource="{Binding VibeSuggestions}" SelectedItem="{Binding SelectedVibe}" BackgroundColor="{StaticResource CardBackground}"/>
+            <Entry Placeholder="Or enter your own vibe" PlaceholderColor="{StaticResource PrimaryColor}" Text="{Binding VibeText}" TextChanged="OnVibeTextChanged" />
             <CollectionView ItemsSource="{Binding FilteredVibeSuggestions}"
                             IsVisible="{Binding IsVibeSuggestionsVisible}"
                             SelectionMode="Single"
@@ -147,8 +141,8 @@
 
             <!-- Section: Source -->
             <Label Text="Source" FontSize="18" FontAttributes="Bold" />
-            <Picker Title="Select a Source" ItemsSource="{Binding SourceSuggestions}" SelectedItem="{Binding SelectedSource}" BackgroundColor="{StaticResource CardBackground}"/>
-            <Entry Placeholder="Or enter your own source" Text="{Binding SourceText}" TextChanged="OnSourceTextChanged" />
+            <Picker Title="Select a Source" TitleColor="{StaticResource PrimaryColor}" ItemsSource="{Binding SourceSuggestions}" SelectedItem="{Binding SelectedSource}" BackgroundColor="{StaticResource CardBackground}"/>
+            <Entry Placeholder="Or enter your own source" PlaceholderColor="{StaticResource PrimaryColor}" Text="{Binding SourceText}" TextChanged="OnSourceTextChanged" />
             <CollectionView ItemsSource="{Binding FilteredSourceSuggestions}"
                             IsVisible="{Binding IsSourceSuggestionsVisible}"
                             SelectionMode="Single"
@@ -200,6 +194,7 @@
                                     </VisualState>
                                     <VisualState Name="Normal">
                                         <VisualState.Setters>
+                                            <Setter TargetName="IconFrame" Property="BackgroundColor" Value="{StaticResource AccentColor}" />
                                             <Setter TargetName="IconFrame" Property="BorderColor" Value="{StaticResource PrimaryColor}" />
                                             <Setter TargetName="IconFrame" Property="HasShadow" Value="False" />
                                         </VisualState.Setters>
@@ -214,7 +209,7 @@
             
 
             <!-- Save Button -->
-            <Button Text="Save Book" Clicked="OnSaveClicked" BackgroundColor="{StaticResource BackgroundColor}" TextColor="{StaticResource TextColor}" />
+            <Button Text="Save Book" Clicked="OnSaveClicked" TextColor="{StaticResource TextColor}" />
             <Label x:Name="StatusLabel" TextColor="{StaticResource PrimaryColor}" FontSize="14" IsVisible="False" />
         </VerticalStackLayout>
     </ScrollView>

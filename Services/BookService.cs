@@ -10,6 +10,14 @@ namespace TBRAppMobile.Services;
 //class handles functionality of book properties
 public class BookService
 {
+    private readonly BookDatabase _database;
+    public BookService(BookDatabase database)
+    {
+        _database = database;
+    }
+
+  
+
     private readonly ObservableCollection<Book> _allBooks = new();
 
     private readonly Dictionary<string, int> _subjectHistory = new();
@@ -103,7 +111,15 @@ public class BookService
 
     public async Task NavigateToListPageAsync(Book book)
     {
-        await Shell.Current.GoToAsync($"bookviewpage?bookId={book.Id}");
+        var target = book.Status switch
+    {
+        BookStatus.TBR => "//TBRListPage",
+        BookStatus.CurrentReads => "//CurrentReadsPage",
+        BookStatus.Read => "//ReadListPage",
+        BookStatus.DNF => "//DNFPage",
+        _ => "//CurrentReadsPage"
+    };
+        await Shell.Current.GoToAsync(target);
     }
 
 
@@ -167,8 +183,19 @@ public class BookService
         }
     }
 
+    public async Task DeleteBook(Book book)
+{
+    RemoveFromAllStatusCollections(book);
+    MyCanon.Remove(book);
+    _allBooks.Remove(book);
+    await _database.DeleteBookAsync(book); 
+}
+
+
+
+
     //method to remove book from current status
-    private void RemoveFromAllStatusCollections(Book book)
+    public void RemoveFromAllStatusCollections(Book book)
     {
         TBRBooks.Remove(book);
         ReadBooks.Remove(book);

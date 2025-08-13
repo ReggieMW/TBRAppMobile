@@ -1,5 +1,4 @@
 using Microsoft.Maui.Controls;
-using System.Diagnostics;
 using TBRAppMobile.Models;
 using TBRAppMobile.Services;
 
@@ -8,41 +7,43 @@ namespace TBRAppMobile.Pages
     public partial class DNFPage : ContentPage
     {
         private readonly BookService _bookService;
+        private BookListController? _controller;
 
-        //updates page with most current version of List on page load
+        public DNFPage()
+        {
+            InitializeComponent();
+            _bookService = App.BookService;
+        }
+
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            BindingContext = _bookService;
-            BookList.ItemsSource = _bookService.GetDNFBooks();
+
+            _controller ??= new BookListController(
+                _bookService,
+                () => _bookService.GetDNFBooks(),
+                BookList,
+                SortPicker,
+                AscSwitch,
+                SearchEntry);
+
+            _controller.Refresh();
         }
 
-        public DNFPage(BookService bookService)
-        {
-            InitializeComponent();
-            _bookService = bookService;
-            BindingContext = _bookService;
-            BookList.ItemsSource = _bookService.DNFBooks;
+        protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        _controller?.Dispose(); // Unwire events cleanly
+        _controller = null;
+    }
 
-        }
-
-        //Allows user to click a book and navigate to BookViewPage
         private async void OnBookSelected(object sender, SelectionChangedEventArgs e)
         {
             if (e.CurrentSelection.FirstOrDefault() is Book selectedBook)
             {
                 ((CollectionView)sender).SelectedItem = null;
-
-                await Shell.Current.GoToAsync($"{nameof(BookViewPage)}?bookId={selectedBook.Id}");
+                await NavigationService.NavigateToBookViewPage(selectedBook.Id);
             }
         }
-        
-        protected override void OnDisappearing()
-{
-    base.OnDisappearing();
-    BindingContext = null;
-}
-
-
     }
 }

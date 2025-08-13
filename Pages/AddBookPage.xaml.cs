@@ -35,12 +35,12 @@ namespace TBRAppMobile.Pages
             }
         }
 
-        public AddBookPage(BookService bookService, GoogleBooksService googleBooksService)
+        public AddBookPage()
         {
             InitializeComponent();
-            _bookService = bookService;
-            _googleBooksService = googleBooksService;
-            _viewModel = new AddBookViewModel(bookService, googleBooksService);
+            _bookService = App.BookService;
+            _googleBooksService = App.GoogleBooksService;
+            _viewModel = new AddBookViewModel(App.BookService, App.GoogleBooksService);
             BindingContext = _viewModel;
         }
 
@@ -58,7 +58,6 @@ namespace TBRAppMobile.Pages
 #pragma warning disable CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
                     _viewModel.SearchResults = new ObservableCollection<Book>(results);
                     _viewModel.IsSearchDropdownVisible = true;
-                    OnPropertyChanged(nameof(vm.SearchResults));
 #pragma warning restore CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
                 }
                 catch (Exception ex)
@@ -174,7 +173,7 @@ namespace TBRAppMobile.Pages
             {
                 viewModel.ClearForm();
                 viewModel.RefreshSuggestions();
-                await Shell.Current.GoToAsync($"//{nameof(TBRListPage)}");
+                await NavigationService.NavigateToPageAsync("//TBRListPage");
             }
         }
 

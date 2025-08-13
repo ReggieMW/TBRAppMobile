@@ -20,7 +20,6 @@ C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-ios\iossimulator-x64\SQLite-net.dll
 C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-ios\iossimulator-x64\SQLitePCLRaw.batteries_v2.dll
 C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-ios\iossimulator-x64\SQLitePCLRaw.core.dll
 C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-ios\iossimulator-x64\SQLitePCLRaw.provider.sqlite3.dll
-C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-ios\iossimulator-x64\System.Diagnostics.DiagnosticSource.dll
 C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-ios\iossimulator-x64\ar\Microsoft.Maui.Controls.resources.dll
 C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-ios\iossimulator-x64\ca\Microsoft.Maui.Controls.resources.dll
 C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-ios\iossimulator-x64\cs\Microsoft.Maui.Controls.resources.dll
@@ -81,6 +80,7 @@ C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-ios\iossimulator-x64\System.Data.Da
 C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-ios\iossimulator-x64\System.Data.dll
 C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-ios\iossimulator-x64\System.Diagnostics.Contracts.dll
 C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-ios\iossimulator-x64\System.Diagnostics.Debug.dll
+C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-ios\iossimulator-x64\System.Diagnostics.DiagnosticSource.dll
 C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-ios\iossimulator-x64\System.Diagnostics.FileVersionInfo.dll
 C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-ios\iossimulator-x64\System.Diagnostics.Process.dll
 C:\Users\reggi\TBRAppMobile\bin\Debug\net8.0-ios\iossimulator-x64\System.Diagnostics.StackTrace.dll
@@ -287,13 +287,13 @@ C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-ios\iossimulator-x64\resizetizer\r\
 C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-ios\iossimulator-x64\resizetizer\r\dotnet_bot@3x.png
 C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-ios\iossimulator-x64\resizetizer\r\dotnet_bot@2x.png
 C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-ios\iossimulator-x64\resizetizer\r\dotnet_bot.png
-C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-ios\iossimulator-x64\resizetizer\r\Resources\book_cyan.png
-C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-ios\iossimulator-x64\resizetizer\r\Resources\book_green.png
-C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-ios\iossimulator-x64\resizetizer\r\Resources\book_yellow.png
-C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-ios\iossimulator-x64\resizetizer\r\Resources\book_black.png
-C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-ios\iossimulator-x64\resizetizer\r\Resources\book_darkgreen.png
 C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-ios\iossimulator-x64\resizetizer\r\Resources\book_red.png
 C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-ios\iossimulator-x64\resizetizer\r\Resources\book_purple.png
+C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-ios\iossimulator-x64\resizetizer\r\Resources\book_cyan.png
+C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-ios\iossimulator-x64\resizetizer\r\Resources\book_black.png
+C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-ios\iossimulator-x64\resizetizer\r\Resources\book_green.png
+C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-ios\iossimulator-x64\resizetizer\r\Resources\book_yellow.png
+C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-ios\iossimulator-x64\resizetizer\r\Resources\book_darkgreen.png
 C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-ios\iossimulator-x64\resizetizer\r\Resources\book_alloy.png
 C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-ios\iossimulator-x64\mauiimage.stamp
 C:\Users\reggi\TBRAppMobile\obj\Debug\net8.0-ios\iossimulator-x64\mauiimage.outputs

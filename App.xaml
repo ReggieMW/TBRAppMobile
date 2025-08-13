@@ -1,10 +1,10 @@
-﻿<?xml version = "1.0" encoding = "UTF-8" ?>
-<Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui" 
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:TBRAppMobile"
+             xmlns:behaviors="clr-namespace:TBRAppMobile.Behaviors"
              x:Class="TBRAppMobile.App">
-             <!-- MAUI installed to make IOS, Android, and Windows compatible app-->
-    <Application.Resources>
+
+  <Application.Resources>
     <!-- Color Palette -->
     <Color x:Key="PrimaryColor">#A53D2C</Color>
     <Color x:Key="BackgroundColor">#EFE1C1</Color>
@@ -13,40 +13,178 @@
     <Color x:Key="CardBackground">#FDF5E6</Color>
     <Color x:Key="HeaderBackground">#B0815B</Color>
 
-    <!-- Entry Style -->
-    <Style TargetType="Entry">
-        <Setter Property="BackgroundColor" Value="{StaticResource CardBackground}" />
-        <Setter Property="TextColor" Value="{StaticResource TextColor}" />
-        <Setter Property="FontSize" Value="14" />
-        <Setter Property="FontFamily" Value="Georgia" />
-        <Setter Property="Margin" Value="0,5" />
-    </Style>
-
-    <!-- Button Style -->
-    <Style TargetType="Button">
-        <Setter Property="BackgroundColor" Value="{StaticResource AccentColor}" />
-        <Setter Property="TextColor" Value="{StaticResource TextColor}" />
-        <Setter Property="CornerRadius" Value="8" />
-        <Setter Property="FontFamily" Value="Georgia" />
-        <Setter Property="FontSize" Value="14" />
-    </Style>
-
-    <!-- Label Style -->
-    <Style TargetType="Label">
-        <Setter Property="TextColor" Value="{StaticResource TextColor}" />
-        <Setter Property="BackgroundColor" Value="{StaticResource BackgroundColor}" />
-        <Setter Property="FontSize" Value="14" />
-        <Setter Property="FontFamily" Value="Georgia" />
+    <!-- Shell / Nav bar uses AccentColor, no shadow -->
+    <Style TargetType="Element">
+      <Setter Property="Shell.BackgroundColor"
+              Value="{StaticResource AccentColor}"/>
+      <Setter Property="Shell.ForegroundColor"
+              Value="{StaticResource TextColor}"/>
+      <Setter Property="Shell.TitleColor"
+              Value="{StaticResource TextColor}"/>
+      <Setter Property="Shell.NavBarHasShadow"
+              Value="False"/>
+      <Setter Property="Shell.FlyoutBackgroundColor"
+              Value="{StaticResource AccentColor}"/>
     </Style>
 
     <!-- Page Background -->
     <Style TargetType="ContentPage">
-        <Setter Property="BackgroundColor" Value="{StaticResource BackgroundColor}" />
+      <Setter Property="BackgroundColor"
+              Value="{StaticResource AccentColor}"/>
+    </Style>
+
+    <!-- Make layout containers transparent so they SHOW the page background -->
+    <Style TargetType="Grid">
+      <Setter Property="BackgroundColor"
+              Value="{StaticResource AccentColor}"/>
+    </Style>
+    <Style TargetType="StackLayout">
+      <Setter Property="BackgroundColor"
+              Value="{StaticResource AccentColor}"/>
+    </Style>
+    <Style TargetType="VerticalStackLayout">
+      <Setter Property="BackgroundColor"
+              Value="{StaticResource AccentColor}"/>
+    </Style>
+    <Style TargetType="HorizontalStackLayout">
+      <Setter Property="BackgroundColor"
+              Value="{StaticResource AccentColor}"/>
+    </Style>
+    <Style TargetType="ScrollView">
+      <Setter Property="BackgroundColor"
+              Value="{StaticResource AccentColor}"/>
+    </Style>
+    <Style TargetType="CollectionView">
+      <Setter Property="BackgroundColor"
+              Value="{StaticResource AccentColor}"/>
+      <Setter Property="ItemsLayout">
+        <Setter.Value>
+          <LinearItemsLayout Orientation="Vertical"
+              ItemSpacing="10"/>
+        </Setter.Value>
+      </Setter>
+    </Style>
+
+
+    <!-- Entry Style -->
+    <Style TargetType="Entry">
+      <Setter Property="BackgroundColor"
+              Value="{StaticResource CardBackground}"/>
+      <Setter Property="TextColor"
+              Value="{StaticResource TextColor}"/>
+      <Setter Property="PlaceholderColor"
+              Value="{StaticResource PrimaryColor}"/>
+      <Setter Property="FontSize"
+              Value="14"/>
+      <Setter Property="FontFamily"
+              Value="Georgia"/>
+      <Setter Property="Margin"
+              Value="0,5"/>
+    </Style>
+
+    <!-- Button Style -->
+    <Style TargetType="Button">
+      <Setter Property="BackgroundColor"
+              Value="{StaticResource PrimaryColor}"/>
+      <Setter Property="TextColor"
+              Value="{StaticResource TextColor}"/>
+      <Setter Property="CornerRadius"
+              Value="8"/>
+      <Setter Property="FontFamily"
+              Value="Georgia"/>
+      <Setter Property="FontSize"
+              Value="14"/>
+              <Setter Property="Behaviors">
+        <Setter.Value>
+          <behaviors:ButtonPressAnimationBehavior
+              PressDuration="90"
+              PressScale="0.96"
+              ClickFlashDuration="180" />
+        </Setter.Value>
+      </Setter>
+    </Style>
+
+    <!-- Label Style -->
+    <!-- Text-only look: labels sit on whatever is under them -->
+    <Style TargetType="Label">
+      <Setter Property="BackgroundColor"
+              Value="Transparent"/>
+      <Setter Property="TextColor"
+              Value="{StaticResource TextColor}"/>
+      <Setter Property="FontSize"
+              Value="14"/>
+      <Setter Property="FontFamily"
+              Value="Georgia"/>
+    </Style>
+
+    <!-- Optional: a reusable “card” surface style (apply per-use with Style="{StaticResource CardFrame}") -->
+    <Style x:Key="CardFrame"
+           TargetType="Frame">
+      <Setter Property="BackgroundColor"
+              Value="{StaticResource CardBackground}"/>
+      <Setter Property="CornerRadius"
+              Value="10"/>
+      <Setter Property="HasShadow"
+              Value="True"/>
+      <Setter Property="Padding"
+              Value="12"/>
     </Style>
 
     <Style TargetType="Picker">
-        <Setter Property="TextColor" Value="{StaticResource TextColor}" />
+      <Setter Property="TextColor"
+              Value="{StaticResource TextColor}"/>
     </Style>
-</Application.Resources>
+
+    <!-- shared chip base -->
+    <Style x:Key="ChipBase"
+           TargetType="Border">
+      <Setter Property="StrokeShape">
+        <Setter.Value>
+          <RoundRectangle CornerRadius="8"/>
+        </Setter.Value>
+      </Setter>
+      <Setter Property="Padding"
+              Value="6,2"/>
+      <Setter Property="StrokeThickness"
+              Value="1"/>
+      <Setter Property="BackgroundColor"
+              Value="Transparent"/>
+    </Style>
+
+    <!-- Accent chip -->
+    <Style x:Key="ChipAccent"
+           TargetType="Border"
+           BasedOn="{StaticResource ChipBase}">
+      <Setter Property="BackgroundColor"
+              Value="{StaticResource AccentColor}"/>
+      <Setter Property="Stroke"
+              Value="{StaticResource PrimaryColor}"/>
+    </Style>
+
+    <!-- Primary chip -->
+    <Style x:Key="ChipPrimary"
+           TargetType="Border"
+           BasedOn="{StaticResource ChipBase}">
+      <Setter Property="BackgroundColor"
+              Value="{StaticResource PrimaryColor}"/>
+      <Setter Property="Stroke"
+              Value="{StaticResource PrimaryColor}"/>
+      <!-- Text inside chips should be readable -->
+    </Style>
+
+    <!-- Ensure chip labels are transparent -->
+    <Style TargetType="Label"
+           x:Key="ChipLabel">
+      <Setter Property="BackgroundColor"
+              Value="Transparent"/>
+      <Setter Property="TextColor"
+              Value="{StaticResource TextColor}"/>
+      <Setter Property="FontSize"
+              Value="12"/>
+      <Setter Property="FontAttributes"
+              Value="Bold"/>
+    </Style>
+
+  </Application.Resources>
 
 </Application>

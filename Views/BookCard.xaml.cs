@@ -9,7 +9,6 @@ namespace TBRAppMobile.Views
         public BookCard()
         {
             InitializeComponent();
-            BindingContext = this;
         }
 
         public static readonly BindableProperty TitleProperty =
@@ -131,7 +130,7 @@ namespace TBRAppMobile.Views
         public event EventHandler<Book>? StatusChanged;
         public event EventHandler<Book>? RemoveRequested;
 
-//updates for status change
+/*updates for status change
         private void OnStatusChanged(object sender, EventArgs e)
         {
             RecommendSection.IsVisible = Status == BookStatus.Read || Status == BookStatus.DNF;
@@ -143,7 +142,7 @@ namespace TBRAppMobile.Views
         {
             Recommend = e.Value;
             ComparableEntry.IsVisible = Recommend;
-        }
+        } */
 
 //Remove book option, button not added yet
         private void OnRemoveClicked(object sender, EventArgs e)
