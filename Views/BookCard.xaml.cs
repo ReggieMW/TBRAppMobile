@@ -3,6 +3,17 @@ using TBRAppMobile.Models;
 
 namespace TBRAppMobile.Views
 {
+    public class ChipClickedEventArgs : EventArgs
+        {
+            public string Type { get; }
+            public string Value { get; }
+            public ChipClickedEventArgs(string type, string value)
+            {
+                Type = type;
+                Value = value;
+            }
+        }
+
     //Class to provide a uniform view of all books for BookViewPage
     public partial class BookCard : ContentView
     {
@@ -109,55 +120,52 @@ namespace TBRAppMobile.Views
             set => SetValue(IsCanonProperty, value);
         }
 
-        public static readonly BindableProperty RecommendProperty =
-            BindableProperty.Create(nameof(Recommend), typeof(bool), typeof(BookCard), false);
 
-        public bool Recommend
+        public event EventHandler<ChipClickedEventArgs>? ChipClicked;
+
+        private void OnSubjectChipTapped(object? s, EventArgs e)
         {
-            get => (bool)GetValue(RecommendProperty);
-            set => SetValue(RecommendProperty, value);
+            if (!string.IsNullOrWhiteSpace(Subject))
+                ChipClicked?.Invoke(this, new ChipClickedEventArgs("Subject", Subject));
         }
 
-        public static readonly BindableProperty ComparableProperty =
-            BindableProperty.Create(nameof(Comparable), typeof(string), typeof(BookCard));
-
-        public string Comparable
+        private void OnVibeChipTapped(object? s, EventArgs e)
         {
-            get => (string)GetValue(ComparableProperty);
-            set => SetValue(ComparableProperty, value);
+            if (!string.IsNullOrWhiteSpace(Vibe))
+                ChipClicked?.Invoke(this, new ChipClickedEventArgs("Vibe", Vibe));
         }
 
-        public event EventHandler<Book>? StatusChanged;
-        public event EventHandler<Book>? RemoveRequested;
-
-/*updates for status change
-        private void OnStatusChanged(object sender, EventArgs e)
+        private void OnAuthorChipTapped(object? s, EventArgs e)
         {
-            RecommendSection.IsVisible = Status == BookStatus.Read || Status == BookStatus.DNF;
-            StatusChanged?.Invoke(this, GetBook());
+            if (!string.IsNullOrWhiteSpace(Author))
+                ChipClicked?.Invoke(this, new ChipClickedEventArgs("Author", Author));
         }
 
-//not implemented yet
-        private void OnRecommendToggled(object sender, ToggledEventArgs e)
+        private void OnYearChipTapped(object? s, EventArgs e)
         {
-            Recommend = e.Value;
-            ComparableEntry.IsVisible = Recommend;
-        } */
-
-//Remove book option, button not added yet
-        private void OnRemoveClicked(object sender, EventArgs e)
-        {
-            RemoveRequested?.Invoke(this, GetBook());
+            ChipClicked?.Invoke(this, new ChipClickedEventArgs("Year", YearPublished.ToString()));
         }
 
-public static readonly BindableProperty BookIdProperty =
-    BindableProperty.Create(nameof(BookId), typeof(int), typeof(BookCard), 0);
+        private void OnCountryChipTapped(object? s, EventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(Country))
+                ChipClicked?.Invoke(this, new ChipClickedEventArgs("Country", Country));
+        }
 
-public int BookId
-{
-    get => (int)GetValue(BookIdProperty);
-    set => SetValue(BookIdProperty, value);
-}
+        private void OnSourceChipTapped(object? s, EventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(Source))
+                ChipClicked?.Invoke(this, new ChipClickedEventArgs("Source", Source));
+        }
+
+        public static readonly BindableProperty BookIdProperty =
+            BindableProperty.Create(nameof(BookId), typeof(int), typeof(BookCard), 0);
+
+        public int BookId
+        {
+            get => (int)GetValue(BookIdProperty);
+            set => SetValue(BookIdProperty, value);
+        }
 
         //fetches book info
         private Book GetBook()
@@ -180,5 +188,39 @@ public int BookId
                 IconPath = this.IconPath
             };
         }
+        public static readonly BindableProperty RecommendProperty =
+              BindableProperty.Create(nameof(Recommend), typeof(bool), typeof(BookCard), false);
+
+        public bool Recommend
+        {
+            get => (bool)GetValue(RecommendProperty);
+            set => SetValue(RecommendProperty, value);
+        }
+
+        public static readonly BindableProperty ComparableProperty =
+            BindableProperty.Create(nameof(Comparable), typeof(string), typeof(BookCard));
+
+        public string Comparable
+        {
+            get => (string)GetValue(ComparableProperty);
+            set => SetValue(ComparableProperty, value);
+        }
+
+        /*
+                  updates for status change
+                  private void OnStatusChanged(object sender, EventArgs e)
+                  {
+                      RecommendSection.IsVisible = Status == BookStatus.Read || Status == BookStatus.DNF;
+                      StatusChanged?.Invoke(this, GetBook());
+                  }
+
+          //not implemented yet
+                  private void OnRecommendToggled(object sender, ToggledEventArgs e)
+                  {
+                      Recommend = e.Value;
+                      ComparableEntry.IsVisible = Recommend;
+                  } */
+
+        //Remove book option, button not added yet
     }
 }

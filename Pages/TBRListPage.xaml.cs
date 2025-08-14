@@ -11,8 +11,9 @@ namespace TBRAppMobile.Pages;
 public partial class TBRListPage : ContentPage
 {
     private readonly BookService _bookService;
-    private BookListController? _controller; 
-    
+    private BookListController? _controller;
+    private bool _suppressNextNavigate;
+
 
     public TBRListPage()
     {
@@ -25,7 +26,7 @@ public partial class TBRListPage : ContentPage
         base.OnAppearing();
         _controller ??= new BookListController(
             _bookService,
-            () => _bookService.GetTBR_Books(),     
+            () => _bookService.GetTBR_Books(),
             BookList,
             SortPicker,
             AscSwitch,
@@ -33,6 +34,33 @@ public partial class TBRListPage : ContentPage
 
         _controller.Refresh();
     }
+
+    private void OnChipClicked(object sender, ChipClickedEventArgs e)
+    {
+        _suppressNextNavigate = true;
+
+        if (_controller is null) return;
+
+        switch (e.Type)
+        {
+            case "Subject": _controller.SetSubjectOnly(e.Value); break;
+        case "Vibe":    _controller.SetVibeOnly(e.Value);    break;
+        case "Author":  _controller.SetAuthorOnly(e.Value);  break;
+        case "Country": _controller.SetCountryOnly(e.Value); break;
+        case "Source":  _controller.SetSourceOnly(e.Value);  break;
+        case "Year":
+            if (int.TryParse(e.Value, out var y)) _controller.SetExactYearOnly(y);
+            break;
+        }
+        BookList.SelectedItem = null;
+    }
+
+    private void OnSortDirTapped(object? sender, EventArgs e)
+{
+    // Flip the hidden switch; controller will pick this up via Toggled and Refresh()
+    AscSwitch.IsToggled = !AscSwitch.IsToggled;
+}
+
 
     protected override void OnDisappearing()
     {
@@ -42,14 +70,23 @@ public partial class TBRListPage : ContentPage
     }
 
     //Allows user to click a book and navigate to BookViewPage
-    private async void OnBookSelected(object sender, SelectionChangedEventArgs e)
+    private async void OnCardTapped(object sender, TappedEventArgs e)
     {
-        if (e.CurrentSelection.FirstOrDefault() is Book selectedBook)
+
+        // If a chip was just tapped, ignore this selection and reset the flag
+        if (_suppressNextNavigate)
         {
-            ((CollectionView)sender).SelectedItem = null;
-
-            await NavigationService.NavigateToBookViewPage(selectedBook.Id);
-
+            _suppressNextNavigate = false;
+            return;
         }
+        // Navigate by the bound item (safer than relying on selection)
+        if (e.Parameter is Book book)
+            await NavigationService.NavigateToBookViewPage(book.Id);
+    }
+
+    private void OnClearFiltersClicked(object sender, EventArgs e)
+    {
+        _controller?.ClearFilters();  // resets Search + all chip filters and refreshes
+        BookList.SelectedItem = null;
     }
 }

@@ -24,7 +24,9 @@ namespace TBRAppMobile.Services
                         (b.Title?.Contains(s, StringComparison.OrdinalIgnoreCase) ?? false) ||
                         (b.Author?.Contains(s, StringComparison.OrdinalIgnoreCase) ?? false) ||
                         (b.Subject?.Contains(s, StringComparison.OrdinalIgnoreCase) ?? false) ||
-                        (b.Vibe?.Contains(s, StringComparison.OrdinalIgnoreCase) ?? false));
+                        (b.Vibe?.Contains(s, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                        (b.Country?.Contains(s, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                        (b.Source?.Contains(s, StringComparison.OrdinalIgnoreCase) ?? false));
                 }
 
                 if (!string.IsNullOrWhiteSpace(filter.Author))
@@ -39,8 +41,13 @@ namespace TBRAppMobile.Services
                 if (!string.IsNullOrWhiteSpace(filter.Country))
                     q = q.Where(b => (b.Country ?? "").StartsWith(filter.Country, StringComparison.OrdinalIgnoreCase));
 
-                if (filter.YearMin.HasValue)  q = q.Where(b => b.YearPublished >= filter.YearMin.Value);
-                if (filter.YearMax.HasValue)  q = q.Where(b => b.YearPublished <= filter.YearMax.Value);
+                if (!string.IsNullOrWhiteSpace(filter.Source))
+                {
+                    q = q.Where(b => (b.Source ?? "").StartsWith(filter.Source, StringComparison.OrdinalIgnoreCase));
+                }
+
+                if (filter.YearMin.HasValue) q = q.Where(b => b.YearPublished >= filter.YearMin.Value);
+                if (filter.YearMax.HasValue) q = q.Where(b => b.YearPublished <= filter.YearMax.Value);
                 if (filter.PagesMin.HasValue) q = q.Where(b => b.Pages >= filter.PagesMin.Value);
                 if (filter.PagesMax.HasValue) q = q.Where(b => b.Pages <= filter.PagesMax.Value);
 
@@ -50,12 +57,12 @@ namespace TBRAppMobile.Services
 
             q = sortField switch
             {
-                SortField.Title         => ascending ? q.OrderBy(b => b.Title)          : q.OrderByDescending(b => b.Title),
-                SortField.Author        => ascending ? q.OrderBy(b => b.Author)         : q.OrderByDescending(b => b.Author),
-                SortField.YearPublished => ascending ? q.OrderBy(b => b.YearPublished)  : q.OrderByDescending(b => b.YearPublished),
-                SortField.Pages         => ascending ? q.OrderBy(b => b.Pages)          : q.OrderByDescending(b => b.Pages),
-                SortField.Id            => ascending ? q.OrderBy(b => b.Id)             : q.OrderByDescending(b => b.Id),
-                _                       => q
+                SortField.Title => ascending ? q.OrderBy(b => b.Title) : q.OrderByDescending(b => b.Title),
+                SortField.Author => ascending ? q.OrderBy(b => b.Author) : q.OrderByDescending(b => b.Author),
+                SortField.YearPublished => ascending ? q.OrderBy(b => b.YearPublished) : q.OrderByDescending(b => b.YearPublished),
+                SortField.Pages => ascending ? q.OrderBy(b => b.Pages) : q.OrderByDescending(b => b.Pages),
+                SortField.Id => ascending ? q.OrderBy(b => b.Id) : q.OrderByDescending(b => b.Id),
+                _ => q
             };
 
 

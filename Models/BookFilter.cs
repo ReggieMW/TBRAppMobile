@@ -10,6 +10,7 @@ namespace TBRAppMobile.Models
         public string? Subject { get; set; }
         public string? Vibe { get; set; }
         public string? Country { get; set; }
+        public string? Source { get; set; }
 
         // Ranges (inclusive)
         public int? YearMin { get; set; }

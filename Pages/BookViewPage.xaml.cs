@@ -65,16 +65,13 @@ public partial class BookViewPage : ContentPage
     }
     private async void OnCanonButtonClicked(object sender, EventArgs e)
     {
-        if (BindingContext is BookViewModel vm)
-        {
-            if (CanonButton == null) return;
-            await CanonButton.ColorTo(Colors.Transparent, Colors.LightGreen, c => CanonButton.BackgroundColor = c, 100);
-            await CanonButton.ColorTo(Colors.LightGreen, Colors.Transparent, c => CanonButton.BackgroundColor = c, 300);
-            await CanonButton.ScaleTo(1.1, 100, Easing.CubicOut);
-            await CanonButton.ScaleTo(1.0, 100, Easing.CubicIn);
+        if (BindingContext is not BookViewModel vm) return;
 
-            vm.ToggleCanonCommand.Execute(null);
-        }
+    // keep primary color; just give a quick press feedback
+    await CanonButton.ScaleTo(0.96, 80, Easing.CubicOut);
+    await CanonButton.ScaleTo(1.0, 80, Easing.CubicIn);
+
+    vm.ToggleCanonCommand.Execute(null);
     }
 
     private async void OnDeleteButtonClicked(object sender, EventArgs e)

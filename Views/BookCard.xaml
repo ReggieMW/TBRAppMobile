@@ -13,51 +13,117 @@
            BackgroundColor="{StaticResource BackgroundColor}"
            BorderColor="{StaticResource PrimaryColor}">
 
-        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12" BackgroundColor="Transparent">
+        <Grid ColumnDefinitions="Auto,*"
+                ColumnSpacing="12"
+                BackgroundColor="Transparent">
             <Image Grid.Column="0"
-                   WidthRequest="54" HeightRequest="54"
+                   WidthRequest="54"
+                    HeightRequest="54"
                    Aspect="AspectFit"
-                   Source="{Binding IconPath, Source={x:Reference root}}" />
+                   Source="{Binding IconPath, Source={x:Reference root}}"/>
 
-            <VerticalStackLayout Grid.Column="1" Spacing="4" BackgroundColor="Transparent">
+            <VerticalStackLayout Grid.Column="1"
+                    Spacing="4"
+                    BackgroundColor="Transparent">
                 <Label Text="{Binding Title, Source={x:Reference root}}"
-                       FontSize="18" FontAttributes="Bold"
+                       FontSize="18"
+                        FontAttributes="Bold"
                        BackgroundColor="Transparent"
-                       TextColor="{StaticResource TextColor}" />
+                       TextColor="{StaticResource TextColor}"/>
 
                 <Label Text="{Binding Author, Source={x:Reference root}}"
                        FontSize="14"
                        BackgroundColor="Transparent"
-                       TextColor="{StaticResource TextColor}" />
+                       TextColor="{StaticResource TextColor}"/>
 
-                <!-- chips -->
-                <HorizontalStackLayout Spacing="8" BackgroundColor="Transparent">
-                    <Border Padding="6,2"
-                            BackgroundColor="{StaticResource AccentColor}"
-                            Stroke="{StaticResource PrimaryColor}"
-                            StrokeThickness="1"
-                            >
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="8"/>
-                        </Border.StrokeShape>
-                        <Label Text="{Binding Subject, Source={x:Reference root}}"
-                               BackgroundColor="Transparent"
-                               FontSize="12" FontAttributes="Bold"
-                               TextColor="{StaticResource TextColor}" />
-                    </Border>
+                <!-- Chips -->
+    <HorizontalStackLayout Spacing="8" Margin="0,6,0,0" BackgroundColor="{StaticResource BackgroundColor}">
 
-                    <Border Padding="6,2"
-                            BackgroundColor="{StaticResource PrimaryColor}"
-                            Stroke="{StaticResource PrimaryColor}"
-                            StrokeThickness="1">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="8"/>
-                        </Border.StrokeShape>
-                        <Label Text="{Binding Vibe, Source={x:Reference root}}"
-                               BackgroundColor="Transparent"
-                               FontSize="12" FontAttributes="Bold"
-                               TextColor="{StaticResource TextColor}" />
-                    </Border>
+        <!-- Subject -->
+        <Border Padding="10,4"
+                BackgroundColor="{DynamicResource PrimaryColor}">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="16"/>
+            </Border.StrokeShape>
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnSubjectChipTapped"/>
+            </Border.GestureRecognizers>
+            <Label Text="{Binding Subject, Source={x:Reference root}}"
+                   FontSize="12" FontAttributes="Bold"
+                   TextColor="White"/>
+        </Border>
+
+        <!-- Vibe -->
+        <Border Padding="10,4"
+                BackgroundColor="{DynamicResource PrimaryColor}">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="16"/>
+            </Border.StrokeShape>
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnVibeChipTapped"/>
+            </Border.GestureRecognizers>
+            <Label Text="{Binding Vibe, Source={x:Reference root}}"
+                   FontSize="12" FontAttributes="Bold"
+                   TextColor="White"/>
+        </Border>
+
+        <!-- Author -->
+        <Border Padding="10,4"
+                BackgroundColor="{DynamicResource PrimaryColor}">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="16"/>
+            </Border.StrokeShape>
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnAuthorChipTapped"/>
+            </Border.GestureRecognizers>
+            <Label Text="{Binding Author, Source={x:Reference root}}"
+                   FontSize="12" FontAttributes="Bold"
+                   TextColor="White"/>
+        </Border>
+
+        <!-- Year -->
+        <Border Padding="10,4"
+                BackgroundColor="{DynamicResource PrimaryColor}">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="16"/>
+            </Border.StrokeShape>
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnYearChipTapped"/>
+            </Border.GestureRecognizers>
+            <Label Text="{Binding YearPublished, Source={x:Reference root}, StringFormat='📅 {0}'}"
+                   FontSize="12" FontAttributes="Bold"
+                   TextColor="White"/>
+        </Border>
+
+        <!-- Country -->
+        <Border Padding="10,4"
+                BackgroundColor="{DynamicResource PrimaryColor}">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="16"/>
+            </Border.StrokeShape>
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnCountryChipTapped"/>
+            </Border.GestureRecognizers>
+            <Label Text="{Binding Country, Source={x:Reference root}}"
+                   FontSize="12" FontAttributes="Bold"
+                   TextColor="White"/>
+        </Border>
+
+        <!-- Source -->
+        <Border Padding="10,4"
+                BackgroundColor="{DynamicResource PrimaryColor}">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="16"/>
+            </Border.StrokeShape>
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnSourceChipTapped"/>
+            </Border.GestureRecognizers>
+            <Label Text="{Binding Source, Source={x:Reference root}}"
+                   FontSize="12" FontAttributes="Bold"
+                   TextColor="White"/>
+        </Border>
+
+
                 </HorizontalStackLayout>
             </VerticalStackLayout>
         </Grid>

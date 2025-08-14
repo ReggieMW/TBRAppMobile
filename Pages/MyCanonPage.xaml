@@ -1,62 +1,142 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:views="clr-namespace:TBRAppMobile.Views"
-    x:Class="TBRAppMobile.Pages.MyCanonPage"
-    Title="My Canon {The Display Shelf}"
-    BackgroundColor="{StaticResource BackgroundColor}">
-    <!-- View Page for all books in My Canon List -->
+       xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:views="clr-namespace:TBRAppMobile.Views"
+       x:Class="TBRAppMobile.Pages.MyCanonPage"
+       Title="My Canon {The Display Shelf}"
+       BackgroundColor="{StaticResource BackgroundColor}">
+
+    <!-- View Page for all books in My Canon -->
     <ScrollView>
-        <VerticalStackLayout Padding="20"
-                Spacing="10">
+        <VerticalStackLayout Padding="20" Spacing="10">
             <Label
                 Text="⭐ My Canon"
                 FontSize="24"
                 HorizontalOptions="Center"/>
-  
-  <Grid ColumnDefinitions="*,Auto,Auto" BackgroundColor="Transparent">
-                <Picker x:Name="SortPicker"
-                        Title="Sort by"
-                        SelectedIndex="0"
-                        BackgroundColor="Transparent">
-                    <Picker.Items>
-                        <x:String>Title</x:String>
-                        <x:String>Author</x:String>
-                        <x:String>YearPublished</x:String>
-                        <x:String>Pages</x:String>
-                        <x:String>Id</x:String>
-                    </Picker.Items>
-                </Picker>
 
-                <Switch x:Name="AscSwitch"
-                        Grid.Column="1" />
+            <Grid ColumnDefinitions="*,Auto,Auto"
+                  BackgroundColor="{StaticResource CardBackground}"
+                  Padding="0,0,0,8"
+                  HorizontalOptions="Center"
+                  WidthRequest="720">
 
-                <Entry x:Name="SearchEntry"
-                       Grid.Column="2"
-                       Placeholder="Search"
-                       BackgroundColor="Transparent" />
+                <VerticalStackLayout Grid.Column="0" Spacing="6" Padding="0,0,16,0">
+
+                    <Picker x:Name="SortPicker"
+                            Title="Sort by"
+                            TitleColor="{StaticResource PrimaryColor}"
+                            FontAttributes="Bold"
+                            SelectedIndex="0"
+                            BackgroundColor="{StaticResource CardBackground}">
+                        <Picker.Items>
+                            <x:String>Title</x:String>
+                            <x:String>Author</x:String>
+                            <x:String>YearPublished</x:String>
+                            <x:String>Pages</x:String>
+                            <x:String>Id</x:String>
+                        </Picker.Items>
+                    </Picker>
+
+                    <!-- Hidden switch the controller will wire to -->
+                    <Switch x:Name="AscSwitch"
+                            IsToggled="True"
+                            Opacity="0"
+                            IsEnabled="False"
+                            HeightRequest="0"
+                            WidthRequest="0" />
+
+                    <!-- Visible control: arrow + text -->
+                    <Grid Padding="8,6" ColumnDefinitions="Auto,Auto">
+                        <!-- Arrow -->
+                        <Label x:Name="SortDirArrow"
+                               Text="▲"
+                               FontSize="18"
+                               TextColor="{DynamicResource PrimaryColor}"
+                               VerticalOptions="Center"/>
+                        <!-- Text -->
+                        <Label x:Name="SortDirText"
+                               Grid.Column="1"
+                               Text="Ascending"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryColor}"
+                               Margin="8,0,0,0"
+                               VerticalOptions="Center"/>
+
+                        <!-- Tap anywhere on this Grid to flip ascending/descending -->
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnSortDirTapped"/>
+                        </Grid.GestureRecognizers>
+
+                        <!-- When the hidden switch is OFF, show descending icon/text -->
+                        <Grid.Triggers>
+                            <DataTrigger TargetType="Grid"
+                                         Binding="{Binding Source={x:Reference AscSwitch}, Path=IsToggled}"
+                                         Value="False">
+                                <Setter TargetName="SortDirArrow"
+                                        Property="Label.Text"
+                                        Value="▼"/>
+                                <Setter TargetName="SortDirText"
+                                        Property="Label.Text"
+                                        Value="Descending"/>
+                            </DataTrigger>
+                        </Grid.Triggers>
+                    </Grid>
+
+                    <VerticalStackLayout Grid.Column="2" Spacing="6">
+                        <Entry x:Name="SearchEntry"
+                               Placeholder="Search"
+                               BackgroundColor="{DynamicResource SearchFieldBackground}"
+                               TextColor="{DynamicResource PrimaryTextColor}"
+                               MinimumWidthRequest="260"
+                               WidthRequest="340"/>
+                    </VerticalStackLayout>
+
+                    <HorizontalStackLayout Spacing="10">
+                        <Button Text="Clear"
+                                Clicked="OnClearFiltersClicked"
+                                BackgroundColor="{DynamicResource ControlBackgroundColor}"
+                                TextColor="{DynamicResource PrimaryTextColor}"
+                                Padding="10,6"/>
+                    </HorizontalStackLayout>
+
+                    <CollectionView x:Name="MyCanon"
+                                    Grid.Row="1"
+                                    SelectionMode="Single"
+                                    ItemSizingStrategy="MeasureAllItems">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame HasShadow="False"
+                                       BackgroundColor="{StaticResource AccentColor}"
+                                       Padding="0"
+                                       Margin="0,8"
+                                       HorizontalOptions="Center"
+                                       MaximumWidthRequest="720">
+                                    <Frame.GestureRecognizers>
+                                        <!-- Tap on the card navigates (double-click on desktop if you set that) -->
+                                        <TapGestureRecognizer Tapped="OnCardTapped"
+                                                              CommandParameter="{Binding}"/>
+                                    </Frame.GestureRecognizers>
+                                    <views:BookCard
+                                        BookId="{Binding Id}"
+                                        Title="{Binding Title}"
+                                        Author="{Binding Author}"
+                                        IconPath="{Binding IconPath}"
+                                        Pages="{Binding Pages}"
+                                        Country="{Binding Country}"
+                                        YearPublished="{Binding YearPublished}"
+                                        Subject="{Binding Subject}"
+                                        Vibe="{Binding Vibe}"
+                                        Source="{Binding Source}"
+                                        ChipClicked="OnChipClicked"/>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                </VerticalStackLayout>
             </Grid>
-  
-            <CollectionView
-                x:Name="MyCanon"
-                
-                SelectionMode="Single"
-                SelectionChanged="OnBookSelected">
-
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <views:BookCard
-                            BookId="{Binding Id}"
-                            Title="{Binding Title}"
-                            Author="{Binding Author}"
-                            IconPath="{Binding IconPath}"
-                            Pages="{Binding Pages}"
-                            Subject="{Binding Subject}"
-                            Vibe="{Binding Vibe}"/>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

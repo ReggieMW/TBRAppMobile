@@ -4,6 +4,76 @@
              Title="{Binding Title}"
              BackgroundColor="{StaticResource AccentColor}">
        <!--Page for viewing an individual book and all properties, many updates to come! -->
+
+       <ContentPage.Resources>
+              <!-- Small primary button (stays primary on press/disabled) -->
+              <Style x:Key="TinyPrimaryButton"
+                     TargetType="Button">
+                     <Setter Property="BackgroundColor"
+                             Value="{DynamicResource PrimaryColor}"/>
+                     <Setter Property="TextColor"
+                             Value="White"/>
+                     <Setter Property="FontSize"
+                             Value="12"/>
+                     <Setter Property="Padding"
+                             Value="10,6"/>
+                     <Setter Property="CornerRadius"
+                             Value="12"/>
+                     <Setter Property="BorderColor"
+                             Value="{DynamicResource PrimaryColor}"/>
+                     <Setter Property="BorderWidth"
+                             Value="1"/>
+                     <Setter Property="VisualStateManager.VisualStateGroups">
+                            <VisualStateGroupList>
+                                   <VisualStateGroup x:Name="CommonStates">
+                                          <VisualState x:Name="Normal">
+                                                 <VisualState.Setters>
+                                                        <Setter Property="BackgroundColor"
+                                                                Value="{DynamicResource PrimaryColor}"/>
+                                                        <Setter Property="Opacity"
+                                                                Value="1"/>
+                                                 </VisualState.Setters>
+                                          </VisualState>
+                                          <VisualState x:Name="Pressed">
+                                                 <VisualState.Setters>
+                                                        <!-- Keep primary; subtle feedback via opacity -->
+                                                        <Setter Property="BackgroundColor"
+                                                                Value="{DynamicResource PrimaryColor}"/>
+                                                        <Setter Property="Opacity"
+                                                                Value="0.9"/>
+                                                 </VisualState.Setters>
+                                          </VisualState>
+                                          <VisualState x:Name="Disabled">
+                                                 <VisualState.Setters>
+                                                        <Setter Property="BackgroundColor"
+                                                                Value="{DynamicResource PrimaryColor}"/>
+                                                        <Setter Property="Opacity"
+                                                                Value="0.5"/>
+                                                 </VisualState.Setters>
+                                          </VisualState>
+                                   </VisualStateGroup>
+                            </VisualStateGroupList>
+                     </Setter>
+              </Style>
+
+              <!-- Status button base + selected highlight -->
+              <Style x:Key="StatusButtonStyle"
+                     TargetType="Button">
+                     <Setter Property="BackgroundColor"
+                             Value="{DynamicResource ControlBackgroundColor}"/>
+                     <Setter Property="TextColor"
+                             Value="{DynamicResource PrimaryTextColor}"/>
+                     <Setter Property="Padding"
+                             Value="10,6"/>
+                     <Setter Property="CornerRadius"
+                             Value="10"/>
+                     <Setter Property="BorderColor"
+                             Value="{DynamicResource CardBorder}"/>
+                     <Setter Property="BorderWidth"
+                             Value="1"/>
+              </Style>
+       </ContentPage.Resources>
+
        <ScrollView>
               <VerticalStackLayout Padding="20"
                                    Spacing="16">
@@ -72,44 +142,84 @@
 
                      <!-- Canon Button -->
                      <Button x:Name="CanonButton"
+                             Style="{StaticResource TinyPrimaryButton}"
                              Text="{Binding CanonButtonText}"
-                             Clicked="OnCanonButtonClicked"
-                             TextColor="{StaticResource TextColor}"
-                             BorderColor="{StaticResource PrimaryColor}"
-                             BorderWidth="1"
-                             CornerRadius="10"
-                             HeightRequest="40"/>
-                     <Button x:Name="DeleteButton"
-                             Text="Delete Book"
-                             Clicked="OnDeleteButtonClicked"
-                             TextColor="{StaticResource TextColor}"
-                             BorderColor="{StaticResource PrimaryColor}"
-                             BorderWidth="1"
-                             CornerRadius="10"
-                             HeightRequest="40"/>
+                             Clicked="OnCanonButtonClicked"/>
+                     <Button  x:Name="DeleteButton"
+                              Style="{StaticResource TinyPrimaryButton}"
+                              Text="Delete"
+                              Clicked="OnDeleteButtonClicked"/>
 
 
                      <!-- Status Buttons -->
                      <Label Text="Change Status:"
                             FontAttributes="Bold"/>
-                     <HorizontalStackLayout Spacing="10">
-                            <Button Text="Want to Read"
-                                    Command="{Binding UpdateStatusCommand}"
-                                    CommandParameter="TBR"
-                                    IsEnabled="{Binding IsNotTBR}"/>
-                            <Button Text="Currently Reading"
-                                    Command="{Binding UpdateStatusCommand}"
-                                    CommandParameter="CurrentReads"
-                                    IsEnabled="{Binding IsNotCurrentReads}"/>
+                     <HorizontalStackLayout Spacing="8">
+                            <Button Text="TBR"
+                                          Style="{StaticResource StatusButtonStyle}"
+                                    Command="{Binding SetStatusCommand}"
+                                          CommandParameter="TBR">
+                                   <Button.Triggers>
+                                          <DataTrigger TargetType="Button"
+                                                        Binding="{Binding Status}"
+                                                        Value="TBR">
+                                                 <Setter Property="BorderColor"
+                                                               Value="{DynamicResource PrimaryColor}"/>
+                                                 <Setter Property="BorderWidth"
+                                                               Value="2"/>
+                                          </DataTrigger>
+                                   </Button.Triggers>
+                            </Button>
+
+                            <Button Text="Current"
+                                          Style="{StaticResource StatusButtonStyle}"
+                                    Command="{Binding SetStatusCommand}"
+                                          CommandParameter="CurrentReads">
+                                   <Button.Triggers>
+                                          <DataTrigger TargetType="Button"
+                                                        Binding="{Binding Status}"
+                                                        Value="CurrentReads">
+                                                 <Setter Property="BorderColor"
+                                                               Value="{DynamicResource PrimaryColor}"/>
+                                                 <Setter Property="BorderWidth"
+                                                               Value="2"/>
+                                          </DataTrigger>
+                                   </Button.Triggers>
+                            </Button>
+
                             <Button Text="Read"
-                                    Command="{Binding UpdateStatusCommand}"
-                                    CommandParameter="Read"
-                                    IsEnabled="{Binding IsNotRead}"/>
+                                          Style="{StaticResource StatusButtonStyle}"
+                                    Command="{Binding SetStatusCommand}"
+                                          CommandParameter="Read">
+                                   <Button.Triggers>
+                                          <DataTrigger TargetType="Button"
+                                                        Binding="{Binding Status}"
+                                                        Value="Read">
+                                                 <Setter Property="BorderColor"
+                                                               Value="{DynamicResource PrimaryColor}"/>
+                                                 <Setter Property="BorderWidth"
+                                                               Value="2"/>
+                                          </DataTrigger>
+                                   </Button.Triggers>
+                            </Button>
+
                             <Button Text="DNF"
-                                    Command="{Binding UpdateStatusCommand}"
-                                    CommandParameter="DNF"
-                                    IsEnabled="{Binding IsNotDNF}"/>
+                                          Style="{StaticResource StatusButtonStyle}"
+                                    Command="{Binding SetStatusCommand}"
+                                          CommandParameter="DNF">
+                                   <Button.Triggers>
+                                          <DataTrigger TargetType="Button"
+                                                        Binding="{Binding Status}"
+                                                        Value="DNF">
+                                                 <Setter Property="BorderColor"
+                                                               Value="{DynamicResource PrimaryColor}"/>
+                                                 <Setter Property="BorderWidth"
+                                                               Value="2"/>
+                                          </DataTrigger>
+                                   </Button.Triggers>
+                            </Button>
                      </HorizontalStackLayout>
+
 
               </VerticalStackLayout>
        </ScrollView>

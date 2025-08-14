@@ -182,7 +182,8 @@
                                BorderColor="{StaticResource PrimaryColor}"
                                HasShadow="False"
                                WidthRequest="50"
-                               HeightRequest="50">
+                               HeightRequest="50"
+                               Margin="0, 10">
                             <Image Source="{Binding}" WidthRequest="40" HeightRequest="40" />
                             <VisualStateManager.VisualStateGroups>
                                 <VisualStateGroup Name="CommonStates">

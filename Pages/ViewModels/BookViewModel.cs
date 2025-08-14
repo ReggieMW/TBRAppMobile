@@ -22,6 +22,7 @@ public class BookViewModel : INotifyPropertyChanged
     public ICommand UpdateStatusCommand { get; }
     public ICommand ReturnToListCommand { get; }
 
+
     public BookViewModel(Book book, BookService bookService)
     {
         _book = book;
@@ -36,6 +37,8 @@ public class BookViewModel : INotifyPropertyChanged
 
         ToggleCanonCommand = new Command(ToggleCanonStatus);
         ReturnToListCommand = new Command(async () => await ReturnToListAsync());
+        
+        
     }
 
     private async Task ReturnToListAsync()
