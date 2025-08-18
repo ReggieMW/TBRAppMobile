@@ -16,15 +16,13 @@ public class BookService
         _database = database;
     }
 
-  
-
     private readonly ObservableCollection<Book> _allBooks = new();
 
-    private readonly Dictionary<string, int> _subjectHistory = new();
-    private readonly Dictionary<string, int> _vibeHistory = new();
-    private readonly Dictionary<string, int> _sourceHistory = new();
-    private readonly Dictionary<string, int> _authorHistory = new();
-    private readonly Dictionary<string, int> _countryHistory = new();
+    private readonly Dictionary<string, int> _subjectHistory = new(StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<string, int> _vibeHistory = new(StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<string, int> _sourceHistory = new(StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<string, int> _authorHistory = new(StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<string, int> _countryHistory = new(StringComparer.OrdinalIgnoreCase);
 
     //default suggestins. will be replaced by users most commonly used suggestions
     private readonly ObservableCollection<string> _defaultSubjects = new()
@@ -61,22 +59,8 @@ public class BookService
         }
         _allBooks.Add(book);
 
-        switch (book.Status)
-        {
-            case BookStatus.TBR:
-                TBRBooks.Add(book);
-                break;
-            case BookStatus.Read:
-                ReadBooks.Add(book);
-                break;
-            case BookStatus.CurrentReads:
-                CurrentReadBooks.Add(book);
-                break;
-            case BookStatus.DNF:
-                DNFBooks.Add(book);
-                break;
-        }
-
+        if (book.Status == BookStatus.TBR)
+            TBRBooks.Add(book);
 
 
         if (book.IsCanon && !MyCanon.Contains(book))
@@ -112,13 +96,13 @@ public class BookService
     public async Task NavigateToListPageAsync(Book book)
     {
         var target = book.Status switch
-    {
-        BookStatus.TBR => "//TBRListPage",
-        BookStatus.CurrentReads => "//CurrentReadsPage",
-        BookStatus.Read => "//ReadListPage",
-        BookStatus.DNF => "//DNFPage",
-        _ => "//CurrentReadsPage"
-    };
+        {
+            BookStatus.TBR => "//TBRListPage",
+            BookStatus.CurrentReads => "//CurrentReadsPage",
+            BookStatus.Read => "//ReadListPage",
+            BookStatus.DNF => "//DNFPage",
+            _ => "//CurrentReadsPage"
+        };
         await Shell.Current.GoToAsync(target);
     }
 
@@ -184,12 +168,12 @@ public class BookService
     }
 
     public async Task DeleteBook(Book book)
-{
-    RemoveFromAllStatusCollections(book);
-    MyCanon.Remove(book);
-    _allBooks.Remove(book);
-    await _database.DeleteBookAsync(book); 
-}
+    {
+        RemoveFromAllStatusCollections(book);
+        MyCanon.Remove(book);
+        _allBooks.Remove(book);
+        await _database.DeleteBookAsync(book);
+    }
 
 
 
@@ -249,15 +233,6 @@ public class BookService
              .ToList();
     }
 
-    public List<string> GetAuthorSuggestions(string input)
-    {
-        return _authorHistory.Keys
-            .Where(k => !string.IsNullOrWhiteSpace(k) && k.StartsWith(input, StringComparison.OrdinalIgnoreCase))
-            .OrderByDescending(k => _authorHistory[k])
-            .Take(5)
-            .ToList();
-    }
-
     public List<string> GetCountrySuggestions()
     {
         return _countryHistory.Keys
@@ -265,15 +240,6 @@ public class BookService
         .OrderByDescending(k => _countryHistory[k])
         .Take(5)
         .ToList();
-    }
-
-    public List<string> GetCountrySuggestions(string input)
-    {
-        return _countryHistory.Keys
-            .Where(k => !string.IsNullOrWhiteSpace(k) && k.StartsWith(input, StringComparison.OrdinalIgnoreCase))
-            .OrderByDescending(k => _countryHistory[k])
-            .Take(5)
-            .ToList();
     }
 
     public List<string> GetSubjectsSuggestions(string input) =>
@@ -298,30 +264,57 @@ _sourceHistory.Keys
     .ToList();
 
 
+    private static string? Normalize(string? s)
+    {
+        if (string.IsNullOrWhiteSpace(s)) return null;
+        return s.Trim();
+    }
+
     private static void UpdateSuggestions(Dictionary<string, int> history, string? value)
     {
-        if (string.IsNullOrWhiteSpace(value)) return;
-
-        if (history.ContainsKey(value))
-            history[value]++;
-        else
-            history[value] = 1;
+        var key = Normalize(value);
+        if (key is null) return;
+        history[key] = history.TryGetValue(key, out var count) ? count + 1 : 1;
     }
+
+    // VM will call these:
+    public void BumpSubject(string? s) => UpdateSuggestions(_subjectHistory, s);
+    public void BumpVibe(string? s) => UpdateSuggestions(_vibeHistory, s);
+    public void BumpSource(string? s) => UpdateSuggestions(_sourceHistory, s);
+    public void BumpAuthor(string? s) => UpdateSuggestions(_authorHistory, s);
+    public void BumpCountry(string? s) => UpdateSuggestions(_countryHistory, s);
+
 
     private static ObservableCollection<string> GetTopSuggestions(
     Dictionary<string, int> history,
     ObservableCollection<string>? defaults = null)
     {
-        return new ObservableCollection<string>(
-            history
-                .OrderByDescending(kv => kv.Value)
-                .Take(5)
-                .Select(kv => kv.Key)
-                .Concat(defaults?.Except(history.Keys).Take(5 - history.Count) ?? Enumerable.Empty<string>())
-                .Distinct()
-                .ToList()
-        );
+        // Take user’s top by count (normalized, case-insensitive)
+        var top = history
+            .Where(kv => !string.IsNullOrWhiteSpace(kv.Key))
+            .OrderByDescending(kv => kv.Value)
+            .Select(kv => kv.Key.Trim())
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .Take(5)
+            .ToList();
+
+        var result = new List<string>(top);
+
+        // Pad with defaults (no dupes, case-insensitive) until we have 5
+        if (defaults is not null)
+        {
+            foreach (var d in defaults)
+            {
+                if (result.Count >= 5) break;
+                if (string.IsNullOrWhiteSpace(d)) continue;
+                if (!result.Contains(d, StringComparer.OrdinalIgnoreCase))
+                    result.Add(d);
+            }
+        }
+
+        return new ObservableCollection<string>(result);
     }
+
 
 #if DEBUG
     public void SeedTestBooks()

@@ -4,6 +4,7 @@ using TBRAppMobile.ViewModels;
 using TBRAppMobile.Services;
 using TBRAppMobile.Helpers;
 using System.Diagnostics;
+using Microsoft.Maui.ApplicationModel; 
 
 namespace TBRAppMobile.Pages;
 
@@ -107,7 +108,30 @@ public partial class BookViewPage : ContentPage
         {
             if (sender is Button bbtn) bbtn.IsEnabled = true;
         }
+    }
 
+protected override void OnNavigatedFrom(NavigatedFromEventArgs args)
+{
+    base.OnNavigatedFrom(args);
+
+    // Defer one tick so the destination page finishes pushing onto the stack,
+    // then remove THIS page from the back stack.
+    MainThread.BeginInvokeOnMainThread(() =>
+    {
+        try
+        {
+            var nav = Navigation;
+            if (nav?.NavigationStack?.Contains(this) == true)
+            {
+                nav.RemovePage(this);
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"[BookViewPage] Remove self failed: {ex}");
+        }
+    });
+}
 
     }
-}
+

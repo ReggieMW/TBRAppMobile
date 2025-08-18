@@ -1,5 +1,6 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:TBRAppMobile.Models"
              x:Class="TBRAppMobile.Pages.BookViewPage"
              Title="{Binding Title}"
              BackgroundColor="{StaticResource AccentColor}">
@@ -26,19 +27,11 @@
                      <Setter Property="VisualStateManager.VisualStateGroups">
                             <VisualStateGroupList>
                                    <VisualStateGroup x:Name="CommonStates">
-                                          <VisualState x:Name="Normal">
-                                                 <VisualState.Setters>
-                                                        <Setter Property="BackgroundColor"
-                                                                Value="{DynamicResource PrimaryColor}"/>
-                                                        <Setter Property="Opacity"
-                                                                Value="1"/>
-                                                 </VisualState.Setters>
-                                          </VisualState>
                                           <VisualState x:Name="Pressed">
                                                  <VisualState.Setters>
                                                         <!-- Keep primary; subtle feedback via opacity -->
                                                         <Setter Property="BackgroundColor"
-                                                                Value="{DynamicResource PrimaryColor}"/>
+                                                                Value="{DynamicResource BackgroundColor}"/>
                                                         <Setter Property="Opacity"
                                                                 Value="0.9"/>
                                                  </VisualState.Setters>
@@ -94,7 +87,7 @@
                             TextColor="{StaticResource TextColor}"/>
 
                      <Grid ColumnDefinitions="Auto,*"
-                           RowDefinitions="Auto,Auto,Auto,Auto,Auto, Auto, Auto"
+                            RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto"
                            RowSpacing="8">
                             <Label Text="Status:"
                                    Grid.Row="0"
@@ -144,10 +137,12 @@
                      <Button x:Name="CanonButton"
                              Style="{StaticResource TinyPrimaryButton}"
                              Text="{Binding CanonButtonText}"
+                             MaximumWidthRequest="720"
                              Clicked="OnCanonButtonClicked"/>
                      <Button  x:Name="DeleteButton"
                               Style="{StaticResource TinyPrimaryButton}"
                               Text="Delete"
+                              MaximumWidthRequest="720"
                               Clicked="OnDeleteButtonClicked"/>
 
 
@@ -156,65 +151,93 @@
                             FontAttributes="Bold"/>
                      <HorizontalStackLayout Spacing="8">
                             <Button Text="TBR"
-                                          Style="{StaticResource StatusButtonStyle}"
-                                    Command="{Binding SetStatusCommand}"
-                                          CommandParameter="TBR">
+                                    Style="{StaticResource StatusButtonStyle}"
+                                    Command="{Binding UpdateStatusCommand}"
+                                    CommandParameter="TBR">
                                    <Button.Triggers>
                                           <DataTrigger TargetType="Button"
-                                                        Binding="{Binding Status}"
-                                                        Value="TBR">
+                                                       Binding="{Binding Status}"
+                                                       Value="{x:Static models:BookStatus.TBR}">
                                                  <Setter Property="BorderColor"
-                                                               Value="{DynamicResource PrimaryColor}"/>
+                                                         Value="{DynamicResource PrimaryColor}"/>
                                                  <Setter Property="BorderWidth"
-                                                               Value="2"/>
+                                                         Value="2"/>
+                                                 <Setter Property="FontAttributes"
+                                                         Value="Bold"/>
+                                                 <Setter Property="BackgroundColor"
+                                                               Value="{DynamicResource AccentColor}"/>
+                                                 <Setter Property="TextColor"
+                                                               Value="{DynamicResource PrimaryColor}"/>
+
                                           </DataTrigger>
                                    </Button.Triggers>
                             </Button>
 
                             <Button Text="Current"
-                                          Style="{StaticResource StatusButtonStyle}"
-                                    Command="{Binding SetStatusCommand}"
-                                          CommandParameter="CurrentReads">
+                                    Style="{StaticResource StatusButtonStyle}"
+                                    Command="{Binding UpdateStatusCommand}"
+                                    CommandParameter="CurrentReads">
                                    <Button.Triggers>
                                           <DataTrigger TargetType="Button"
-                                                        Binding="{Binding Status}"
-                                                        Value="CurrentReads">
+                                                       Binding="{Binding Status}"
+                                                       Value="{x:Static models:BookStatus.CurrentReads}">
                                                  <Setter Property="BorderColor"
-                                                               Value="{DynamicResource PrimaryColor}"/>
+                                                         Value="{DynamicResource PrimaryColor}"/>
                                                  <Setter Property="BorderWidth"
-                                                               Value="2"/>
+                                                         Value="2"/>
+                                                 <Setter Property="FontAttributes"
+                                                         Value="Bold"/>
+                                                 <Setter Property="BackgroundColor"
+                                                               Value="{DynamicResource AccentColor}"/>
+                                                 <Setter Property="TextColor"
+                                                               Value="{DynamicResource PrimaryColor}"/>
+
                                           </DataTrigger>
                                    </Button.Triggers>
                             </Button>
 
                             <Button Text="Read"
-                                          Style="{StaticResource StatusButtonStyle}"
-                                    Command="{Binding SetStatusCommand}"
-                                          CommandParameter="Read">
+                                    Style="{StaticResource StatusButtonStyle}"
+                                    Command="{Binding UpdateStatusCommand}"
+                                    CommandParameter="Read">
                                    <Button.Triggers>
                                           <DataTrigger TargetType="Button"
-                                                        Binding="{Binding Status}"
-                                                        Value="Read">
+                                                       Binding="{Binding Status}"
+                                                       Value="{x:Static models:BookStatus.Read}">
                                                  <Setter Property="BorderColor"
-                                                               Value="{DynamicResource PrimaryColor}"/>
+                                                         Value="{DynamicResource PrimaryColor}"/>
                                                  <Setter Property="BorderWidth"
-                                                               Value="2"/>
+                                                         Value="2"/>
+                                                 <Setter Property="FontAttributes"
+                                                         Value="Bold"/>
+                                                 <Setter Property="BackgroundColor"
+                                                               Value="{DynamicResource AccentColor}"/>
+                                                 <Setter Property="TextColor"
+                                                               Value="{DynamicResource PrimaryColor}"/>
+
                                           </DataTrigger>
                                    </Button.Triggers>
                             </Button>
 
                             <Button Text="DNF"
-                                          Style="{StaticResource StatusButtonStyle}"
-                                    Command="{Binding SetStatusCommand}"
-                                          CommandParameter="DNF">
+                                    Style="{StaticResource StatusButtonStyle}"
+                                    Command="{Binding UpdateStatusCommand}"
+                                    CommandParameter="DNF">
                                    <Button.Triggers>
                                           <DataTrigger TargetType="Button"
-                                                        Binding="{Binding Status}"
-                                                        Value="DNF">
+                                                       Binding="{Binding Status}"
+                                                       Value="{x:Static models:BookStatus.DNF}">
                                                  <Setter Property="BorderColor"
-                                                               Value="{DynamicResource PrimaryColor}"/>
+                                                         Value="{DynamicResource PrimaryColor}"/>
                                                  <Setter Property="BorderWidth"
-                                                               Value="2"/>
+                                                         Value="2"/>
+                                                 <Setter Property="FontAttributes"
+                                                         Value="Bold"/>
+                                                 <Setter Property="BackgroundColor"
+                                                               Value="{DynamicResource AccentColor}"/>
+                                                 <Setter Property="TextColor"
+                                                               Value="{DynamicResource PrimaryColor}"/>
+
                                           </DataTrigger>
                                    </Button.Triggers>
                             </Button>

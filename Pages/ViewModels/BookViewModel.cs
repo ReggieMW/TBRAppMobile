@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using Microsoft.Maui.Controls; 
 using TBRAppMobile.Models;
 using TBRAppMobile.Pages;
 using TBRAppMobile.Services;
@@ -22,23 +23,27 @@ public class BookViewModel : INotifyPropertyChanged
     public ICommand UpdateStatusCommand { get; }
     public ICommand ReturnToListCommand { get; }
 
-
+    // BookViewModel.cs
     public BookViewModel(Book book, BookService bookService)
     {
         _book = book;
         _bookService = bookService;
 
         //allows user to change book status
-        UpdateStatusCommand = new Command<string>(status =>
+        UpdateStatusCommand = new Command<string>(s =>
         {
-            if (Enum.TryParse(status, out BookStatus parsedStatus))
-                UpdateStatus(parsedStatus);
+            if (Enum.TryParse<BookStatus>(s, out var newStatus))
+            {
+                Status = newStatus;            // raises OnPropertyChanged via setter
+                _bookService.UpdateBook(Book); // fire-and-forget if it returns void
+                OnPropertyChanged(nameof(Book)); // in case any bindings use Book.Status
+            }
         });
 
         ToggleCanonCommand = new Command(ToggleCanonStatus);
         ReturnToListCommand = new Command(async () => await ReturnToListAsync());
-        
-        
+
+
     }
 
     private async Task ReturnToListAsync()

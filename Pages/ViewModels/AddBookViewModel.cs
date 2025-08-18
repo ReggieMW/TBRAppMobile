@@ -30,15 +30,17 @@ public class AddBookViewModel : INotifyPropertyChanged
         _bookService = bookService;
         _googleBooksService = googleBooksService;
 
-        //These properties have suggestions provided by the logic
-        SubjectSuggestions = _bookService.GetSubjectsSuggestions();
-        VibeSuggestions = _bookService.GetVibeSuggestions();
-        SourceSuggestions = _bookService.GetSourceSuggestions();
         DefaultIcons = new ObservableCollection<string>
         {
             "book_alloy.png", "book_cyan.png", "book_red.png", "book_green.png",
             "book_yellow.png", "book_purple.png", "book_darkgreen.png", "book_black.png"
         };
+
+        SubjectSuggestions = new ObservableCollection<string>();
+        VibeSuggestions = new ObservableCollection<string>();
+        SourceSuggestions = new ObservableCollection<string>();
+        AuthorSuggestions = new ObservableCollection<string>();
+        CountrySuggestions = new ObservableCollection<string>();
 
     }
 
@@ -49,7 +51,7 @@ public class AddBookViewModel : INotifyPropertyChanged
         set => SetProperty(ref _searchResults, value);
     }
 
-    private Book _selectedSearchResult;
+    private Book? _selectedSearchResult;
     private bool _isSearchDropdownVisible;
     public bool IsSearchDropdownVisible
     {
@@ -57,7 +59,7 @@ public class AddBookViewModel : INotifyPropertyChanged
         set => SetProperty(ref _isSearchDropdownVisible, value);
     }
 
-    public Book SelectedSearchResult
+    public Book? SelectedSearchResult
     {
         get => _selectedSearchResult;
         set
@@ -216,7 +218,7 @@ public class AddBookViewModel : INotifyPropertyChanged
     public string? SelectedSource
     {
         get => _selectedSource;
-        set { _selectedSource = value; OnPropertyChanged(); }
+        set { _selectedSource = value; OnPropertyChanged(); }   
     }
 
     private string? _SourceText = string.Empty;
@@ -304,36 +306,77 @@ public class AddBookViewModel : INotifyPropertyChanged
         }
     }
 
-    //allows selection of suggestion
-    public ICommand SelectAuthorCommand => new Command<string>((selected) =>
-{
-    AuthorText = selected;
-    IsAuthorSuggestionsVisible = false;
-});
+    public void ReplaceSuggestions(
+    IEnumerable<string> subjects,
+    IEnumerable<string> vibes,
+    IEnumerable<string> sources,
+    IEnumerable<string> authors,
+    IEnumerable<string> countries)
+    {
+        void Reset(ObservableCollection<string> oc, IEnumerable<string> items)
+        {
+            oc.Clear();
+            foreach (var s in items) oc.Add(s);
+        }
 
-    public ICommand SelectCountryCommand => new Command<string>((selected) =>
+        // must be on UI thread
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            Reset(SubjectSuggestions, subjects);
+            Reset(VibeSuggestions, vibes);
+            Reset(SourceSuggestions, sources);
+            Reset(AuthorSuggestions, authors);
+            Reset(CountrySuggestions, countries);
+
+            OnPropertyChanged(nameof(SubjectSuggestions));
+            OnPropertyChanged(nameof(VibeSuggestions));
+            OnPropertyChanged(nameof(SourceSuggestions));
+            OnPropertyChanged(nameof(AuthorSuggestions));
+            OnPropertyChanged(nameof(CountrySuggestions));
+        });
+    }
+
+    //allows selection of suggestion
+    public ICommand SelectAuthorCommand => new Command<string>(selected =>
+    {
+        AuthorText = selected;
+        IsAuthorSuggestionsVisible = false;
+        _bookService.BumpAuthor(selected);
+        RefreshSuggestions();
+    });
+
+    public ICommand SelectCountryCommand => new Command<string>(selected =>
     {
         CountryText = selected;
         IsCountrySuggestionsVisible = false;
+        _bookService.BumpCountry(selected);
+        RefreshSuggestions();
     });
 
-    public ICommand SelectSubjectsCommand => new Command<string>((selected) =>
+    public ICommand SelectSubjectsCommand => new Command<string>(selected =>
     {
         SubjectText = selected;
         IsSubjectsSuggestionsVisible = false;
+        _bookService.BumpSubject(selected);
+        RefreshSuggestions();
     });
 
-    public ICommand SelectVibeCommand => new Command<string>((selected) =>
+    public ICommand SelectVibeCommand => new Command<string>(selected =>
     {
         VibeText = selected;
         IsVibeSuggestionsVisible = false;
+        _bookService.BumpVibe(selected);
+        RefreshSuggestions();
     });
 
-    public ICommand SelectSourceCommand => new Command<string>((selected) =>
+    public ICommand SelectSourceCommand => new Command<string>(selected =>
     {
         SourceText = selected;
         IsSourceSuggestionsVisible = false;
+        _bookService.BumpSource(selected);
+        RefreshSuggestions();
     });
+
 
     private bool _isGoogleImage;
     public bool IsGoogleImage
@@ -368,19 +411,47 @@ public class AddBookViewModel : INotifyPropertyChanged
     //Method creates a book, assigns values to properties, and saves it in the app
     public Book CreateBook()
     {
-        return new Book
+        var subject = !string.IsNullOrWhiteSpace(SubjectText) ? SubjectText : SelectedSubject;
+        var vibe = !string.IsNullOrWhiteSpace(VibeText) ? VibeText : SelectedVibe;
+        var source = !string.IsNullOrWhiteSpace(SourceText) ? SourceText : SelectedSource;
+
+        // bump usage so the next RefreshSuggestions shows updated top-5
+        _bookService.BumpSubject(subject);
+        _bookService.BumpVibe(vibe);
+        _bookService.BumpSource(source);
+        _bookService.BumpAuthor(AuthorText);
+        _bookService.BumpCountry(CountryText);
+
+        var book = new Book
         {
             Title = BookTitle,
             Author = AuthorText,
             Country = CountryText,
-            Subject = !string.IsNullOrWhiteSpace(SubjectText) ? SubjectText : SelectedSubject,
-            Vibe = !string.IsNullOrWhiteSpace(VibeText) ? VibeText : SelectedVibe,
-            Source = !string.IsNullOrWhiteSpace(SourceText) ? SourceText : SelectedSource,
+            Subject = subject,
+            Vibe = vibe,
+            Source = source,
             IconPath = SelectedIcon ?? "book_cyan.png"
         };
+
+        return book;
     }
 
-    private string _searchQuery;
+    private static bool ContainsIgnoreCase(ObservableCollection<string> oc, string? s)
+        => !string.IsNullOrWhiteSpace(s) && oc.Any(x => string.Equals(x, s, StringComparison.OrdinalIgnoreCase));
+
+    public void ForceIncludeRecentChoices(string? subject, string? vibe, string? source)
+    {
+        if (!string.IsNullOrWhiteSpace(subject) && !ContainsIgnoreCase(SubjectSuggestions, subject))
+            SubjectSuggestions.Insert(0, subject.Trim());
+
+        if (!string.IsNullOrWhiteSpace(vibe) && !ContainsIgnoreCase(VibeSuggestions, vibe))
+            VibeSuggestions.Insert(0, vibe.Trim());
+
+        if (!string.IsNullOrWhiteSpace(source) && !ContainsIgnoreCase(SourceSuggestions, source))
+            SourceSuggestions.Insert(0, source.Trim());
+    }
+
+    private string _searchQuery = string.Empty;
     public string SearchQuery
     {
         get => _searchQuery;
@@ -392,6 +463,7 @@ public class AddBookViewModel : INotifyPropertyChanged
     {
         SearchQuery = string.Empty;
         SearchResults.Clear();
+        IsSearchDropdownVisible = false;
 
         BookTitle = string.Empty;
         AuthorText = string.Empty;
@@ -448,7 +520,6 @@ public class AddBookViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(AuthorSuggestions));
         OnPropertyChanged(nameof(CountrySuggestions));
     }
-
 }
 
 
